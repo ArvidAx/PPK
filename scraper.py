@@ -248,78 +248,100 @@ class HemkopScraperPipeline:
 
     def crawl_hemkop_urls(self, limit: int = 50) -> List[str]:
         """
-        Kör en crawl-traversering på Hemköp med smarta kostnadseffektiva include/exclude filter.
+        Upptäcker produkt-URL:er extremt billigt (1 kredit) via Firecrawls map-funktion.
+        Ersätter den tidigare dyra crawlningen för optimal kostnadskontroll.
         """
         start_url = "https://www.hemkop.se"
-        logging.info("Startar Firecrawl crawl-traversering för Hemköp (gräns: %d sidor)...", limit)
-        
-        # Undvik att skrapa frukter för att hålla nere API-kostnader
-        exclude_paths = [
-            "/sortiment/frukt-och-gront/frukt.*",
-            "/produkt/.*frukt.*",
-            "/produkt/.*mango.*",
-            "/produkt/.*banan.*",
-            "/produkt/.*apple.*",
-            "/produkt/.*paeron.*",
-            "/produkt/.*citron.*",
-            "/produkt/.*apelsin.*",
-            "/produkt/.*jordgubbar.*",
-            "/produkt/.*melon.*"
-        ]
-        
-        # Fokusera endast på proteinrika sortiment
-        include_paths = [
-            "/sortiment/mejeri-ost-och-agg/.*",
-            "/sortiment/kott-chark-och-fagel/.*",
-            "/sortiment/fisk-och-skaldjur/.*",
-            "/sortiment/fryst/vego.*",
-            "/sortiment/skafferi/konserver.*",
-            "/produkt/.*"
-        ]
+        logging.info("Startar Firecrawl URL-mappning för Hemköp (gräns: %d sidor)...", limit)
         
         retries = 3
-        crawl_job = None
+        map_result = None
         
         for attempt in range(retries):
             try:
-                crawl_job = self.app.crawl(
-                    url=start_url,
-                    exclude_paths=exclude_paths,
-                    include_paths=include_paths,
+                # Använd map med sökning efter '/produkt/' och platta sökparametrar
+                map_result = self.app.map(
+                    start_url,
+                    search="/produkt/",
                     limit=limit,
-                    crawl_entire_domain=True
+                    ignore_query_parameters=True
                 )
                 break
             except Exception as e:
-                # Exponentiell backoff med slumpmässigt inslag
                 wait_time = 2 ** attempt + random.uniform(0, 1)
-                logging.error("Firecrawl crawl misslyckades på försök %d: %s. Försöker igen om %.2fs...", attempt + 1, e, wait_time)
+                logging.error("Firecrawl map misslyckades på försök %d: %s. Försöker igen om %.2fs...", attempt + 1, e, wait_time)
                 if attempt == retries - 1:
-                    logging.error("Kunde inte starta eller slutföra crawl efter %d försök.", retries)
+                    logging.error("Kunde inte slutföra map efter %d försök.", retries)
                     return []
                 time.sleep(wait_time)
                 
-        if not crawl_job or not hasattr(crawl_job, "data") or not crawl_job.data:
-            logging.warning("Ingen data returnerades från Firecrawl crawl-jobbet.")
+        if not map_result or not hasattr(map_result, "links") or not map_result.links:
+            logging.warning("Inga länkar returnerades från Firecrawl map.")
             return []
             
         product_urls = set()
-        for doc in crawl_job.data:
-            url = None
-            if hasattr(doc, "metadata") and doc.metadata:
-                url = doc.metadata.source_url or doc.metadata.url
-            if not url and hasattr(doc, "url"):
-                url = doc.url
+        for link in map_result.links:
+            url_str = str(link.url)
+            if "/produkt/" in url_str:
+                product_urls.add(url_str)
                 
-            if url:
-                url_str = str(url)
-                # Spara endast faktiska produktsidor
-                if "/produkt/" in url_str:
-                    product_urls.add(url_str)
-                    
         unique_urls = list(product_urls)
-        logging.info("Hittade %d unika produkt-URL:er från Hemköps traversering.", len(unique_urls))
+        logging.info("Hittade %d unika produkt-URL:er från Hemköps webbplats-karta.", len(unique_urls))
         return unique_urls
+
+    def is_product_cached(self, url: str, max_age_days: int = 7) -> bool:
+        """
+        Kontrollerar om produkten i URL:en redan har skrapats nyligen i databasen.
+        Extraherar EAN/SKU ur URL:en och verifierar dess senast uppdaterade pris.
+        """
+        # Extrahera SKU/EAN från slutet av URL-en
+        # T.ex. https://www.hemkop.se/produkt/Pagenlimpan-100548542_ST -> 100548542_ST
+        match = re.search(r'/produkt/[^/]+-(\w+)$', url)
+        sku = None
+        if match:
+            sku = match.group(1).strip()
+        else:
+            match_num = re.search(r'/produkt/(\d+)(_\w+)?$', url)
+            if match_num:
+                suffix = match_num.group(2) or ""
+                sku = match_num.group(1) + suffix
+                
+        if not sku:
+            return False
+            
+        session = SessionLocal()
+        try:
+            # Sök efter produkt med matchande EAN/SKU
+            product = session.query(Product).filter(Product.ean == sku).first()
+            if not product:
+                return False
+                
+            # Kolla prishistorik för denna produkt hos Hemköp
+            store = session.query(Store).filter(Store.name == "Hemköp").first()
+            if not store:
+                return False
+                
+            price_entry = session.query(Price).filter(
+                Price.product_id == product.id,
+                Price.store_id == store.id
+            ).first()
+            
+            if not price_entry:
+                return False
+                
+            # Kolla ålder på prishistorik
+            from datetime import datetime
+            age = datetime.utcnow() - price_entry.last_updated
+            is_fresh = age.days < max_age_days
+            if is_fresh:
+                logging.info("Produkt '%s' (EAN/SKU: %s) hittades i cache (ålder: %d dagar). Hoppar över skrapning för att spara krediter.", 
+                             product.name, sku, age.days)
+            return is_fresh
+        except Exception as e:
+            logging.error("Fel vid cache-kontroll för %s: %s", url, e)
+            return False
+        finally:
+            session.close()
 
     def scrape_product_details(self, url: str) -> Optional[Dict[str, Any]]:
         """
@@ -362,21 +384,31 @@ class HemkopScraperPipeline:
 
     def run_pipeline(self, limit: int = 50):
         """
-        Kör hela pipelinen: Traversering -> Extraktion -> OFF-berikning -> Säkra databaslagring.
+        Kör hela pipelinen med optimal kostnadskontroll:
+        1. Upptäck URL:er billigt via Map (1 kredit).
+        2. Filtrera bort produkter som redan har färsk information i cachen (0 krediter).
+        3. Skrapa endast de unika sidor som faktiskt behöver uppdateras (5 krediter/produkt).
+        4. Berika med OFF och spara transaktionssäkert.
         """
-        logging.info("Startar exekvering av Hemköps skrapningspipeline...")
+        logging.info("Startar exekvering av optimerad Hemköps-skrapningspipeline...")
         
-        # 1. Traversering
+        # 1. URL-Discovery via Map
         product_urls = self.crawl_hemkop_urls(limit=limit)
         if not product_urls:
             logging.warning("Inga produkt-URL:er hittades. Avbryter pipeline.")
             return
             
         success_count = 0
+        skipped_count = 0
         
-        # 2. Skrapning och lagring
+        # 2. Skrapning och lagring med caching-kontroll
         for url in product_urls:
             try:
+                # Kolla lokal cache (max ålder: 7 dagar) för att spara krediter!
+                if self.is_product_cached(url, max_age_days=7):
+                    skipped_count += 1
+                    continue
+                    
                 raw_data = self.scrape_product_details(url)
                 if not raw_data:
                     continue
@@ -452,7 +484,7 @@ class HemkopScraperPipeline:
             except Exception as e:
                 logging.error("Fel vid hantering av produkt-URL %s: %s", url, e)
                 
-        logging.info("Hemköps pipeline klar! Exekverade och sparade %d produkter i databasen.", success_count)
+        logging.info("Hemköps pipeline klar! Sparade %d produkter, hoppade över %d sparade i cache.", success_count, skipped_count)
 
 
 def upsert_scraped_data(
