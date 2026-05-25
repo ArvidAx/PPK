@@ -5,5 +5,5 @@ __pycache__/
 venv/
 ENV/
 env/
-ppk_database.db
 .streamlit/
+
