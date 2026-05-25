@@ -24,7 +24,8 @@ def run_cleanup():
     non_food_keywords = [
         "tvättmedel", "sköljmedel", "maskindisk", "diskmedel", "blöja", "blöjor", 
         "tvål", "schampo", "balsam", "tampong", "binda", "bindor", "tandkräm", 
-        "tandborste", "rakhyvel", "hundmat", "kattmat", "tvätt", "disk", "tvål"
+        "tandborste", "rakhyvel", "hundmat", "kattmat", "tvätt", "disk", "tvål",
+        "snus", "portionssnus", "lössnus", "oil", "tallrik", "spray", "allrengöring", "party"
     ]
     logging.info("Step 1: Removing non-food items...")
     deleted_non_food = 0
@@ -37,14 +38,26 @@ def run_cleanup():
             cursor.execute("DELETE FROM products WHERE id = ?", (pid,))
             deleted_non_food += 1
             
+    # Also delete anything in the 'Övrigt' category as it contains miscellaneous non-food scrapes
+    cursor.execute("SELECT id, name FROM products WHERE category = 'Övrigt'")
+    for row in cursor.fetchall():
+        pid, name = row
+        logging.info(f"Deleting non-food item from category 'Övrigt': {name} (ID: {pid})")
+        cursor.execute("DELETE FROM prices WHERE product_id = ?", (pid,))
+        cursor.execute("DELETE FROM products WHERE id = ?", (pid,))
+        deleted_non_food += 1
+            
     conn.commit()
     logging.info(f"Deleted {deleted_non_food} non-food items.")
     
     # 2. Recategorize vegetables/fruits misclassified as 'Spannmål & Kolhydrater' or others
     logging.info("Step 2: Recategorizing vegetables/fruits...")
+    # Map category 'Frukt' to 'Vegetabiliskt'
+    cursor.execute("UPDATE products SET category = 'Vegetabiliskt' WHERE category = 'Frukt'")
+    
     vegetable_keywords = [
         "tomat", "potatis", "lök", "morot", "paprika", "vitlök", "sallad", "gurka", 
-        "citron", "äpple", "banan", "apelsin", "päron", "ingefära", "radis", "zucchini", "purjo"
+        "citron", "äpple", "banan", "apelsin", "päron", "ingefära", "radis", "zucchini", "purjo", "mango"
     ]
     recategorized = 0
     for kw in vegetable_keywords:
@@ -290,6 +303,8 @@ def run_cleanup():
                 protein, fat, carbs, calories, nova = 1.1, 0.3, 23.0, 89, 1
             elif "gurka" in name_lower:
                 protein, fat, carbs, calories, nova = 0.7, 0.1, 3.0, 15, 1
+            elif "mango" in name_lower:
+                protein, fat, carbs, calories, nova = 0.8, 0.4, 15.0, 60, 1
             else:
                 protein, fat, carbs, calories, nova = 1.0, 0.2, 5.0, 25, 1
 

@@ -174,7 +174,7 @@ with st.sidebar:
     selected_stores = ["Hemköp"]
         
     # 3. Category Multi-select
-    all_categories = ["Kött & Fågel", "Mejeri", "Spannmål & Kolhydrater", "Fisk & Skaldjur", "Vegetabiliska Proteiner"]
+    all_categories = ["Kött & Fågel", "Mejeri", "Spannmål & Kolhydrater", "Vegetabiliskt", "Ägg", "Fisk & Skaldjur", "Vegetabiliska Proteiner"]
     selected_categories = st.multiselect(
         "Kategorier",
         options=all_categories,
