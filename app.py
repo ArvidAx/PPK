@@ -14,136 +14,221 @@ database.init_db()
 
 # Set up page configurations
 st.set_page_config(
-    page_title="Protein Per Krona (PPK) - Smart Proteinjakt",
-    page_icon="💪",
+    page_title="Protein Per Krona (PPK)",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Inject custom modern CSS styling to wow the user (premium Swedish grocery theme)
-# Includes Google Font 'Outfit', card glassmorphic styling, hover micro-animations, and custom borders
+# Inject custom modern CSS styling
+# Uses Google Font 'Inter', clean card styling, subtle borders and a red accent color.
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
     
     /* Apply typography */
     html, body, [class*="css"], .stApp {
-        font-family: 'Outfit', sans-serif;
+        font-family: 'Inter', sans-serif;
+        background-color: #F9FAFB;
+        color: #111827;
     }
     
     /* Main title layout styling */
     .app-title {
-        font-size: 2.8rem;
+        font-size: 2.5rem;
         font-weight: 700;
-        background: linear-gradient(135deg, #005B99 0%, #00B4DB 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: #111827;
         margin-bottom: 0.2rem;
         padding-top: 0.5rem;
+        letter-spacing: -0.02em;
     }
     
     .app-subtitle {
-        font-size: 1.1rem;
-        color: #555;
-        margin-bottom: 1.8rem;
+        font-size: 1.05rem;
+        color: #4B5563;
+        margin-bottom: 2rem;
+        font-weight: 400;
     }
     
     /* Collapsible expander header styling */
     .stExpander {
-        border-radius: 8px !important;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.03) !important;
-        border: 1px solid #eef2f5 !important;
+        border-radius: 6px !important;
+        border: 1px solid #E5E7EB !important;
+        box-shadow: none !important;
+        background-color: #FFFFFF !important;
     }
     
     /* Card design for top 3 protein sources */
     .kpi-card {
-        background: radial-gradient(circle at 10% 20%, rgba(248, 250, 252, 0.95) 0%, rgba(255, 255, 255, 0.95) 90%);
-        border-radius: 12px;
+        background: #FFFFFF;
+        border-radius: 8px;
         padding: 1.5rem;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
         margin-bottom: 1rem;
-        border: 1px solid #e2e8f0;
+        border: 1px solid #E5E7EB;
+        position: relative;
     }
     
     .kpi-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 30px rgba(0, 91, 153, 0.1);
-    }
-    
-    .kpi-rank-1 {
-        border-left: 6px solid #FFD700; /* Gold */
-    }
-    
-    .kpi-rank-2 {
-        border-left: 6px solid #C0C0C0; /* Silver */
-    }
-    
-    .kpi-rank-3 {
-        border-left: 6px solid #CD7F32; /* Bronze */
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.03);
     }
     
     .kpi-rank-badge {
-        display: inline-block;
-        padding: 0.2rem 0.6rem;
-        border-radius: 20px;
-        font-size: 0.8rem;
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        background-color: #E52421;
+        color: #FFFFFF;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
         font-weight: 700;
-        text-transform: uppercase;
-        margin-bottom: 0.6rem;
+        box-shadow: 0 2px 4px rgba(229, 36, 33, 0.3);
     }
     
-    .badge-1 { background-color: #FFF9E6; color: #B78A00; }
-    .badge-2 { background-color: #F1F3F5; color: #495057; }
-    .badge-3 { background-color: #FDF2E9; color: #A04000; }
-    
     .kpi-title {
-        font-size: 1.2rem;
-        font-weight: 700;
-        color: #1e293b;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #111827;
         margin-bottom: 0.2rem;
+        margin-top: 0.5rem;
     }
     
     .kpi-brand {
-        font-size: 0.9rem;
-        color: #64748b;
-        margin-bottom: 0.8rem;
+        font-size: 0.85rem;
+        color: #6B7280;
+        margin-bottom: 1rem;
         text-transform: uppercase;
         letter-spacing: 0.05em;
+        font-weight: 500;
     }
     
     .kpi-value-container {
         display: flex;
         justify-content: space-between;
         align-items: baseline;
-        margin-top: 0.5rem;
-        padding-top: 0.5rem;
-        border-top: 1px dashed #e2e8f0;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #F3F4F6;
     }
     
     .kpi-ppk-label {
         font-size: 0.85rem;
-        color: #64748b;
+        color: #4B5563;
+        font-weight: 500;
     }
     
     .kpi-ppk-value {
-        font-size: 1.6rem;
+        font-size: 1.4rem;
         font-weight: 700;
-        color: #005B99;
+        color: #E52421;
     }
     
     .kpi-meta-item {
         font-size: 0.9rem;
-        color: #334155;
-        margin-bottom: 0.3rem;
+        color: #374151;
+        margin-bottom: 0.4rem;
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .kpi-meta-label {
+        color: #6B7280;
+    }
+    
+    .kpi-meta-value {
+        font-weight: 500;
     }
     
     /* Styling for sidebar custom elements */
     .sidebar-header {
-        font-weight: 700;
-        font-size: 1.2rem;
-        color: #0f172a;
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: #111827;
         margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #E5E7EB;
+    }
+    
+    /* Detail View Styling */
+    .detail-card {
+        background-color: #FFFFFF;
+        border-top: 4px solid #E52421;
+        border-radius: 6px;
+        padding: 2rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        border-left: 1px solid #E5E7EB;
+        border-right: 1px solid #E5E7EB;
+        border-bottom: 1px solid #E5E7EB;
+        height: 100%;
+    }
+    
+    .detail-store {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #E52421;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+        letter-spacing: 0.05em;
+    }
+    
+    .detail-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 0.2rem;
+    }
+    
+    .detail-brand {
+        font-size: 0.85rem;
+        color: #6B7280;
+        margin-bottom: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.75rem;
+        font-size: 0.95rem;
+        border-bottom: 1px solid #F9FAFB;
+        padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+        color: #4B5563;
+    }
+    
+    .detail-value {
+        font-weight: 500;
+        color: #111827;
+    }
+    
+    .detail-footer {
+        margin-top: 1.5rem;
+        padding-top: 1rem;
+        border-top: 1px solid #E5E7EB;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .detail-ppk-label {
+        font-weight: 500;
+        color: #4B5563;
+        font-size: 0.95rem;
+    }
+    
+    .detail-ppk-value {
+        font-weight: 700;
+        color: #10B981;
+        font-size: 1.5rem;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -153,24 +238,24 @@ st.markdown("""
 try:
     df_all = database.get_all_products_prices()
 except Exception as e:
-    st.error(f"Ett fel uppstod vid hämtning av data från databasen: {e}")
+    st.error(f"Ett fel uppstod vid inläsning av databasen: {e}")
     df_all = pd.DataFrame()
 
 
-# --- SIDEBAR CONTROLS (Swedish UI) ---
+# --- SIDEBAR CONTROLS ---
 with st.sidebar:
-    st.markdown('<div class="sidebar-header">🔍 Filter och inställningar</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-header">Filtrering</div>', unsafe_allow_html=True)
     
-    # 1. Text Search (Fuzzy filter)
+    # 1. Text Search
     search_query = st.text_input(
         "Fritextsökning",
         value="",
         placeholder="Sök på produkt eller märke...",
-        help="Filtrerar listan baserat på matchningar i produktnamn eller varumärke."
+        help="Filtrerar tabellen baserat på produktnamn och varumärke."
     )
     
-    # 2. Store Selection (Disabled - Hemköp only)
-    st.markdown("**Vald butik:** 🔴 Hemköp")
+    # 2. Store Selection
+    st.markdown("**Vald butik:** Hemköp")
     selected_stores = ["Hemköp"]
         
     # 3. Category Multi-select
@@ -178,25 +263,23 @@ with st.sidebar:
     selected_categories = st.multiselect(
         "Kategorier",
         options=all_categories,
-        default=all_categories,
-        help="Välj en eller flera livsmedelskategorier att visa."
+        default=all_categories
     )
     
-    # 4. Processing Filter (Simplified)
+    # 4. Processing Filter
     nova_options = [
-        "🟢 Naturligt / Oprocessat",
-        "🟡 Köksprodukt / Tillsats",
-        "🟠 Processat / Konserverat",
-        "🔴 Ultraprocessat / Helfabrikat"
+        "Naturligt / Oprocessat",
+        "Köksprodukt / Tillsats",
+        "Processat / Konserverat",
+        "Ultraprocessat / Helfabrikat"
     ]
     selected_nova_labels = st.multiselect(
-        "Bearbetningsgrad",
+        "Bearbetningsgrad (NOVA)",
         options=nova_options,
-        default=nova_options,
-        help="Filtrera baserat på hur mycket livsmedlet har industriellt bearbetats."
+        default=nova_options
     )
     
-    # Map selected Swedish labels to numeric values
+    # Map selected labels to numeric values
     selected_nova_nums = []
     for label in selected_nova_labels:
         if "Naturligt" in label:
@@ -214,141 +297,118 @@ with st.sidebar:
         min_value=5.0,
         max_value=150.0,
         value=120.0,
-        step=5.0,
-        help="Visa endast produkter vars pris är under eller lika med detta värde."
+        step=5.0
     )
     
     min_protein = st.slider(
-        "Minsta Protein per 100g (g)",
+        "Minsta protein per 100g (g)",
         min_value=0.0,
         max_value=30.0,
         value=0.0,
-        step=1.0,
-        help="Filtrera bort produkter som innehåller mindre protein än detta gränsvärde per 100 gram."
+        step=1.0
     )
 
 
 # --- MAIN HEADER PANEL ---
 st.markdown('<h1 class="app-title">Protein Per Krona (PPK)</h1>', unsafe_allow_html=True)
-st.markdown('<p class="app-subtitle">Hitta butikernas mest prisvärda proteinkällor – optimerad för svenska konsumenter.</p>', unsafe_allow_html=True)
+st.markdown('<p class="app-subtitle">Ett oberoende verktyg för att jämföra kostnadseffektiviteten hos marknadens proteinkällor.</p>', unsafe_allow_html=True)
 
 
-# --- COLLAPSIBLE MATHEMATICAL EXPLAINER (Swedish LaTeX) ---
-with st.expander("🧮 Hur beräknas Protein per Krona (PPK)? Läs den matematiska formeln"):
+# --- COLLAPSIBLE MATHEMATICAL EXPLAINER ---
+with st.expander("Beräkningsmetodik (PPK)"):
     st.markdown("""
-    Protein per Krona (PPK) är ett standardiserat nyckeltal för att mäta hur många gram protein du får för varje krona du spenderar. 
-    Det gör det otroligt enkelt att jämföra billiga bulkvaror med dyrare premiumprodukter på ett rättvist sätt.
+    Protein per Krona (PPK) är ett standardiserat mätetal för att utvärdera den verkliga kostnaden för protein i en produkt.
+    Det möjliggör en objektiv jämförelse mellan produkter oavsett förpackningsstorlek eller kilopris.
     """)
     st.latex(r"PPK = \frac{\text{Vikt (g)} \times \text{Protein/100g}}{100 \times \text{Pris (kr)}}")
-    st.markdown("""
-    **Räkneexempel:**
-    Om en förpackning **Milbona Kvarg** väger **500g**, kostar **16,90 kr** på Lidl, och har **11,5g protein** per 100g, blir beräkningen:
-    """)
-    st.latex(r"PPK = \frac{500 \times 11.5}{100 \times 16.90} = \frac{5750}{1690} \approx 3.40\text{ g protein / kr}")
 
 
 # --- DATA FILTERING LOGIC ---
 df_filtered = df_all.copy()
 
 if not df_filtered.empty:
-    # Apply category filter
     if selected_categories:
         df_filtered = df_filtered[df_filtered["Kategori"].isin(selected_categories)]
     else:
-        df_filtered = pd.DataFrame(columns=df_filtered.columns)  # Empty if no categories selected
+        df_filtered = pd.DataFrame(columns=df_filtered.columns)
         
-    # Apply store filter
     if selected_stores and not df_filtered.empty:
         df_filtered = df_filtered[df_filtered["Butik"].isin(selected_stores)]
     else:
-        df_filtered = pd.DataFrame(columns=df_filtered.columns)  # Empty if no stores checked
+        df_filtered = pd.DataFrame(columns=df_filtered.columns)
         
-    # Apply NOVA filter
     if selected_nova_nums and not df_filtered.empty:
         df_filtered = df_filtered[df_filtered["NOVA-Grupp"].isin(selected_nova_nums)]
     else:
-        df_filtered = pd.DataFrame(columns=df_filtered.columns)  # Empty if no NOVA groups selected
+        df_filtered = pd.DataFrame(columns=df_filtered.columns)
 
-    # Apply text filter (fuzzy match on Product name or Brand)
     if search_query and not df_filtered.empty:
         df_filtered = df_filtered[
             df_filtered["Produkt"].str.contains(search_query, case=False, na=False) |
             df_filtered["Märke"].str.contains(search_query, case=False, na=False)
         ]
         
-    # Apply sliders
     if not df_filtered.empty:
         df_filtered = df_filtered[df_filtered["Pris"] <= max_price]
         df_filtered = df_filtered[df_filtered["Protein/100g"] >= min_protein]
         
-    # Sort by PPK descending (highest first)
     if not df_filtered.empty:
         df_filtered = df_filtered.sort_values(by="PPK", ascending=False)
 
 
-# --- 1. KPI CARDS SECTION (Top 3 Protein Sources) ---
-st.markdown("### 🏆 Topp 3 Mest Prisvärda Proteinkällor")
+# --- 1. KPI CARDS SECTION ---
+st.markdown("### Topp 3 mest kostnadseffektiva valen")
 
 if df_filtered.empty:
-    st.info("Inga produkter matchar dina valda filter. Justera filtren i sidofältet för att visa resultat.")
+    st.info("Inga produkter matchar dina valda filter.")
 else:
-    # Extract the top 3 products matching current filters
     top_3 = df_filtered.head(3)
-    
     kpi_cols = st.columns(3)
+    
     for i, (_, row) in enumerate(top_3.iterrows()):
         rank = i + 1
-        rank_badge_text = f"🥇 {rank}:a plats" if rank == 1 else f"🥈 {rank}:a plats" if rank == 2 else f"🥉 {rank}:e plats"
-        badge_class = f"badge-{rank}"
-        rank_class = f"kpi-rank-{rank}"
-        
         with kpi_cols[i]:
             st.markdown(f"""
-            <div class="kpi-card {rank_class}">
-                <div class="kpi-rank-badge {badge_class}">{rank_badge_text}</div>
-                <div class="kpi-title">{row['Produkt']}</div>
-                <div class="kpi-brand">{row['Märke']}</div>
-                <div class="kpi-meta-item">📍 <b>Butik:</b> {row['Butik']}</div>
-                <div class="kpi-meta-item">💰 <b>Pris:</b> {row['Pris']:.2f} kr ({row['Storlek (g)']:.0f}g)</div>
-                <div class="kpi-meta-item">🍗 <b>Protein:</b> {row['Protein/100g']:.1f}g per 100g</div>
-                <div class="kpi-value-container">
-                    <span class="kpi-ppk-label">Protein per krona:</span>
-                    <span class="kpi-ppk-value">{row['PPK']:.2f}g/kr</span>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+<div class="kpi-card">
+<div class="kpi-rank-badge">{rank}</div>
+<div class="kpi-title">{row['Produkt']}</div>
+<div class="kpi-brand">{row['Märke']}</div>
+<div class="kpi-meta-item"><span class="kpi-meta-label">Butik:</span> <span class="kpi-meta-value">{row['Butik']}</span></div>
+<div class="kpi-meta-item"><span class="kpi-meta-label">Pris:</span> <span class="kpi-meta-value">{row['Pris']:.2f} kr ({row['Storlek (g)']:.0f}g)</span></div>
+<div class="kpi-meta-item"><span class="kpi-meta-label">Protein/100g:</span> <span class="kpi-meta-value">{row['Protein/100g']:.1f}g</span></div>
+<div class="kpi-value-container">
+<span class="kpi-ppk-label">Protein per krona:</span>
+<span class="kpi-ppk-value">{row['PPK']:.2f} g/kr</span>
+</div>
+</div>
+""", unsafe_allow_html=True)
 
 
 # --- 2. INTERACTIVE DATA TABLE ---
-st.markdown("### 📊 Alla Matchande Produkter (sorterade efter PPK)")
+st.markdown("### Tabellöversikt")
 if not df_filtered.empty:
-    # Function to map NOVA numbers to user-friendly Swedish labels
     def map_nova_group(group_num):
         if group_num == 1:
-            return "🟢 Naturligt / Oprocessat"
+            return "Naturligt / Oprocessat"
         elif group_num == 2:
-            return "🟡 Köksprodukt"
+            return "Köksprodukt"
         elif group_num == 3:
-            return "🟠 Processat"
+            return "Processat"
         elif group_num == 4:
-            return "🔴 Ultraprocessat"
+            return "Ultraprocessat"
         return "Okänt"
 
-    # Select and reorder columns for visual presentation to Swedish users
     presentation_df = df_filtered[[
         "Produkt", "Märke", "Butik", "Pris", "Storlek (g)", "Protein/100g", "NOVA-Grupp", "PPK"
     ]].copy()
     
-    # Map to simplified label
     presentation_df["Bearbetning"] = presentation_df["NOVA-Grupp"].apply(map_nova_group)
     presentation_df = presentation_df.drop(columns=["NOVA-Grupp"])
     
-    # Reorder to put Bearbetning in a nice place
     presentation_df = presentation_df[[
         "Produkt", "Märke", "Butik", "Pris", "Storlek (g)", "Protein/100g", "Bearbetning", "PPK"
     ]]
     
-    # Render interactive DataFrame styled with high performance
     st.dataframe(
         presentation_df,
         use_container_width=True,
@@ -364,76 +424,73 @@ if not df_filtered.empty:
 
 
 # --- 3. DETAILED PRODUCT VIEW ---
-st.markdown("### 🔍 Detaljerad Produktvy")
+st.markdown("### Detaljerad information")
 
 if not df_all.empty:
     unique_product_names = sorted(df_all["Produkt"].unique())
     
     selected_product = st.selectbox(
-        "Välj en produkt för att visa detaljerad närings- och prisinformation:",
+        "Välj en produkt för fullständig pris- och näringsinformation:",
         options=unique_product_names,
-        index=0,
-        help="Välj en produkt för att se dess näringsvärden, EAN-kod, NOVA-grupp och Protein per Krona."
+        index=0
     )
     
     if selected_product:
-        # Filter details for the selected product
         prod_df = df_all[(df_all["Produkt"] == selected_product) & (df_all["Butik"] == "Hemköp")].copy()
         
         if not prod_df.empty:
             row = prod_df.iloc[0]
             
-            # Map NOVA group to simplified label with emoji
             nova_val = row['NOVA-Grupp']
             if nova_val == 1:
-                nova_label = "🟢 Naturligt / Oprocessat"
+                nova_label = "Naturligt / Oprocessat"
             elif nova_val == 2:
-                nova_label = "🟡 Köksprodukt / Tillsats"
+                nova_label = "Köksprodukt / Tillsats"
             elif nova_val == 3:
-                nova_label = "🟠 Processat (konserverat)"
+                nova_label = "Processat (konserverat)"
             elif nova_val == 4:
-                nova_label = "🔴 Ultraprocessat / Helfabrikat"
+                nova_label = "Ultraprocessat / Helfabrikat"
             else:
                 nova_label = "Okänt"
                 
-            # Show a beautiful detailed view in 2 columns
             detail_cols = st.columns([1, 1])
             
             with detail_cols[0]:
                 st.markdown(f"""
-<div style="background-color: #f8fafc; border-top: 4px solid #005B99; border-radius: 8px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03); height: 100%;">
-<div style="font-size: 0.8rem; font-weight: 700; color: #005B99; text-transform: uppercase; margin-bottom: 0.3rem;">🔴 Hemköp</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">{row['Produkt']}</div>
-<div style="font-size: 0.9rem; color: #64748b; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">VARUMÄRKE: {row['Märke']}</div>
+<div class="detail-card">
+<div class="detail-store">Hemköp</div>
+<div class="detail-title">{row['Produkt']}</div>
+<div class="detail-brand">{row['Märke']}</div>
 
-<p style="margin: 0.3rem 0; font-size: 1rem;">💸 <b>Konsumentpris:</b> {row['Pris']:.2f} kr</p>
-<p style="margin: 0.3rem 0; font-size: 1rem;">⚖️ <b>Förpackningsstorlek:</b> {row['Storlek (g)']:.0f}g</p>
-<p style="margin: 0.3rem 0; font-size: 1rem;">🍗 <b>Protein per 100g:</b> {row['Protein/100g']:.1f}g</p>
-<p style="margin: 0.3rem 0; font-size: 1rem;">🏷️ <b>EAN-kod:</b> <code>{row['EAN']}</code></p>
-<p style="margin: 0.3rem 0; font-size: 1rem;">⚙️ <b>Bearbetningsgrad:</b> {nova_label}</p>
-<p style="margin: 0.3rem 0; font-size: 1rem;">📁 <b>Kategori:</b> {row['Kategori']}</p>
+<div class="detail-row"><span class="detail-label">Konsumentpris</span><span class="detail-value">{row['Pris']:.2f} kr</span></div>
+<div class="detail-row"><span class="detail-label">Förpackningsstorlek</span><span class="detail-value">{row['Storlek (g)']:.0f} g</span></div>
+<div class="detail-row"><span class="detail-label">Protein per 100g</span><span class="detail-value">{row['Protein/100g']:.1f} g</span></div>
+<div class="detail-row"><span class="detail-label">EAN-kod</span><span class="detail-value"><code>{row['EAN']}</code></span></div>
+<div class="detail-row"><span class="detail-label">Bearbetningsgrad</span><span class="detail-value">{nova_label}</span></div>
+<div class="detail-row"><span class="detail-label">Kategori</span><span class="detail-value">{row['Kategori']}</span></div>
 
-<div style="margin-top: 1.2rem; padding-top: 0.8rem; border-top: 1px dashed #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
-<span style="font-weight: 600; color: #64748b; font-size: 1rem;">Protein per krona (PPK):</span>
-<span style="font-weight: 800; color: #10b981; font-size: 1.6rem;">{row['PPK']:.2f} g/kr</span>
+<div class="detail-footer">
+<span class="detail-ppk-label">Protein per krona (PPK):</span>
+<span class="detail-ppk-value">{row['PPK']:.2f} g/kr</span>
 </div>
 </div>
 """, unsafe_allow_html=True)
                 
             with detail_cols[1]:
-                # Renders a bar chart comparing this product's metrics visually
-                st.markdown("<p style='font-size:1.1rem; font-weight:600; text-align:center; margin-bottom:0.8rem;'>Produktens förhållande: Protein per 100g vs PPK (g/kr)</p>", unsafe_allow_html=True)
+                st.markdown("<p style='font-size:1rem; font-weight:500; color:#4B5563; text-align:center; margin-bottom:1rem;'>Nyckeltalsjämförelse</p>", unsafe_allow_html=True)
                 chart_data = pd.DataFrame({
                     "Värde": [row['Protein/100g'], row['PPK']],
-                    "Metrik": ["Protein per 100g (g)", "Protein per krona (g/kr)"]
+                    "Metrik": ["Protein per 100g (g)", "PPK (g/kr)"]
                 })
+                # Using a red color hex for the bar chart
                 st.bar_chart(
                     data=chart_data,
                     x="Metrik",
                     y="Värde",
+                    color="#E52421",
                     use_container_width=True
                 )
         else:
             st.warning("Produkten saknas eller säljs inte på Hemköp.")
 else:
-    st.warning("Ingen data hittades i databasen för att utföra detaljerad produktvy.")
+    st.info("Databasen innehåller ingen information att visa.")
