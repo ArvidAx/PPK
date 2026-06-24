@@ -266,31 +266,6 @@ with st.sidebar:
         default=all_categories
     )
     
-    # 4. Processing Filter
-    nova_options = [
-        "Naturligt / Oprocessat",
-        "Köksprodukt / Tillsats",
-        "Processat / Konserverat",
-        "Ultraprocessat / Helfabrikat"
-    ]
-    selected_nova_labels = st.multiselect(
-        "Bearbetningsgrad (NOVA)",
-        options=nova_options,
-        default=nova_options
-    )
-    
-    # Map selected labels to numeric values
-    selected_nova_nums = []
-    for label in selected_nova_labels:
-        if "Naturligt" in label:
-            selected_nova_nums.append(1)
-        elif "Köksprodukt" in label:
-            selected_nova_nums.append(2)
-        elif "Processat" in label:
-            selected_nova_nums.append(3)
-        elif "Ultraprocessat" in label:
-            selected_nova_nums.append(4)
-            
     # 5. Numerical Sliders
     max_price = st.slider(
         "Maxpris (SEK)",
@@ -337,11 +312,6 @@ if not df_filtered.empty:
     else:
         df_filtered = pd.DataFrame(columns=df_filtered.columns)
         
-    if selected_nova_nums and not df_filtered.empty:
-        df_filtered = df_filtered[df_filtered["NOVA-Grupp"].isin(selected_nova_nums)]
-    else:
-        df_filtered = pd.DataFrame(columns=df_filtered.columns)
-
     if search_query and not df_filtered.empty:
         df_filtered = df_filtered[
             df_filtered["Produkt"].str.contains(search_query, case=False, na=False) |
@@ -387,27 +357,9 @@ else:
 # --- 2. INTERACTIVE DATA TABLE ---
 st.markdown("### Tabellöversikt")
 if not df_filtered.empty:
-    def map_nova_group(group_num):
-        if group_num == 1:
-            return "Naturligt / Oprocessat"
-        elif group_num == 2:
-            return "Köksprodukt"
-        elif group_num == 3:
-            return "Processat"
-        elif group_num == 4:
-            return "Ultraprocessat"
-        return "Okänt"
-
     presentation_df = df_filtered[[
-        "Produkt", "Märke", "Butik", "Pris", "Storlek (g)", "Protein/100g", "NOVA-Grupp", "PPK"
+        "Produkt", "Märke", "Butik", "Pris", "Storlek (g)", "Protein/100g", "Kategori", "PPK"
     ]].copy()
-    
-    presentation_df["Bearbetning"] = presentation_df["NOVA-Grupp"].apply(map_nova_group)
-    presentation_df = presentation_df.drop(columns=["NOVA-Grupp"])
-    
-    presentation_df = presentation_df[[
-        "Produkt", "Märke", "Butik", "Pris", "Storlek (g)", "Protein/100g", "Bearbetning", "PPK"
-    ]]
     
     st.dataframe(
         presentation_df,
@@ -418,7 +370,7 @@ if not df_filtered.empty:
             "Storlek (g)": st.column_config.NumberColumn("Storlek (g)", format="%d g"),
             "Protein/100g": st.column_config.NumberColumn("Protein/100g", format="%.1f g"),
             "PPK": st.column_config.NumberColumn("PPK (g/kr)", format="%.2f"),
-            "Bearbetning": st.column_config.TextColumn("Bearbetningsgrad")
+            "Kategori": st.column_config.TextColumn("Kategori")
         }
     )
 
@@ -441,18 +393,6 @@ if not df_all.empty:
         if not prod_df.empty:
             row = prod_df.iloc[0]
             
-            nova_val = row['NOVA-Grupp']
-            if nova_val == 1:
-                nova_label = "Naturligt / Oprocessat"
-            elif nova_val == 2:
-                nova_label = "Köksprodukt / Tillsats"
-            elif nova_val == 3:
-                nova_label = "Processat (konserverat)"
-            elif nova_val == 4:
-                nova_label = "Ultraprocessat / Helfabrikat"
-            else:
-                nova_label = "Okänt"
-                
             detail_cols = st.columns([1, 1])
             
             with detail_cols[0]:
@@ -466,7 +406,6 @@ if not df_all.empty:
 <div class="detail-row"><span class="detail-label">Förpackningsstorlek</span><span class="detail-value">{row['Storlek (g)']:.0f} g</span></div>
 <div class="detail-row"><span class="detail-label">Protein per 100g</span><span class="detail-value">{row['Protein/100g']:.1f} g</span></div>
 <div class="detail-row"><span class="detail-label">EAN-kod</span><span class="detail-value"><code>{row['EAN']}</code></span></div>
-<div class="detail-row"><span class="detail-label">Bearbetningsgrad</span><span class="detail-value">{nova_label}</span></div>
 <div class="detail-row"><span class="detail-label">Kategori</span><span class="detail-value">{row['Kategori']}</span></div>
 
 <div class="detail-footer">
