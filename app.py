@@ -401,24 +401,24 @@ if not df_all.empty:
             
             with detail_cols[0]:
                 st.markdown(f"""
-                <div style="background-color: #f8fafc; border-top: 4px solid #005B99; border-radius: 8px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03); height: 100%;">
-                    <div style="font-size: 0.8rem; font-weight: 700; color: #005B99; text-transform: uppercase; margin-bottom: 0.3rem;">🔴 Hemköp</div>
-                    <div style="font-size: 1.5rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">{row['Produkt']}</div>
-                    <div style="font-size: 0.9rem; color: #64748b; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">VARUMÄRKE: {row['Märke']}</div>
-                    
-                    <p style="margin: 0.3rem 0; font-size: 1rem;">💸 <b>Konsumentpris:</b> {row['Pris']:.2f} kr</p>
-                    <p style="margin: 0.3rem 0; font-size: 1rem;">⚖️ <b>Förpackningsstorlek:</b> {row['Storlek (g)']:.0f}g</p>
-                    <p style="margin: 0.3rem 0; font-size: 1rem;">🍗 <b>Protein per 100g:</b> {row['Protein/100g']:.1f}g</p>
-                    <p style="margin: 0.3rem 0; font-size: 1rem;">🏷️ <b>EAN-kod:</b> <code>{row['EAN']}</code></p>
-                    <p style="margin: 0.3rem 0; font-size: 1rem;">⚙️ <b>Bearbetningsgrad:</b> {nova_label}</p>
-                    <p style="margin: 0.3rem 0; font-size: 1rem;">📁 <b>Kategori:</b> {row['Kategori']}</p>
-                    
-                    <div style="margin-top: 1.2rem; padding-top: 0.8rem; border-top: 1px dashed #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
-                        <span style="font-weight: 600; color: #64748b; font-size: 1rem;">Protein per krona (PPK):</span>
-                        <span style="font-weight: 800; color: #10b981; font-size: 1.6rem;">{row['PPK']:.2f} g/kr</span>
-                    </div>
-                </div>
-                """, unsafe_allow_html=True)
+<div style="background-color: #f8fafc; border-top: 4px solid #005B99; border-radius: 8px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03); height: 100%;">
+    <div style="font-size: 0.8rem; font-weight: 700; color: #005B99; text-transform: uppercase; margin-bottom: 0.3rem;">🔴 Hemköp</div>
+    <div style="font-size: 1.5rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">{row['Produkt']}</div>
+    <div style="font-size: 0.9rem; color: #64748b; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">VARUMÄRKE: {row['Märke']}</div>
+    
+    <p style="margin: 0.3rem 0; font-size: 1rem;">💸 <b>Konsumentpris:</b> {row['Pris']:.2f} kr</p>
+    <p style="margin: 0.3rem 0; font-size: 1rem;">⚖️ <b>Förpackningsstorlek:</b> {row['Storlek (g)']:.0f}g</p>
+    <p style="margin: 0.3rem 0; font-size: 1rem;">🍗 <b>Protein per 100g:</b> {row['Protein/100g']:.1f}g</p>
+    <p style="margin: 0.3rem 0; font-size: 1rem;">🏷️ <b>EAN-kod:</b> <code>{row['EAN']}</code></p>
+    <p style="margin: 0.3rem 0; font-size: 1rem;">⚙️ <b>Bearbetningsgrad:</b> {nova_label}</p>
+    <p style="margin: 0.3rem 0; font-size: 1rem;">📁 <b>Kategori:</b> {row['Kategori']}</p>
+    
+    <div style="margin-top: 1.2rem; padding-top: 0.8rem; border-top: 1px dashed #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-weight: 600; color: #64748b; font-size: 1rem;">Protein per krona (PPK):</span>
+        <span style="font-weight: 800; color: #10b981; font-size: 1.6rem;">{row['PPK']:.2f} g/kr</span>
+    </div>
+</div>
+""", unsafe_allow_html=True)
                 
             with detail_cols[1]:
                 # Renders a bar chart comparing this product's metrics visually
