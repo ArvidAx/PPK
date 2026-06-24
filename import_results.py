@@ -28,13 +28,15 @@ def import_data():
         session.add(hemkop)
         session.commit()
 
-    # 3. Read resultat.json
-    try:
-        with open("resultat.json", "r", encoding="utf-8") as f:
-            data = json.load(f)
-    except Exception as e:
-        print(f"Error loading resultat.json: {e}")
-        return
+    # 3. Read both json files
+    data = []
+    for filename in ["resultat.json", "resultat_fler_kategorier.json"]:
+        try:
+            with open(filename, "r", encoding="utf-8") as f:
+                data.extend(json.load(f))
+            print(f"Loaded {filename}")
+        except Exception as e:
+            print(f"Error loading {filename}: {e}")
 
     # 4. Insert data
     count = 0
