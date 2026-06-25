@@ -283,57 +283,84 @@ def parse_package_weight_g(display_volume: Optional[str], url: str = "") -> Opti
     return None
 
 
-def extract_protein_per_100g(product_detail: dict) -> Optional[float]:
+def extract_nutrition_per_100g(product_detail: dict) -> dict:
     """
-    Extraherar proteininnehåll per 100g från produktdetaljernas näringsvärden.
-    Hanterar nu korrekt gram, milligram och mikrogram.
+    Extraherar näringsvärden (protein, kalorier, fett, kolhydrater, salt) per 100g.
     """
+    result = {
+        "protein": None,
+        "calories": None,
+        "fat": None,
+        "carbohydrates": None,
+        "salt": None
+    }
+    
     nutrient_headers = product_detail.get("nutrientHeaders", [])
     if not nutrient_headers:
-        return None
+        return result
+
+    def _parse_val(nutrient):
+        qty = nutrient.get("quantityContained")
+        if qty is None:
+            return None
+        unit = (nutrient.get("measurementUnitCode") or "").lower()
+        try:
+            val = float(qty)
+            if unit in ("milligram", "mg"):
+                val /= 1000.0
+            elif unit in ("mikrogram", "microgram", "µg", "ug"):
+                val /= 1000000.0
+            return val
+        except (ValueError, TypeError):
+            return None
 
     for header in nutrient_headers:
         basis_qty = header.get("nutrientBasisQuantity")
         if basis_qty and float(basis_qty) != 100:
             continue
 
-        nutrient_details = header.get("nutrientDetails", [])
-        for nutrient in nutrient_details:
-            type_code = (nutrient.get("nutrientTypeCode") or "").lower()
-            unit = (nutrient.get("measurementUnitCode") or "").lower()
-
-            if "protein" in type_code:
-                qty = nutrient.get("quantityContained")
-                if qty is not None:
-                    try:
-                        val = float(qty)
-                        if unit in ("milligram", "mg"):
-                            val /= 1000.0
-                        elif unit in ("mikrogram", "microgram", "µg", "ug"):
-                            val /= 1000000.0
-                        return val
-                    except (ValueError, TypeError):
-                        pass
-
-    # Fallback: ta första bästa om 100g-block saknas
-    for header in nutrient_headers:
         for nutrient in header.get("nutrientDetails", []):
             type_code = (nutrient.get("nutrientTypeCode") or "").lower()
             unit = (nutrient.get("measurementUnitCode") or "").lower()
-            if "protein" in type_code:
-                qty = nutrient.get("quantityContained")
-                if qty is not None:
-                    try:
-                        val = float(qty)
-                        if unit in ("milligram", "mg"):
-                            val /= 1000.0
-                        elif unit in ("mikrogram", "microgram", "µg", "ug"):
-                            val /= 1000000.0
-                        return val
-                    except (ValueError, TypeError):
-                        pass
+            val = _parse_val(nutrient)
+            
+            if val is not None:
+                if "protein" in type_code:
+                    result["protein"] = val
+                elif "energi" in type_code and "kilokalori" in unit:
+                    result["calories"] = val
+                elif type_code == "fett":
+                    result["fat"] = val
+                elif type_code == "kolhydrat":
+                    result["carbohydrates"] = val
+                elif "salt" in type_code:
+                    result["salt"] = val
+                    
+        if result["protein"] is not None:
+            break
 
-    return None
+    # Fallback om ingen 100g basis fanns
+    if result["protein"] is None:
+        for header in nutrient_headers:
+            for nutrient in header.get("nutrientDetails", []):
+                type_code = (nutrient.get("nutrientTypeCode") or "").lower()
+                unit = (nutrient.get("measurementUnitCode") or "").lower()
+                val = _parse_val(nutrient)
+                if val is not None:
+                    if "protein" in type_code:
+                        result["protein"] = val
+                    elif "energi" in type_code and "kilokalori" in unit:
+                        result["calories"] = val
+                    elif type_code == "fett":
+                        result["fat"] = val
+                    elif type_code == "kolhydrat":
+                        result["carbohydrates"] = val
+                    elif "salt" in type_code:
+                        result["salt"] = val
+            if result["protein"] is not None:
+                break
+                
+    return result
 
 
 # ── Beräkningsfunktioner ─────────────────────────────────────────────────────
@@ -491,7 +518,12 @@ def scrape_all_categories(
                     "package_weight_g": package_weight_g,
                     "compare_price": compare_price_str,
                     "compare_price_per_kg": compare_price_per_kg,
+                    "description": "",
                     "protein_per_100g": None,
+                    "calories_per_100g": None,
+                    "fat_per_100g": None,
+                    "carbohydrates_per_100g": None,
+                    "salt_per_100g": None,
                     "protein_per_krona": None,
                     "calculation_method": None,
                     "url": product_url,
@@ -501,8 +533,17 @@ def scrape_all_categories(
                 if fetch_nutrition:
                     _polite_sleep()
                     detail = fetch_product_details(session, code)
-                    protein = extract_protein_per_100g(detail)
+                    
+                    product_entry["description"] = detail.get("description", "")
+                    
+                    nutrition = extract_nutrition_per_100g(detail)
+                    protein = nutrition["protein"]
+                    
                     product_entry["protein_per_100g"] = protein
+                    product_entry["calories_per_100g"] = nutrition["calories"]
+                    product_entry["fat_per_100g"] = nutrition["fat"]
+                    product_entry["carbohydrates_per_100g"] = nutrition["carbohydrates"]
+                    product_entry["salt_per_100g"] = nutrition["salt"]
 
                     if protein is not None:
                         ppk = calculate_protein_per_krona(
