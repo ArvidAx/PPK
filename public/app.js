@@ -24,13 +24,9 @@ async function init() {
         
         // Calculate PPK and ensure data structure
         allData = rawData.map(item => {
-            let ppk = 0;
-            if (item.price_sek > 0) {
-                ppk = (item.package_size_grams * item.protein_per_100g) / (100 * item.price_sek);
-            }
             return {
                 ...item,
-                ppk: ppk
+                ppk: item.protein_per_krona || 0
             };
         });
 
@@ -150,9 +146,8 @@ function renderTable() {
             <td data-label="Produkt"><strong>${item.name || 'Okänd'}</strong></td>
             <td data-label="Märke">${item.brand || '-'}</td>
             <td data-label="Pris">${item.price_sek.toFixed(2)} kr</td>
-            <td data-label="Storlek">${item.package_size_grams} g</td>
+            <td data-label="Storlek">${item.display_volume || '-'}</td>
             <td data-label="Protein/100g">${item.protein_per_100g.toFixed(1)} g</td>
-            <td data-label="Kategori">${item.category || '-'}</td>
             <td data-label="PPK (g/kr)" class="${ppkClass}">${item.ppk.toFixed(2)}</td>
             <td><a href="${url}" target="_blank" class="store-link">Hemköp →</a></td>
         `;

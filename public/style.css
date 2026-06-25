@@ -91,6 +91,7 @@ body {
 
 .sidebar {
     width: 320px;
+    flex-shrink: 0;
     background-color: var(--sidebar-bg);
     border-right: 1px solid var(--border-color);
     padding: 2.5rem 2rem;
@@ -266,8 +267,12 @@ table {
 }
 
 th, td {
-    padding: 1rem 2rem;
+    padding: 1rem 1.5rem;
     border-bottom: 1px solid var(--border-color);
+}
+
+td:first-child {
+    min-width: 220px;
 }
 
 th {
