@@ -306,6 +306,10 @@ with st.expander("Beräkningsmetodik (PPK)"):
 # --- DATA FILTERING LOGIC ---
 df_filtered = df_all.copy()
 
+# Säkerhetskontroll (om Streamlit Cloud har en gammal database.py cachad i minnet)
+if "Länk" not in df_filtered.columns:
+    df_filtered["Länk"] = ""
+
 if not df_filtered.empty:
     if selected_categories:
         df_filtered = df_filtered[df_filtered["Kategori"].isin(selected_categories)]
