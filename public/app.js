@@ -15,6 +15,7 @@ const minProteinInput = document.getElementById('minProtein');
 const minProteinLabel = document.getElementById('minProteinLabel');
 const totalProductsEl = document.getElementById('totalProducts');
 const bestPPKEl = document.getElementById('bestPPK');
+const resultCountEl = document.getElementById('resultCount');
 const tableHeaders = document.querySelectorAll('th[data-sort]');
 
 // Shopping List Elements
@@ -42,6 +43,14 @@ function esc(str) {
         .replace(/"/g, '&quot;');
 }
 
+// Safe URL validator — only allow http/https to prevent javascript: XSS
+function safeUrl(url, fallback) {
+    if (url && (url.startsWith('https://') || url.startsWith('http://'))) {
+        return url;
+    }
+    return fallback || '#';
+}
+
 // Safe number formatting — handles null/undefined without crashing
 function fmt(val, decimals = 1, suffix = '') {
     if (val == null || isNaN(val)) return '–';
@@ -51,7 +60,7 @@ function fmt(val, decimals = 1, suffix = '') {
 // Init
 async function init() {
     try {
-        // Fetch and display last updated time
+        // Fetch and display last updated time (non-blocking)
         fetch('last_updated.json')
             .then(res => {
                 if (!res.ok) throw new Error();
@@ -145,12 +154,11 @@ function setupEventListeners() {
     tableHeaders.forEach(th => {
         th.addEventListener('click', () => {
             const col = th.dataset.sort;
-            if (!col) return; // Ignore columns without sorting
+            if (!col) return;
             if (sortCol === col) {
                 sortDesc = !sortDesc;
             } else {
                 sortCol = col;
-                // Descending by default for efficiency metrics, ascending for others
                 sortDesc = (col === 'ppk' || col === 'ppkcal' || col === 'protein_per_100g');
             }
             updateSortHeaders();
@@ -160,6 +168,9 @@ function setupEventListeners() {
 
     // Modal close listeners
     closeModalBtn.addEventListener('click', closeModal);
+    closeModalBtn.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); closeModal(); }
+    });
     window.addEventListener('click', e => {
         if (e.target === productModal) closeModal();
     });
@@ -204,7 +215,6 @@ function applyFilters() {
     filteredData.sort((a, b) => {
         let valA = a[sortCol];
         let valB = b[sortCol];
-        // Handle nulls — push to bottom regardless of sort direction
         if (valA == null) return 1;
         if (valB == null) return -1;
         if (typeof valA === 'string') valA = valA.toLowerCase();
@@ -225,20 +235,38 @@ function renderTable() {
         tableBody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding: 3rem; color: #64748b;">
             Inga produkter matchar dina filter.
         </td></tr>`;
+        if (resultCountEl) resultCountEl.textContent = '(0 produkter)';
         return;
     }
 
     const displayData = filteredData.slice(0, 200);
+    if (resultCountEl) {
+        resultCountEl.textContent = filteredData.length > 200
+            ? `(visar 200 av ${filteredData.length})`
+            : `(${filteredData.length} produkter)`;
+    }
 
     displayData.forEach(item => {
         const tr = document.createElement('tr');
-        const ppkClass = item.ppk >= 2 ? 'ppk-value' : '';
+
+        // Color-code PPK: green >= 2, yellow >= 1, neutral otherwise
+        let ppkClass = '';
+        if (item.ppk >= 2) ppkClass = 'ppk-high';
+        else if (item.ppk >= 1) ppkClass = 'ppk-mid';
+
+        // Color-code PPKcal: green >= 10g/100kcal
         const ppkcalClass = item.ppkcal >= 10 ? 'ppk-value' : '';
-        const url = esc(item.url || `https://www.hemkop.se/produkt/${item.code}`);
+
+        const fallbackUrl = (item.store || '').toLowerCase() === 'willys'
+            ? `https://www.willys.se/produkt/${item.code}`
+            : `https://www.hemkop.se/produkt/${item.code}`;
+        const validUrl = safeUrl(item.url, fallbackUrl);
         const storeClass = (item.store || '').toLowerCase() === 'willys' ? 'willys' : 'hemkop';
 
         tr.innerHTML = `
-            <td style="text-align: center;"><button class="add-to-list-btn" title="Lägg till i shoppinglistan">+</button></td>
+            <td style="text-align: center;">
+                <button class="add-to-list-btn" aria-label="Lägg till ${esc(item.name)} i shoppinglistan" title="Lägg till i shoppinglistan">+</button>
+            </td>
             <td data-label="Produkt"><strong>${esc(item.name)}</strong></td>
             <td data-label="Märke">${esc(item.brand) || '–'}</td>
             <td data-label="Butik"><span class="store-badge ${storeClass}">${esc(item.store) || 'Hemköp'}</span></td>
@@ -247,58 +275,50 @@ function renderTable() {
             <td data-label="Protein/100g">${fmt(item.protein_per_100g, 1)} g</td>
             <td data-label="PPK (g/kr)" class="${ppkClass}">${fmt(item.ppk, 2)}</td>
             <td data-label="Prot/100 kcal" class="${ppkcalClass}">${fmt(item.ppkcal, 1)} g</td>
-            <td></td>
+            <td data-label="Länk"></td>
         `;
 
-        // Add to list button functionality
-        tr.querySelector('.add-to-list-btn').addEventListener('click', (e) => {
-            e.stopPropagation(); // Avoid triggering row click modal
+        // Add to list button with visual feedback
+        const addBtn = tr.querySelector('.add-to-list-btn');
+        addBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             addToShoppingList(item);
+            addBtn.textContent = '✓';
+            addBtn.classList.add('added');
+            setTimeout(() => {
+                addBtn.textContent = '+';
+                addBtn.classList.remove('added');
+            }, 1200);
         });
 
-        // Row click functionality
+        // Row click: open modal (except first and last col)
         tr.addEventListener('click', (e) => {
             const cell = e.target.closest('td');
             if (!cell) return;
             const cells = Array.from(cell.parentNode.children);
             const index = cells.indexOf(cell);
-            
-            if (index === 0) {
-                return; // Plus button column
-            }
+            if (index === 0) return;
             if (index === 9) {
-                // Link column clicked - trigger anchor link click
                 const anchor = cell.querySelector('.store-link');
                 if (anchor) anchor.click();
                 return;
             }
-            // Anywhere else: open modal
             openModal(item);
         });
 
-        // Build link safely via DOM to prevent URL injection
+        // Build link via DOM (safe against URL injection)
         const linkCell = tr.querySelector('td:last-child');
         linkCell.style.cursor = 'pointer';
-        
         const a = document.createElement('a');
-        a.href = url;
+        a.href = validUrl;
         a.target = '_blank';
         a.rel = 'noopener noreferrer';
         a.className = 'store-link';
         a.textContent = 'Butik →';
-        
-        // Prevent row click modal when clicking the button directly
-        a.addEventListener('click', (e) => {
-            e.stopPropagation();
-        });
-
-        // Clicking anywhere in the cell triggers the link
-        linkCell.addEventListener('click', (e) => {
-            e.stopPropagation();
-            a.click();
-        });
-
+        a.addEventListener('click', e => e.stopPropagation());
+        linkCell.addEventListener('click', (e) => { e.stopPropagation(); a.click(); });
         linkCell.appendChild(a);
+
         tableBody.appendChild(tr);
     });
 }
@@ -319,6 +339,10 @@ function loadShoppingList() {
     try {
         const saved = localStorage.getItem('ppk_shopping_list');
         shoppingList = saved ? JSON.parse(saved) : [];
+        // Sanitize loaded data - filter out items with missing required fields
+        shoppingList = shoppingList.filter(item =>
+            item && item.code && item.name && item.price_sek != null
+        );
     } catch (e) {
         shoppingList = [];
     }
@@ -389,13 +413,23 @@ function renderShoppingList() {
     shoppingList.forEach(item => {
         const qty = item.qty || 1;
         totalQty += qty;
-        totalCost += item.price_sek * qty;
 
-        const weight = item.package_weight_g || 0;
-        const itemProtein = (item.protein_per_100g / 100) * weight;
-        totalProtein += itemProtein * qty;
+        // Guard against null price_sek
+        const price = item.price_sek != null ? item.price_sek : 0;
+        totalCost += price * qty;
 
-        const itemUrl = item.url || ((item.store || '').toLowerCase() === 'willys' ? `https://www.willys.se/produkt/${item.code}` : `https://www.hemkop.se/produkt/${item.code}`);
+        // Guard against missing weight/protein data
+        const weight = item.package_weight_g > 0 ? item.package_weight_g : null;
+        if (weight && item.protein_per_100g) {
+            const itemProtein = (item.protein_per_100g / 100) * weight;
+            totalProtein += itemProtein * qty;
+        }
+
+        // Safe URL with validation
+        const fallbackUrl = (item.store || '').toLowerCase() === 'willys'
+            ? `https://www.willys.se/produkt/${item.code}`
+            : `https://www.hemkop.se/produkt/${item.code}`;
+        const itemUrl = safeUrl(item.url, fallbackUrl);
 
         const li = document.createElement('li');
         li.className = 'shopping-item';
@@ -403,12 +437,13 @@ function renderShoppingList() {
             <div class="shopping-item-info">
                 <span class="shopping-item-name">${esc(item.name)}</span>
                 <span class="shopping-item-sub">${esc(item.brand)} | ${esc(item.store)}</span>
+                <span class="shopping-item-price-unit">${fmt(price, 2)} kr/st</span>
                 <a href="${esc(itemUrl)}" target="_blank" rel="noopener noreferrer" class="shopping-item-store-link">Köp på ${esc(item.store || 'butiken')} →</a>
             </div>
             <div class="shopping-item-controls">
-                <button class="btn-qty btn-minus">-</button>
-                <span class="shopping-item-qty">${qty}</span>
-                <button class="btn-qty btn-plus">+</button>
+                <button class="btn-qty btn-minus" aria-label="Minska antal ${esc(item.name)}">−</button>
+                <span class="shopping-item-qty" aria-label="Antal">${qty}</span>
+                <button class="btn-qty btn-plus" aria-label="Öka antal ${esc(item.name)}">+</button>
             </div>
         `;
 
@@ -428,7 +463,7 @@ function renderShoppingList() {
 
     summaryCountEl.textContent = `${totalQty} st`;
     summaryPriceEl.textContent = `${totalCost.toFixed(2)} kr`;
-    summaryProteinEl.textContent = `${totalProtein.toFixed(1)} g`;
+    summaryProteinEl.textContent = totalProtein > 0 ? `${totalProtein.toFixed(1)} g` : '– g';
     summaryPPKEl.textContent = `${combinedPPK.toFixed(2)} g/kr`;
 }
 
@@ -439,24 +474,28 @@ function openModal(item) {
     const carbs = item.carbohydrates_per_100g || 0;
     const salt = item.salt_per_100g || 0;
     const calories = item.calories_per_100g || 0;
-    
-    const protPct = Math.min((protein / 100) * 100, 100);
-    const fatPct = Math.min((fat / 100) * 100, 100);
-    const carbsPct = Math.min((carbs / 100) * 100, 100);
-    const saltPct = Math.min((salt / 100) * 100, 100);
+
+    // Calculate bar widths as % of 50g max (sensible max for visualization)
+    const protPct = Math.min((protein / 50) * 100, 100);
+    const fatPct = Math.min((fat / 50) * 100, 100);
+    const carbsPct = Math.min((carbs / 50) * 100, 100);
+    const saltPct = Math.min((salt / 5) * 100, 100);
 
     const storeBadgeClass = (item.store || '').toLowerCase() === 'willys' ? 'willys' : 'hemkop';
-    const url = esc(item.url || `https://www.hemkop.se/produkt/${item.code}`);
+    const fallbackUrl = (item.store || '').toLowerCase() === 'willys'
+        ? `https://www.willys.se/produkt/${item.code}`
+        : `https://www.hemkop.se/produkt/${item.code}`;
+    const validUrl = safeUrl(item.url, fallbackUrl);
 
     modalBody.innerHTML = `
         <div class="modal-header">
             <h2 class="modal-title">${esc(item.name)}</h2>
             <div class="modal-subtitle">
-                ${esc(item.brand) || 'Okänt märke'} &nbsp;|&nbsp; 
+                ${esc(item.brand) || 'Okänt märke'} &nbsp;|&nbsp;
                 <span class="store-badge ${storeBadgeClass}">${esc(item.store) || 'Hemköp'}</span>
             </div>
         </div>
-        
+
         <div class="modal-grid">
             <div>
                 <h3 class="modal-section-title">Näringsvärden (per 100g)</h3>
@@ -499,7 +538,7 @@ function openModal(item) {
                     </div>
                 </div>
             </div>
-            
+
             <div>
                 <h3 class="modal-section-title">Pris & Effektivitet</h3>
                 <div class="modal-stats">
@@ -526,15 +565,15 @@ function openModal(item) {
                 </div>
             </div>
         </div>
-        
+
         ${item.description ? `
             <h3 class="modal-section-title">Beskrivning</h3>
             <div class="modal-desc">${esc(item.description)}</div>
         ` : ''}
-        
+
         <div class="modal-footer">
             <button class="btn btn-secondary" id="closeModalFooterBtn">Stäng</button>
-            <a class="btn btn-primary" href="${url}" target="_blank" rel="noopener noreferrer">Visa på ${esc(item.store) || 'butiken'} →</a>
+            <a class="btn btn-primary" href="${esc(validUrl)}" target="_blank" rel="noopener noreferrer">Visa på ${esc(item.store) || 'butiken'} →</a>
         </div>
     `;
 
@@ -542,16 +581,16 @@ function openModal(item) {
 
     productModal.classList.add('show');
     productModal.setAttribute('aria-hidden', 'false');
-    
-    // Animate progress bars width after modal opens
+    // Move focus to modal for accessibility
+    productModal.querySelector('.close-btn').focus();
+
+    // Animate progress bars
     setTimeout(() => {
         const fills = modalBody.querySelectorAll('.macro-bar-fill');
         fills.forEach(fill => {
             const width = fill.style.width;
             fill.style.width = '0';
-            setTimeout(() => {
-                fill.style.width = width;
-            }, 50);
+            setTimeout(() => { fill.style.width = width; }, 50);
         });
     }, 100);
 }

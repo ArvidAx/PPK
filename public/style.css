@@ -164,6 +164,8 @@ tr{transition:background-color .15s}
 tr:hover{background-color:#f8fafc}
 
 .ppk-value{font-weight:800;color:var(--accent-green)}
+.ppk-high{font-weight:800;color:var(--accent-green)}
+.ppk-mid{font-weight:700;color:#d97706}
 
 .store-link{
     display:inline-flex;align-items:center;justify-content:center;
@@ -321,6 +323,12 @@ tr:hover{background-color:#f8fafc}
     transform: scale(1.1);
     box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
 }
+.add-to-list-btn.added {
+    background-color: var(--accent-green);
+    color: white;
+    transform: scale(1.05);
+    font-size: 0.9rem;
+}
 
 /* =========================================
    SHOPPING LIST
@@ -384,6 +392,11 @@ tr:hover{background-color:#f8fafc}
 .shopping-item-sub {
     font-size: 0.75rem;
     color: var(--text-muted);
+}
+.shopping-item-price-unit {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 0.05rem;
 }
 .shopping-item-store-link {
     font-size: 0.7rem;
@@ -509,6 +522,7 @@ tr:hover{background-color:#f8fafc}
         opacity: 1;
     }
 }
+/* close-btn is a <button> — reset button styles, keep appearance */
 .close-btn {
     position: absolute;
     top: 1.25rem;
@@ -519,9 +533,15 @@ tr:hover{background-color:#f8fafc}
     cursor: pointer;
     transition: color 0.2s;
     line-height: 1;
+    background: none;
+    border: none;
+    padding: 0;
+    outline: none;
 }
-.close-btn:hover {
+.close-btn:hover, .close-btn:focus-visible {
     color: var(--text-main);
+    outline: 2px solid var(--accent-red);
+    border-radius: 4px;
 }
 
 /* Clickable table rows */
@@ -696,6 +716,26 @@ tbody tr {
 .store-badge.willys {
     background-color: #e0f2fe;
     color: #0369a1;
+}
+
+/* Article CTA call-to-action block */
+.article-cta {
+    background: linear-gradient(135deg, #fff1f2, #fff);
+    border: 1px solid rgba(225,29,72,.2);
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+    font-size: 1rem;
+    color: var(--text-main);
+}
+.article-cta p { margin: 0; }
+
+/* Kunskap article-card h2 fix (was h3) */
+.article-card h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
 }
 
 .article-banner {

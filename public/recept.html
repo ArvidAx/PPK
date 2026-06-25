@@ -5,45 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proteinrika Recept – Budget & Hälsa | PPK</title>
     <meta name="description" content="Smarta, billiga och proteinrika recept baserade på de mest kostnadseffektiva råvarorna. Fyll på kroppen utan att tömma plånboken.">
+    <link rel="canonical" href="https://ppk.arvid.dev/recept.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ppk.arvid.dev/recept.html">
+    <meta property="og:title" content="Proteinrika Recept – Budget & Hälsa | PPK">
+    <meta property="og:description" content="Smarta, billiga och proteinrika recept baserade på de mest kostnadseffektiva råvarorna. Fyll på kroppen utan att tömma plånboken.">
+    <meta property="og:locale" content="sv_SE">
+    <meta name="twitter:card" content="summary">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <nav class="navbar">
+    <nav class="navbar" aria-label="Huvudnavigation">
         <a href="index.html" class="logo">PPK<span class="logo-dot">.</span></a>
-        <ul class="nav-links">
+        <ul class="nav-links" role="list">
             <li><a href="index.html">Kalkylator</a></li>
-            <li><a href="recept.html" class="active">Recept</a></li>
+            <li><a href="recept.html" class="active" aria-current="page">Recept</a></li>
             <li><a href="kunskap.html">Kunskapsbank</a></li>
         </ul>
     </nav>
 
-    <div class="app-container" style="display: block;">
+    <main>
         <div class="page-content">
             <header style="margin-bottom: 3rem;">
                 <h1 class="app-title">Proteinrika <span class="accent-red">Recept</span></h1>
                 <p class="app-subtitle" style="margin-bottom: 0;">Smarta, billiga och mättande måltider baserade på databasens mest kostnadseffektiva råvaror. Proteinrikt behöver inte vara dyrt.</p>
             </header>
 
-            <div class="recipe-filter-tabs">
-                <button class="tab-btn active" data-filter="alla">Alla</button>
-                <button class="tab-btn" data-filter="frukost">Frukost</button>
-                <button class="tab-btn" data-filter="lunch">Lunch</button>
-                <button class="tab-btn" data-filter="middag">Middag</button>
+            <div class="recipe-filter-tabs" role="tablist" aria-label="Filtrera recept">
+                <button class="tab-btn active" data-filter="alla" role="tab" aria-selected="true">Alla</button>
+                <button class="tab-btn" data-filter="frukost" role="tab" aria-selected="false">Frukost</button>
+                <button class="tab-btn" data-filter="lunch" role="tab" aria-selected="false">Lunch</button>
+                <button class="tab-btn" data-filter="middag" role="tab" aria-selected="false">Middag</button>
             </div>
 
-            <div class="recipe-grid">
+            <div class="recipe-grid" role="tabpanel">
 
-                <article class="recipe-card" data-cat="middag" id="chicken_pasta">
-                    <div class="recipe-img" style="background-image: url('img_chicken_pasta.png');"></div>
+                <article class="recipe-card" data-cat="middag" id="chicken_pasta" tabindex="0" role="button" aria-label="Öppna recept: Krämig Kycklingpasta">
+                    <div class="recipe-img" style="background-image: url('img_chicken_pasta.png');" role="img" aria-label="Krämig Kycklingpasta"></div>
                     <div class="recipe-content">
                         <div class="recipe-meta">
                             <span>⏱ 20 min</span>
                             <span class="recipe-badge middag">Middag</span>
                         </div>
-                        <h3 class="recipe-title">Krämig Kycklingpasta</h3>
+                        <h2 class="recipe-title">Krämig Kycklingpasta</h2>
                         <p class="recipe-desc">Snabb vardagsrätt med kycklingfilé, kvarg och riven parmesan. Enkel, mättande och budgetvänlig.</p>
                         <div class="recipe-footer">
                             <span class="recipe-protein">💪 45g protein</span>
@@ -52,14 +61,14 @@
                     </div>
                 </article>
 
-                <article class="recipe-card" data-cat="frukost" id="overnight_oats">
-                    <div class="recipe-img" style="background-image: url('img_overnight_oats.png');"></div>
+                <article class="recipe-card" data-cat="frukost" id="overnight_oats" tabindex="0" role="button" aria-label="Öppna recept: Overnight Oats med Kvarg">
+                    <div class="recipe-img" style="background-image: url('img_overnight_oats.png');" role="img" aria-label="Overnight Oats med Kvarg"></div>
                     <div class="recipe-content">
                         <div class="recipe-meta">
                             <span>⏱ 5 min + natt</span>
                             <span class="recipe-badge frukost">Frukost</span>
                         </div>
-                        <h3 class="recipe-title">Overnight Oats med Kvarg</h3>
+                        <h2 class="recipe-title">Overnight Oats med Kvarg</h2>
                         <p class="recipe-desc">Förbered kvällen innan. Havregryn, kvarg och bär ger en proteinrik start på dagen utan att ta en minut av morgonen.</p>
                         <div class="recipe-footer">
                             <span class="recipe-protein">💪 30g protein</span>
@@ -68,14 +77,14 @@
                     </div>
                 </article>
 
-                <article class="recipe-card" data-cat="lunch" id="lentil_halloumi">
-                    <div class="recipe-img" style="background-image: url('img_lentil_halloumi.png');"></div>
+                <article class="recipe-card" data-cat="lunch" id="lentil_halloumi" tabindex="0" role="button" aria-label="Öppna recept: Linsgryta med Halloumi">
+                    <div class="recipe-img" style="background-image: url('img_lentil_halloumi.png');" role="img" aria-label="Linsgryta med Halloumi"></div>
                     <div class="recipe-content">
                         <div class="recipe-meta">
                             <span>⏱ 25 min</span>
                             <span class="recipe-badge lunch">Lunch</span>
                         </div>
-                        <h3 class="recipe-title">Linsgryta med Halloumi</h3>
+                        <h2 class="recipe-title">Linsgryta med Halloumi</h2>
                         <p class="recipe-desc">En mustig och värmande gryta med röda linser, krossade tomater och gyllenstekt halloumi. Vegetarisk favorit.</p>
                         <div class="recipe-footer">
                             <span class="recipe-protein">💪 38g protein</span>
@@ -86,12 +95,12 @@
 
             </div>
         </div>
-    </div>
+    </main>
 
     <!-- Recipe Detail Modal -->
-    <div id="recipeModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div id="recipeModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="recipeModalTitle">
         <div class="modal-content" style="max-width: 650px;">
-            <span class="close-btn" id="closeRecipeModalBtn" aria-label="Stäng">&times;</span>
+            <button class="close-btn" id="closeRecipeModalBtn" aria-label="Stäng recept">×</button>
             <div id="recipeModalBody">
                 <!-- Dynamically populated by recipe_app.js -->
             </div>

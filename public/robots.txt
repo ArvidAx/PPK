@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Disallow data files and JSON
+Disallow: /data.json
+Disallow: /last_updated.json
+
+Sitemap: https://ppk.arvid.dev/sitemap.xml

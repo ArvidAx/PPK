@@ -107,13 +107,17 @@ async function init() {
 }
 
 function setupRecipeEvents() {
-    // Click recipe card to open modal
+    // Click or keyboard Enter/Space on recipe card to open modal
     document.querySelectorAll('.recipe-card').forEach(card => {
-        card.addEventListener('click', () => {
+        const openCard = () => {
             const recipeId = card.id;
             if (recipeId && recipesData[recipeId]) {
                 openRecipeModal(recipeId);
             }
+        };
+        card.addEventListener('click', openCard);
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCard(); }
         });
     });
 
@@ -286,18 +290,9 @@ function openRecipeModal(recipeId) {
 
     recipeModal.classList.add('show');
     recipeModal.setAttribute('aria-hidden', 'false');
-    
-    // Animate progress bars width after modal opens
-    setTimeout(() => {
-        const fills = modalBody.querySelectorAll('.macro-bar-fill');
-        fills.forEach(fill => {
-            const width = fill.style.width;
-            fill.style.width = '0';
-            setTimeout(() => {
-                fill.style.width = width;
-            }, 50);
-        });
-    }, 100);
+    // Move focus to close button for accessibility
+    const closeFocusBtn = recipeModal.querySelector('.close-btn');
+    if (closeFocusBtn) closeFocusBtn.focus();
 }
 
 // Cart integration with localStorage

@@ -5,22 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kunskapsbank om Protein – Fakta, Råd & Forskning | PPK</title>
     <meta name="description" content="Allt du behöver veta om protein: hur mycket du behöver, skillnaden på animaliskt och vegetabiliskt, aminosyror, och mat kontra proteinpulver.">
+    <link rel="canonical" href="https://ppk.arvid.dev/kunskap.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ppk.arvid.dev/kunskap.html">
+    <meta property="og:title" content="Kunskapsbank om Protein – Fakta, Råd & Forskning | PPK">
+    <meta property="og:description" content="Allt du behöver veta om protein: hur mycket du behöver, skillnaden på animaliskt och vegetabiliskt, aminosyror, och mat kontra proteinpulver.">
+    <meta property="og:locale" content="sv_SE">
+    <meta name="twitter:card" content="summary">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <nav class="navbar">
+    <nav class="navbar" aria-label="Huvudnavigation">
         <a href="index.html" class="logo">PPK<span class="logo-dot">.</span></a>
-        <ul class="nav-links">
+        <ul class="nav-links" role="list">
             <li><a href="index.html">Kalkylator</a></li>
             <li><a href="recept.html">Recept</a></li>
-            <li><a href="kunskap.html" class="active">Kunskapsbank</a></li>
+            <li><a href="kunskap.html" class="active" aria-current="page">Kunskapsbank</a></li>
         </ul>
     </nav>
 
-    <div class="app-container" style="display: block;">
+    <main>
         <div class="page-content">
 
             <header style="margin-bottom: 3rem;">
@@ -29,51 +38,57 @@
             </header>
 
             <!-- Article Grid -->
-            <div class="article-grid">
+            <nav aria-label="Artiklar om protein">
+                <div class="article-grid">
 
-                <!-- Article Card 1 -->
-                <a href="artikel-varfor-protein.html" class="article-card">
-                    <div class="article-card-icon">🧬</div>
-                    <div>
-                        <h3>Varför behöver kroppen protein?</h3>
-                        <p>Mer än muskler – protein driver enzymer, hormoner och håller dig mätt.</p>
-                        <span class="read-more">Läs artikel →</span>
-                    </div>
-                </a>
+                    <a href="artikel-varfor-protein.html" class="article-card">
+                        <div class="article-card-icon" aria-hidden="true">🧬</div>
+                        <div>
+                            <h2>Varför behöver kroppen protein?</h2>
+                            <p>Mer än muskler – protein driver enzymer, hormoner och håller dig mätt.</p>
+                            <span class="read-more">Läs artikel →</span>
+                        </div>
+                    </a>
 
-                <!-- Article Card 2 -->
-                <a href="artikel-hur-mycket.html" class="article-card">
-                    <div class="article-card-icon">⚖️</div>
-                    <div>
-                        <h3>Hur mycket protein behöver du?</h3>
-                        <p>Räkna ut ditt dagliga behov baserat på kroppsvikt och aktivitetsnivå.</p>
-                        <span class="read-more">Läs artikel →</span>
-                    </div>
-                </a>
+                    <a href="artikel-hur-mycket.html" class="article-card">
+                        <div class="article-card-icon" aria-hidden="true">⚖️</div>
+                        <div>
+                            <h2>Hur mycket protein behöver du?</h2>
+                            <p>Räkna ut ditt dagliga behov baserat på kroppsvikt och aktivitetsnivå.</p>
+                            <span class="read-more">Läs artikel →</span>
+                        </div>
+                    </a>
 
-                <!-- Article Card 3 -->
-                <a href="artikel-proteinkvalitet.html" class="article-card">
-                    <div class="article-card-icon">🥩</div>
-                    <div>
-                        <h3>Proteinkvalitet: Animaliskt vs Vegetabiliskt</h3>
-                        <p>Vad är ett fullvärdigt protein, och vilka aminosyror är essentiella?</p>
-                        <span class="read-more">Läs artikel →</span>
-                    </div>
-                </a>
+                    <a href="artikel-proteinkvalitet.html" class="article-card">
+                        <div class="article-card-icon" aria-hidden="true">🥩</div>
+                        <div>
+                            <h2>Proteinkvalitet: Animaliskt vs Vegetabiliskt</h2>
+                            <p>Vad är ett fullvärdigt protein, och vilka aminosyror är essentiella?</p>
+                            <span class="read-more">Läs artikel →</span>
+                        </div>
+                    </a>
 
-                <!-- Article Card 4 -->
-                <a href="artikel-mat-vs-pulver.html" class="article-card">
-                    <div class="article-card-icon">🥤</div>
-                    <div>
-                        <h3>Mat vs Proteinpulver</h3>
-                        <p>När är pulver smart och när ska du prioritera riktig mat? En ärlig jämförelse.</p>
-                        <span class="read-more">Läs artikel →</span>
-                    </div>
-                </a>
+                    <a href="artikel-mat-vs-pulver.html" class="article-card">
+                        <div class="article-card-icon" aria-hidden="true">🥤</div>
+                        <div>
+                            <h2>Mat vs Proteinpulver</h2>
+                            <p>När är pulver smart och när ska du prioritera riktig mat? En ärlig jämförelse.</p>
+                            <span class="read-more">Läs artikel →</span>
+                        </div>
+                    </a>
 
+                </div>
+            </nav>
+
+            <div class="info-item" style="margin-top: 3rem; max-width: 600px;">
+                <span class="info-icon" aria-hidden="true">🧮</span>
+                <div>
+                    <strong>Redo att hitta din billigaste proteinkälla?</strong>
+                    <p>Gå till <a href="index.html">PPK-kalkylatorn</a> och jämför hundratals produkter från Hemköp och Willys direkt.</p>
+                </div>
             </div>
 
         </div>
-    </div>
+    </main>
 </body>
 </html>
