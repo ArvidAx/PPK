@@ -7,3 +7,16 @@ ENV/
 env/
 .streamlit/
 
+# Secrets & credentials - never commit these
+*.env
+.env.*
+secrets.json
+credentials.json
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Logs
+cron_log.txt
+*.log

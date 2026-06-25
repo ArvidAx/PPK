@@ -3,18 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PPK - Protein per Krona</title>
-    <meta name="description" content="Hitta de mest kostnadseffektiva proteinkällorna på Hemköp.">
-    
-    <!-- Google Fonts -->
+    <title>PPK – Protein per Krona | Hitta billigast protein på Hemköp</title>
+    <meta name="description" content="Beräkna Protein per Krona (PPK) för alla produkter på Hemköp. Hitta de mest kostnadseffektiva proteinkällorna och spara pengar på din kost.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Navbar -->
     <nav class="navbar">
         <a href="index.html" class="logo">PPK<span class="logo-dot">.</span></a>
         <ul class="nav-links">
@@ -25,56 +21,61 @@
     </nav>
 
     <div class="app-container">
-        <!-- Sidebar / Filters -->
         <aside class="sidebar">
+            <div class="sidebar-section-title">Filter</div>
+
             <div class="filter-group">
-                <label for="search">Sök Produkt</label>
-                <input type="text" id="search" placeholder="T.ex. Kyckling, Arla...">
+                <label for="search">🔍 Sök Produkt</label>
+                <input type="text" id="search" placeholder="T.ex. Kyckling, Arla..." autocomplete="off">
             </div>
 
             <div class="filter-group">
-                <label for="category">Kategori</label>
+                <label for="category">📂 Kategori</label>
                 <select id="category">
                     <option value="">Alla Kategorier</option>
-                    <!-- Fylls i dynamiskt av JS -->
                 </select>
             </div>
 
             <div class="filter-group">
-                <label for="maxPrice"><span>Max Pris:</span> <span id="maxPriceLabel">200 kr</span></label>
+                <label for="maxPrice"><span>💰 Max Pris</span><span id="maxPriceLabel">200 kr</span></label>
                 <input type="range" id="maxPrice" min="0" max="500" value="200" step="1">
+                <div class="range-labels"><span>0 kr</span><span>500 kr</span></div>
             </div>
 
             <div class="filter-group">
-                <label for="minProtein"><span>Minst Protein:</span> <span id="minProteinLabel">0 g</span></label>
-                <input type="range" id="minProtein" min="0" max="100" value="0" step="1">
+                <label for="minProtein"><span>💪 Minst Protein/100g</span><span id="minProteinLabel">0 g</span></label>
+                <input type="range" id="minProtein" min="0" max="50" value="0" step="1">
+                <div class="range-labels"><span>0 g</span><span>50 g</span></div>
             </div>
-            
-            <div class="sidebar-footer">
-                <p>Data hämtas direkt från Hemköp via vår PPK-motor.</p>
+
+            <div class="sidebar-explainer">
+                <p><strong>Vad är PPK?</strong></p>
+                <p>Protein per Krona = gram protein du får för varje spenderad krona. Ju högre siffra, desto bättre bang for your buck.</p>
             </div>
         </aside>
 
-        <!-- Main Content -->
         <main class="main-content">
-            <header class="header">
+            <header class="page-header">
                 <h1 class="app-title">Protein Per Krona <span class="accent-red">(PPK)</span></h1>
-                <p class="app-subtitle">Hitta de billigaste proteinkällorna på marknaden. Ett högt PPK-värde ger dig mest protein för pengarna och hjälper dig att optimera din kost.</p>
+                <p class="app-subtitle">Sveriges mest kompletta verktyg för att hitta de billigaste proteinkällorna. All data hämtas och uppdateras automatiskt direkt från Hemköp.</p>
                 <div class="kpi-cards">
                     <div class="kpi-card">
+                        <div class="kpi-icon">📦</div>
                         <h3>Antal Produkter</h3>
-                        <p id="totalProducts">0</p>
+                        <p id="totalProducts">–</p>
                     </div>
                     <div class="kpi-card highlight">
+                        <div class="kpi-icon">🏆</div>
                         <h3>Bästa PPK just nu</h3>
-                        <p id="bestPPK">0.00 <span class="unit">g/kr</span></p>
+                        <p id="bestPPK">– <span class="unit">g/kr</span></p>
                     </div>
                 </div>
             </header>
 
             <section class="table-section">
                 <div class="table-header">
-                    <h2>Resultat</h2>
+                    <h2>Resultat <span id="resultCount" class="result-count"></span></h2>
+                    <p class="table-hint">Klicka på en kolumnrubrik för att sortera. Visar max 200 produkter.</p>
                 </div>
                 <div class="table-container">
                     <table id="resultsTable">
@@ -83,16 +84,40 @@
                                 <th data-sort="name">Produkt</th>
                                 <th data-sort="brand">Märke</th>
                                 <th data-sort="price_sek">Pris</th>
-                                <th data-sort="package_size_grams">Storlek</th>
+                                <th data-sort="display_volume">Storlek</th>
                                 <th data-sort="protein_per_100g">Protein/100g</th>
                                 <th data-sort="ppk" class="sort-active desc">PPK (g/kr)</th>
                                 <th>Länk</th>
                             </tr>
                         </thead>
                         <tbody id="tableBody">
-                            <!-- Fylls i dynamiskt -->
+                            <tr><td colspan="7" style="text-align:center; padding:2rem; color:#64748b;">Laddar produkter...</td></tr>
                         </tbody>
                     </table>
+                </div>
+            </section>
+
+            <section class="info-banner">
+                <div class="info-item">
+                    <span class="info-icon">🔄</span>
+                    <div>
+                        <strong>Alltid uppdaterad</strong>
+                        <p>Priser och produkter hämtas automatiskt varje natt.</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">🧮</span>
+                    <div>
+                        <strong>Transparent beräkning</strong>
+                        <p>PPK = g protein × 10 ÷ jämförpris per kg.</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">📖</span>
+                    <div>
+                        <strong>Vill du lära dig mer?</strong>
+                        <p>Läs vår <a href="kunskap.html">Kunskapsbank</a> om protein.</p>
+                    </div>
                 </div>
             </section>
         </main>
