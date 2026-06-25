@@ -46,6 +46,10 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 # ── Konstanter ───────────────────────────────────────────────────────────────
+STORES = {
+    "hemkop": {"name": "Hemköp", "base_url": "https://www.hemkop.se"},
+    "willys": {"name": "Willys", "base_url": "https://www.willys.se"}
+}
 BASE_URL = "https://www.hemkop.se"
 
 # Realistisk User-Agent för att undvika blockering
@@ -145,7 +149,7 @@ def safe_get(session: requests.Session, url: str, params: Optional[dict] = None,
 
 # ── Skrapningsfunktioner ─────────────────────────────────────────────────────
 
-def fetch_category_page(session: requests.Session, category_slug: str, page: int) -> dict:
+def fetch_category_page(session: requests.Session, base_url: str, category_slug: str, page: int) -> dict:
     """
     Hämtar en sida med produkter från kategorins REST-API.
 
@@ -153,15 +157,16 @@ def fetch_category_page(session: requests.Session, category_slug: str, page: int
 
     Args:
         session: Aktiv requests.Session.
+        base_url: Bas-URL för butiken (t.ex. https://www.hemkop.se).
         category_slug: Kategori-slug, t.ex. "kott-fagel-och-chark".
         page: Sidnummer (0-indexerat).
 
     Returns:
         Rå JSON-svar som dict, eller tomt dict vid fel.
     """
-    url = urljoin(BASE_URL, f"/c/{category_slug}")
+    url = urljoin(base_url, f"/c/{category_slug}")
     params = {"size": PAGE_SIZE, "page": page}
-    log.info("Hämtar kategori '%s', sida %d...", category_slug, page)
+    log.info("Hämtar kategori '%s' från %s (sida %d)...", category_slug, base_url, page)
 
     resp = safe_get(session, url, params=params)
     if resp is None:
@@ -175,7 +180,7 @@ def fetch_category_page(session: requests.Session, category_slug: str, page: int
         return {}
 
 
-def fetch_product_details(session: requests.Session, product_code: str) -> dict:
+def fetch_product_details(session: requests.Session, base_url: str, product_code: str) -> dict:
     """
     Hämtar fullständiga produktdetaljer inkl. näringsvärden.
 
@@ -186,13 +191,14 @@ def fetch_product_details(session: requests.Session, product_code: str) -> dict:
       Varje element har: nutrientTypeCode, quantityContained, measurementUnitCode
 
     Args:
-        session: Aktiv requests.Session.
+        session: En aktiv requests.Session.
+        base_url: Bas-URL för butiken (t.ex. https://www.hemkop.se).
         product_code: Produktkod, t.ex. "101262973_ST".
 
     Returns:
         Rå JSON-svar som dict, eller tomt dict vid fel.
     """
-    url = urljoin(BASE_URL, f"/axfood/rest/p/{product_code}")
+    url = urljoin(base_url, f"/axfood/rest/p/{product_code}")
 
     resp = safe_get(session, url)
     if resp is None:
@@ -412,9 +418,10 @@ def scrape_all_categories(
     max_pages: int = MAX_PAGES_PER_CATEGORY,
     fetch_nutrition: bool = True,
     nutrition_delay: float = None,
+    stores: list = None,
 ) -> list:
     """
-    Huvud-skrapningsfunktion. Hämtar produkter från alla angivna kategorier
+    Huvud-skrapningsfunktion. Hämtar produkter från alla angivna kategorier och butiker
     och berikar varje produkt med näringsvärden från produktdetaljsidan.
 
     Args:
@@ -422,156 +429,171 @@ def scrape_all_categories(
         max_pages: Max sidor per kategori (0 = alla).
         fetch_nutrition: Om True, hämtas näringsvärden per produkt (långsammare).
         nutrition_delay: Sekunder att vänta mellan näringsdataanrop (None = slumpat).
+        stores: Lista med butik-ID:n (t.ex. ["hemkop", "willys"]).
 
     Returns:
         Lista med produktdicts sorterade efter "protein_per_krona" (fallande).
     """
+    if not stores:
+        stores = ["hemkop", "willys"]
+
     session = make_session()
-
-    # Initialt anrop för att sätta cookies (t.ex. cookie consent)
-    log.info("Initierar session mot Hemköp...")
-    warmup_resp = safe_get(session, BASE_URL, timeout=15)
-    if warmup_resp:
-        log.info("Session initierad. Cookie-hantering aktiv.")
-    _polite_sleep()
-
     all_products = []
-    seen_codes = set()  # Deduplicering – samma produkt kan finnas i flera kategorier
+    seen_keys = set()  # Deduplicering per butik – t.ex. "Hemköp_123"
 
-    for slug in category_slugs:
-        log.info("── Startar kategori: %s ──", slug)
-        page = 0
-        total_pages = None
+    for store_key in stores:
+        store_info = STORES.get(store_key)
+        if not store_info:
+            log.warning("Okänd butik: %s. Hoppar över.", store_key)
+            continue
+        store_name = store_info["name"]
+        base_url = store_info["base_url"]
 
-        while True:
-            data = fetch_category_page(session, slug, page)
-            if not data:
-                log.warning("Inga data för kategori '%s' sida %d. Hoppar.", slug, page)
-                break
+        log.info("Initierar session mot %s...", store_name)
+        session.headers.update({"Referer": base_url + "/"})
+        warmup_resp = safe_get(session, base_url, timeout=15)
+        if warmup_resp:
+            log.info("Session initierad för %s.", store_name)
+        _polite_sleep()
 
-            # Extrahera pagineringsinformation
-            pagination = data.get("pagination", {})
-            if total_pages is None:
-                total_pages = pagination.get("numberOfPages", 1)
-                total_items = pagination.get("totalNumberOfResults", "?")
-                log.info("Kategori '%s': %s produkter totalt, %d sidor.",
-                         slug, total_items, total_pages)
+        for slug in category_slugs:
+            log.info("── Startar kategori: %s på %s ──", slug, store_name)
+            page = 0
+            total_pages = None
 
-            results = data.get("results", [])
-            if not results:
-                log.info("Inga fler produkter för kategori '%s'.", slug)
-                break
+            while True:
+                data = fetch_category_page(session, base_url, slug, page)
+                if not data:
+                    log.warning("Inga data för kategori '%s' på %s, sida %d. Hoppar.", slug, store_name, page)
+                    break
 
-            log.info("Kategori '%s' sida %d/%d: %d produkter.",
-                     slug, page + 1, total_pages, len(results))
+                # Extrahera pagineringsinformation
+                pagination = data.get("pagination", {})
+                if total_pages is None:
+                    total_pages = pagination.get("numberOfPages", 1)
+                    total_items = pagination.get("totalNumberOfResults", "?")
+                    log.info("Kategori '%s' på %s: %s produkter totalt, %d sidor.",
+                             slug, store_name, total_items, total_pages)
 
-            for raw in results:
-                code = raw.get("code", "")
-                if not code or code in seen_codes:
-                    continue
-                seen_codes.add(code)
+                results = data.get("results", [])
+                if not results:
+                    log.info("Inga fler produkter för kategori '%s' på %s.", slug, store_name)
+                    break
 
-                # ── Extrakt grunddata från kategorilistan ──
-                name = raw.get("name", "Okänd produkt")
-                brand = raw.get("manufacturer", "Okänt märke")
+                log.info("Kategori '%s' på %s, sida %d/%d: %d produkter.",
+                         slug, store_name, page + 1, total_pages, len(results))
 
-                # Pris: "priceValue" är numeriskt (float), "price" är sträng som "47,27 kr"
-                price_sek = None
-                if raw.get("priceValue") is not None:
-                    price_sek = float(raw["priceValue"])
-                else:
-                    price_sek = parse_price(raw.get("price"))
+                for raw in results:
+                    code = raw.get("code", "")
+                    if not code:
+                        continue
+                    seen_key = f"{store_name}_{code}"
+                    if seen_key in seen_keys:
+                        continue
+                    seen_keys.add(seen_key)
 
-                # Jämförpris
-                compare_price_str = raw.get("comparePrice", "")
-                compare_price_sek = parse_price(compare_price_str)
-                compare_price_unit = (raw.get("comparePriceUnit") or "").lower()
+                    # ── Extrakt grunddata från kategorilistan ──
+                    name = raw.get("name", "Okänd produkt")
+                    brand = raw.get("manufacturer", "Okänt märke")
 
-                # Jämförpris per KG (normalisera om enheten är "liter" eller "100g" etc.)
-                compare_price_per_kg = None
-                if compare_price_sek is not None:
-                    if compare_price_unit in ("kg", "kilo"):
-                        compare_price_per_kg = compare_price_sek
-                    elif compare_price_unit in ("100g", "100 g"):
-                        compare_price_per_kg = compare_price_sek * 10
-                    elif compare_price_unit in ("g", "gram"):
-                        compare_price_per_kg = compare_price_sek * 1000
+                    # Pris: "priceValue" är numeriskt (float), "price" är sträng som "47,27 kr"
+                    price_sek = None
+                    if raw.get("priceValue") is not None:
+                        price_sek = float(raw["priceValue"])
+                    else:
+                        price_sek = parse_price(raw.get("price"))
 
-                # Förpackningsvikt
-                display_volume = raw.get("displayVolume", "")
-                package_weight_g = parse_package_weight_g(display_volume, code)
+                    # Jämförpris
+                    compare_price_str = raw.get("comparePrice", "")
+                    compare_price_sek = parse_price(compare_price_str)
+                    compare_price_unit = (raw.get("comparePriceUnit") or "").lower()
 
-                # Länk
-                url_path = raw.get("url")
-                if url_path:
-                    product_url = "https://www.hemkop.se" + url_path
-                else:
-                    product_url = f"https://www.hemkop.se/produkt/{code}"
+                    # Jämförpris per KG (normalisera om enheten är "liter" eller "100g" etc.)
+                    compare_price_per_kg = None
+                    if compare_price_sek is not None:
+                        if compare_price_unit in ("kg", "kilo"):
+                            compare_price_per_kg = compare_price_sek
+                        elif compare_price_unit in ("100g", "100 g"):
+                            compare_price_per_kg = compare_price_sek * 10
+                        elif compare_price_unit in ("g", "gram"):
+                            compare_price_per_kg = compare_price_sek * 1000
 
-                product_entry = {
-                    "name": name,
-                    "brand": brand,
-                    "code": code,
-                    "category": slug,
-                    "price_sek": price_sek,
-                    "display_volume": display_volume,
-                    "package_weight_g": package_weight_g,
-                    "compare_price": compare_price_str,
-                    "compare_price_per_kg": compare_price_per_kg,
-                    "description": "",
-                    "protein_per_100g": None,
-                    "calories_per_100g": None,
-                    "fat_per_100g": None,
-                    "carbohydrates_per_100g": None,
-                    "salt_per_100g": None,
-                    "protein_per_krona": None,
-                    "calculation_method": None,
-                    "url": product_url,
-                }
+                    # Förpackningsvikt
+                    display_volume = raw.get("displayVolume", "")
+                    package_weight_g = parse_package_weight_g(display_volume, code)
 
-                # ── Hämta näringsvärden (om aktiverat) ──
-                if fetch_nutrition:
-                    _polite_sleep()
-                    detail = fetch_product_details(session, code)
-                    
-                    product_entry["description"] = detail.get("description", "")
-                    
-                    nutrition = extract_nutrition_per_100g(detail)
-                    protein = nutrition["protein"]
-                    
-                    product_entry["protein_per_100g"] = protein
-                    product_entry["calories_per_100g"] = nutrition["calories"]
-                    product_entry["fat_per_100g"] = nutrition["fat"]
-                    product_entry["carbohydrates_per_100g"] = nutrition["carbohydrates"]
-                    product_entry["salt_per_100g"] = nutrition["salt"]
+                    # Länk
+                    url_path = raw.get("url")
+                    if url_path:
+                        product_url = base_url + url_path
+                    else:
+                        product_url = f"{base_url}/produkt/{code}"
 
-                    if protein is not None:
-                        ppk = calculate_protein_per_krona(
-                            protein_per_100g=protein,
-                            price_sek=price_sek or 0,
-                            compare_price_per_kg=compare_price_per_kg,
-                            package_weight_g=package_weight_g,
-                        )
-                        product_entry["protein_per_krona"] = ppk
-                        if compare_price_per_kg:
-                            product_entry["calculation_method"] = "A (jämförpris/kg)"
-                        elif package_weight_g and price_sek:
-                            product_entry["calculation_method"] = "B (totalvikt/pris)"
+                    product_entry = {
+                        "name": name,
+                        "brand": brand,
+                        "code": code,
+                        "store": store_name,
+                        "category": slug,
+                        "price_sek": price_sek,
+                        "display_volume": display_volume,
+                        "package_weight_g": package_weight_g,
+                        "compare_price": compare_price_str,
+                        "compare_price_per_kg": compare_price_per_kg,
+                        "description": "",
+                        "protein_per_100g": None,
+                        "calories_per_100g": None,
+                        "fat_per_100g": None,
+                        "carbohydrates_per_100g": None,
+                        "salt_per_100g": None,
+                        "protein_per_krona": None,
+                        "calculation_method": None,
+                        "url": product_url,
+                    }
 
-                all_products.append(product_entry)
+                    # ── Hämta näringsvärden (om aktiverat) ──
+                    if fetch_nutrition:
+                        _polite_sleep()
+                        detail = fetch_product_details(session, base_url, code)
+                        
+                        product_entry["description"] = detail.get("description", "")
+                        
+                        nutrition = extract_nutrition_per_100g(detail)
+                        protein = nutrition["protein"]
+                        
+                        product_entry["protein_per_100g"] = protein
+                        product_entry["calories_per_100g"] = nutrition["calories"]
+                        product_entry["fat_per_100g"] = nutrition["fat"]
+                        product_entry["carbohydrates_per_100g"] = nutrition["carbohydrates"]
+                        product_entry["salt_per_100g"] = nutrition["salt"]
 
-            _polite_sleep()
-            page += 1
+                        if protein is not None:
+                            ppk = calculate_protein_per_krona(
+                                protein_per_100g=protein,
+                                price_sek=price_sek or 0,
+                                compare_price_per_kg=compare_price_per_kg,
+                                package_weight_g=package_weight_g,
+                            )
+                            product_entry["protein_per_krona"] = ppk
+                            if compare_price_per_kg:
+                                product_entry["calculation_method"] = "A (jämförpris/kg)"
+                            elif package_weight_g and price_sek:
+                                product_entry["calculation_method"] = "B (totalvikt/pris)"
 
-            # Avbryt om vi nått max antal sidor eller sista sidan
-            if max_pages > 0 and page >= max_pages:
-                log.info("Nådde max sidor (%d) för kategori '%s'.", max_pages, slug)
-                break
-            if total_pages is not None and page >= total_pages:
-                break
+                    all_products.append(product_entry)
 
-        log.info("Klar med kategori '%s'. Totalt %d unika produkter hittills.",
-                 slug, len(all_products))
+                _polite_sleep()
+                page += 1
+
+                # Avbryt om vi nått max antal sidor eller sista sidan
+                if max_pages > 0 and page >= max_pages:
+                    log.info("Nådde max sidor (%d) för kategori '%s' på %s.", max_pages, slug, store_name)
+                    break
+                if total_pages is not None and page >= total_pages:
+                    break
+
+            log.info("Klar med kategori '%s' på %s. Totalt %d unika produkter hittills.",
+                     slug, store_name, len(all_products))
 
     return all_products
 
@@ -666,17 +688,23 @@ if __name__ == "__main__":
         "--output-json", type=str, default=None,
         help="Spara alla produkter som JSON-fil (t.ex. --output-json results.json)."
     )
+    parser.add_argument(
+        "--stores", nargs="*", default=["hemkop", "willys"],
+        help="Specifika butiker att skrapa (t.ex. --stores hemkop willys)."
+    )
     args = parser.parse_args()
 
     cats = args.categories if args.categories else CATEGORY_SLUGS
+    stores_to_scrape = args.stores
 
-    log.info("Startar skrapning av %d kategorier (max %d sidor/kategori)...",
-             len(cats), args.max_pages or 999)
+    log.info("Startar skrapning av %d butiker och %d kategorier (max %d sidor/kategori)...",
+             len(stores_to_scrape), len(cats), args.max_pages or 999)
 
     products = scrape_all_categories(
         category_slugs=cats,
         max_pages=args.max_pages,
         fetch_nutrition=not args.no_nutrition,
+        stores=stores_to_scrape,
     )
 
     if args.output_json is None:

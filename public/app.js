@@ -2,10 +2,12 @@ let allData = [];
 let filteredData = [];
 let sortCol = 'ppk';
 let sortDesc = true;
+let shoppingList = [];
 
 // DOM Elements
 const tableBody = document.getElementById('tableBody');
 const categorySelect = document.getElementById('category');
+const storeSelect = document.getElementById('store');
 const searchInput = document.getElementById('search');
 const maxPriceInput = document.getElementById('maxPrice');
 const maxPriceLabel = document.getElementById('maxPriceLabel');
@@ -14,6 +16,21 @@ const minProteinLabel = document.getElementById('minProteinLabel');
 const totalProductsEl = document.getElementById('totalProducts');
 const bestPPKEl = document.getElementById('bestPPK');
 const tableHeaders = document.querySelectorAll('th[data-sort]');
+
+// Shopping List Elements
+const shoppingListEl = document.getElementById('shoppingList');
+const shoppingListEmptyEl = document.getElementById('shoppingListEmpty');
+const shoppingListSummaryEl = document.getElementById('shoppingListSummary');
+const summaryCountEl = document.getElementById('summaryCount');
+const summaryPriceEl = document.getElementById('summaryPrice');
+const summaryProteinEl = document.getElementById('summaryProtein');
+const summaryPPKEl = document.getElementById('summaryPPK');
+const clearListBtn = document.getElementById('clearListBtn');
+
+// Modal Elements
+const productModal = document.getElementById('productModal');
+const closeModalBtn = document.getElementById('closeModalBtn');
+const modalBody = document.getElementById('modalBody');
 
 // Safe text helper — prevents XSS from scraped product names/brands
 function esc(str) {
@@ -38,17 +55,23 @@ async function init() {
         if (!response.ok) throw new Error('Kunde inte hämta data.json');
         const rawData = await response.json();
 
-        allData = rawData.map(item => ({
-            ...item,
-            ppk: item.protein_per_krona || 0
-        })).filter(item => item.price_sek != null && item.protein_per_100g != null);
+        allData = rawData.map(item => {
+            const protein = item.protein_per_100g || 0;
+            const calories = item.calories_per_100g || 0;
+            return {
+                ...item,
+                ppk: item.protein_per_krona || 0,
+                ppkcal: calories > 0 ? (protein / calories) * 100 : 0
+            };
+        }).filter(item => item.price_sek != null && item.protein_per_100g != null);
 
         populateCategories();
         setupEventListeners();
+        loadShoppingList();
         applyFilters();
     } catch (error) {
         console.error(error);
-        tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 2rem; color:#e11d48;">
+        tableBody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding: 2rem; color:#e11d48;">
             Kunde inte ladda produktdata. Kör skrapan och försök igen.
         </td></tr>`;
     }
@@ -80,6 +103,7 @@ function populateCategories() {
 function setupEventListeners() {
     searchInput.addEventListener('input', applyFilters);
     categorySelect.addEventListener('change', applyFilters);
+    storeSelect.addEventListener('change', applyFilters);
 
     maxPriceInput.addEventListener('input', e => {
         maxPriceLabel.textContent = e.target.value + ' kr';
@@ -94,16 +118,29 @@ function setupEventListeners() {
     tableHeaders.forEach(th => {
         th.addEventListener('click', () => {
             const col = th.dataset.sort;
+            if (!col) return; // Ignore columns without sorting
             if (sortCol === col) {
                 sortDesc = !sortDesc;
             } else {
                 sortCol = col;
-                sortDesc = (col === 'ppk' || col === 'protein_per_100g' || col === 'price_sek');
+                sortDesc = (col === 'ppk' || col === 'ppkcal' || col === 'protein_per_100g' || col === 'price_sek');
             }
             updateSortHeaders();
             renderTable();
         });
     });
+
+    // Modal close listeners
+    closeModalBtn.addEventListener('click', closeModal);
+    window.addEventListener('click', e => {
+        if (e.target === productModal) closeModal();
+    });
+    window.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeModal();
+    });
+
+    // Clear List listener
+    clearListBtn.addEventListener('click', clearShoppingList);
 }
 
 function updateSortHeaders() {
@@ -119,11 +156,13 @@ function updateSortHeaders() {
 function applyFilters() {
     const search = searchInput.value.toLowerCase().trim();
     const cat = categorySelect.value;
+    const store = storeSelect.value;
     const maxPrice = parseFloat(maxPriceInput.value);
     const minProtein = parseFloat(minProteinInput.value);
 
     filteredData = allData.filter(item => {
         if (cat && item.category !== cat) return false;
+        if (store && item.store !== store) return false;
         if (item.price_sek > maxPrice) return false;
         if ((item.protein_per_100g || 0) < minProtein) return false;
         if (search) {
@@ -155,7 +194,7 @@ function renderTable() {
     tableBody.innerHTML = '';
 
     if (filteredData.length === 0) {
-        tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 3rem; color: #64748b;">
+        tableBody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding: 3rem; color: #64748b;">
             Inga produkter matchar dina filter.
         </td></tr>`;
         return;
@@ -167,27 +206,50 @@ function renderTable() {
         const tr = document.createElement('tr');
         const ppkClass = item.ppk >= 2 ? 'ppk-value' : '';
         const url = esc(item.url || `https://www.hemkop.se/produkt/${item.code}`);
+        const storeClass = (item.store || '').toLowerCase() === 'willys' ? 'willys' : 'hemkop';
 
-        // Use DOM methods for the link cell to avoid XSS
         tr.innerHTML = `
+            <td style="text-align: center;"><button class="add-to-list-btn" title="Lägg till i shoppinglistan">+</button></td>
             <td data-label="Produkt"><strong>${esc(item.name)}</strong></td>
             <td data-label="Märke">${esc(item.brand) || '–'}</td>
+            <td data-label="Butik"><span class="store-badge ${storeClass}">${esc(item.store) || 'Hemköp'}</span></td>
             <td data-label="Pris">${fmt(item.price_sek, 2)} kr</td>
             <td data-label="Storlek">${esc(item.display_volume) || '–'}</td>
             <td data-label="Protein/100g">${fmt(item.protein_per_100g, 1)} g</td>
             <td data-label="PPK (g/kr)" class="${ppkClass}">${fmt(item.ppk, 2)}</td>
+            <td data-label="Prot/100 kcal">${fmt(item.ppkcal, 1)} g</td>
             <td></td>
         `;
-        // Build link safely via DOM (not innerHTML) to prevent URL injection
+
+        // Add to list button functionality
+        tr.querySelector('.add-to-list-btn').addEventListener('click', (e) => {
+            e.stopPropagation(); // Avoid triggering row click modal
+            addToShoppingList(item);
+        });
+
+        // Row click modal functionality (ignoring clicks on plus button or store link)
+        tr.addEventListener('click', (e) => {
+            if (e.target.closest('.store-link') || e.target.closest('.add-to-list-btn')) {
+                return;
+            }
+            openModal(item);
+        });
+
+        // Build link safely via DOM to prevent URL injection
         const linkCell = tr.querySelector('td:last-child');
         const a = document.createElement('a');
         a.href = url;
         a.target = '_blank';
         a.rel = 'noopener noreferrer';
         a.className = 'store-link';
-        a.textContent = 'Hemköp →';
-        linkCell.appendChild(a);
+        a.textContent = 'Butik →';
+        
+        // Prevent row click modal when clicking the link
+        a.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
 
+        linkCell.appendChild(a);
         tableBody.appendChild(tr);
     });
 }
@@ -201,6 +263,249 @@ function updateKPIs() {
     } else {
         bestPPKEl.innerHTML = `– <span class="unit">g/kr</span>`;
     }
+}
+
+// Shopping List Operations
+function loadShoppingList() {
+    try {
+        const saved = localStorage.getItem('ppk_shopping_list');
+        shoppingList = saved ? JSON.parse(saved) : [];
+    } catch (e) {
+        shoppingList = [];
+    }
+    renderShoppingList();
+}
+
+function saveShoppingList() {
+    localStorage.setItem('ppk_shopping_list', JSON.stringify(shoppingList));
+    renderShoppingList();
+}
+
+function addToShoppingList(item) {
+    const existing = shoppingList.find(x => x.code === item.code && x.store === item.store);
+    if (existing) {
+        existing.qty = (existing.qty || 1) + 1;
+    } else {
+        shoppingList.push({
+            code: item.code,
+            name: item.name,
+            brand: item.brand,
+            store: item.store,
+            price_sek: item.price_sek,
+            protein_per_100g: item.protein_per_100g,
+            package_weight_g: item.package_weight_g || 0,
+            qty: 1
+        });
+    }
+    saveShoppingList();
+}
+
+function removeFromShoppingList(code, store) {
+    shoppingList = shoppingList.filter(x => !(x.code === code && x.store === store));
+    saveShoppingList();
+}
+
+function updateQty(code, store, delta) {
+    const existing = shoppingList.find(x => x.code === code && x.store === store);
+    if (existing) {
+        existing.qty = (existing.qty || 1) + delta;
+        if (existing.qty <= 0) {
+            removeFromShoppingList(code, store);
+        } else {
+            saveShoppingList();
+        }
+    }
+}
+
+function clearShoppingList() {
+    shoppingList = [];
+    saveShoppingList();
+}
+
+function renderShoppingList() {
+    shoppingListEl.innerHTML = '';
+    if (shoppingList.length === 0) {
+        shoppingListEmptyEl.style.display = 'block';
+        shoppingListSummaryEl.style.display = 'none';
+        return;
+    }
+    shoppingListEmptyEl.style.display = 'none';
+    shoppingListSummaryEl.style.display = 'block';
+
+    let totalCost = 0;
+    let totalProtein = 0;
+    let totalQty = 0;
+
+    shoppingList.forEach(item => {
+        const qty = item.qty || 1;
+        totalQty += qty;
+        totalCost += item.price_sek * qty;
+
+        const weight = item.package_weight_g || 0;
+        const itemProtein = (item.protein_per_100g / 100) * weight;
+        totalProtein += itemProtein * qty;
+
+        const li = document.createElement('li');
+        li.className = 'shopping-item';
+        li.innerHTML = `
+            <div class="shopping-item-info">
+                <span class="shopping-item-name">${esc(item.name)}</span>
+                <span class="shopping-item-sub">${esc(item.brand)} | ${esc(item.store)}</span>
+            </div>
+            <div class="shopping-item-controls">
+                <button class="btn-qty btn-minus">-</button>
+                <span class="shopping-item-qty">${qty}</span>
+                <button class="btn-qty btn-plus">+</button>
+            </div>
+        `;
+
+        li.querySelector('.btn-minus').addEventListener('click', (e) => {
+            e.stopPropagation();
+            updateQty(item.code, item.store, -1);
+        });
+        li.querySelector('.btn-plus').addEventListener('click', (e) => {
+            e.stopPropagation();
+            updateQty(item.code, item.store, 1);
+        });
+
+        shoppingListEl.appendChild(li);
+    });
+
+    const combinedPPK = totalCost > 0 ? totalProtein / totalCost : 0;
+
+    summaryCountEl.textContent = `${totalQty} st`;
+    summaryPriceEl.textContent = `${totalCost.toFixed(2)} kr`;
+    summaryProteinEl.textContent = `${totalProtein.toFixed(1)} g`;
+    summaryPPKEl.textContent = `${combinedPPK.toFixed(2)} g/kr`;
+}
+
+// Modal Details Populator
+function openModal(item) {
+    const protein = item.protein_per_100g || 0;
+    const fat = item.fat_per_100g || 0;
+    const carbs = item.carbohydrates_per_100g || 0;
+    const salt = item.salt_per_100g || 0;
+    const calories = item.calories_per_100g || 0;
+    
+    const protPct = Math.min((protein / 100) * 100, 100);
+    const fatPct = Math.min((fat / 100) * 100, 100);
+    const carbsPct = Math.min((carbs / 100) * 100, 100);
+    const saltPct = Math.min((salt / 100) * 100, 100);
+
+    const storeBadgeClass = (item.store || '').toLowerCase() === 'willys' ? 'willys' : 'hemkop';
+    const url = esc(item.url || `https://www.hemkop.se/produkt/${item.code}`);
+
+    modalBody.innerHTML = `
+        <div class="modal-header">
+            <h2 class="modal-title">${esc(item.name)}</h2>
+            <div class="modal-subtitle">
+                ${esc(item.brand) || 'Okänt märke'} &nbsp;|&nbsp; 
+                <span class="store-badge ${storeBadgeClass}">${esc(item.store) || 'Hemköp'}</span>
+            </div>
+        </div>
+        
+        <div class="modal-grid">
+            <div>
+                <h3 class="modal-section-title">Näringsvärden (per 100g)</h3>
+                <div class="macro-list">
+                    <div class="macro-item macro-protein">
+                        <div class="macro-info">
+                            <span>💪 Protein</span>
+                            <span>${fmt(protein, 1)} g</span>
+                        </div>
+                        <div class="macro-bar-bg">
+                            <div class="macro-bar-fill" style="width: ${protPct}%"></div>
+                        </div>
+                    </div>
+                    <div class="macro-item macro-fat">
+                        <div class="macro-info">
+                            <span>🥑 Fett</span>
+                            <span>${fmt(fat, 1)} g</span>
+                        </div>
+                        <div class="macro-bar-bg">
+                            <div class="macro-bar-fill" style="width: ${fatPct}%"></div>
+                        </div>
+                    </div>
+                    <div class="macro-item macro-carbs">
+                        <div class="macro-info">
+                            <span>🌾 Kolhydrater</span>
+                            <span>${fmt(carbs, 1)} g</span>
+                        </div>
+                        <div class="macro-bar-bg">
+                            <div class="macro-bar-fill" style="width: ${carbsPct}%"></div>
+                        </div>
+                    </div>
+                    <div class="macro-item macro-salt">
+                        <div class="macro-info">
+                            <span>🧂 Salt</span>
+                            <span>${fmt(salt, 2)} g</span>
+                        </div>
+                        <div class="macro-bar-bg">
+                            <div class="macro-bar-fill" style="width: ${saltPct}%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <h3 class="modal-section-title">Pris & Effektivitet</h3>
+                <div class="modal-stats">
+                    <div class="modal-stat-card">
+                        <span class="modal-stat-label">💰 Konsumentpris</span>
+                        <span class="modal-stat-value">${fmt(item.price_sek, 2)} kr</span>
+                    </div>
+                    <div class="modal-stat-card">
+                        <span class="modal-stat-label">⚖️ Jämförpris</span>
+                        <span class="modal-stat-value">${esc(item.compare_price) || fmt(item.compare_price_per_kg, 2, ' kr/kg')}</span>
+                    </div>
+                    <div class="modal-stat-card">
+                        <span class="modal-stat-label">🏆 Protein per krona</span>
+                        <span class="modal-stat-value highlight">${fmt(item.ppk, 2)} g/kr</span>
+                    </div>
+                    <div class="modal-stat-card">
+                        <span class="modal-stat-label">⚡ Prot per 100 kcal</span>
+                        <span class="modal-stat-value highlight">${fmt(item.ppkcal, 1)} g</span>
+                    </div>
+                    <div class="modal-stat-card">
+                        <span class="modal-stat-label">🔥 Kalorier</span>
+                        <span class="modal-stat-value highlight-red">${calories > 0 ? calories.toFixed(0) + ' kcal' : '–'}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        ${item.description ? `
+            <h3 class="modal-section-title">Beskrivning</h3>
+            <div class="modal-desc">${esc(item.description)}</div>
+        ` : ''}
+        
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="closeModalFooterBtn">Stäng</button>
+            <a class="btn btn-primary" href="${url}" target="_blank" rel="noopener noreferrer">Visa på ${esc(item.store) || 'butiken'} →</a>
+        </div>
+    `;
+
+    document.getElementById('closeModalFooterBtn').onclick = closeModal;
+
+    productModal.classList.add('show');
+    productModal.setAttribute('aria-hidden', 'false');
+    
+    // Animate progress bars width after modal opens
+    setTimeout(() => {
+        const fills = modalBody.querySelectorAll('.macro-bar-fill');
+        fills.forEach(fill => {
+            const width = fill.style.width;
+            fill.style.width = '0';
+            setTimeout(() => {
+                fill.style.width = width;
+            }, 50);
+        });
+    }, 100);
+}
+
+function closeModal() {
+    productModal.classList.remove('show');
+    productModal.setAttribute('aria-hidden', 'true');
 }
 
 init();

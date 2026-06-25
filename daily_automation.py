@@ -8,13 +8,20 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 
 def run_cmd(cmd):
     logging.info(f"Kör: {cmd}")
-    result = subprocess.run(cmd, shell=True, text=True, capture_output=True)
-    if result.returncode != 0:
-        logging.error(f"Kommando misslyckades: {cmd}\nError: {result.stderr}")
+    # Kör med Popen och slå samman stderr/stdout för att strömma loggar direkt till terminalen
+    process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+    
+    stdout_lines = []
+    for line in process.stdout:
+        sys.stdout.write(line)
+        sys.stdout.flush()
+        stdout_lines.append(line)
+        
+    process.wait()
+    if process.returncode != 0:
+        logging.error(f"Kommando misslyckades med returkod {process.returncode}: {cmd}")
         sys.exit(1)
-    if result.stdout.strip():
-        logging.info(result.stdout.strip())
-    return result.stdout
+    return "".join(stdout_lines)
 
 def main():
     # 1. Byt katalog till repot så att scriptet kan köras varifrån som helst
@@ -28,7 +35,7 @@ def main():
     # 3. Kör skrapan. Skicka vidare eventuella argument (t.ex. för snabbtestning).
     args_str = " ".join(sys.argv[1:])
     logging.info(f"Startar Hemköp-skrapan med argument: {args_str if args_str else 'inga (full skrapning)'}...")
-    run_cmd(f"{sys.executable} hemkop_protein_per_krona.py {args_str}")
+    run_cmd(f"{sys.executable} -u hemkop_protein_per_krona.py {args_str}")
 
     # 4. Kontrollera om data.json faktiskt har ändrats
     status = subprocess.run("git status --porcelain public/data.json", shell=True, capture_output=True, text=True)
