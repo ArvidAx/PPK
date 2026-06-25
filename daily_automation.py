@@ -25,10 +25,10 @@ def main():
     logging.info("Uppdaterar lokalt repo...")
     run_cmd("git pull origin main")
 
-    # 3. Kör skrapan. Utan --max-pages skrapar den ALLA produkter i de angivna kategorierna.
-    logging.info("Startar Hemköp-skrapan över hela sortimentet...")
-    # Tar tid, men det är okej eftersom detta körs på natten/morgonen.
-    run_cmd(f"{sys.executable} hemkop_protein_per_krona.py")
+    # 3. Kör skrapan. Skicka vidare eventuella argument (t.ex. för snabbtestning).
+    args_str = " ".join(sys.argv[1:])
+    logging.info(f"Startar Hemköp-skrapan med argument: {args_str if args_str else 'inga (full skrapning)'}...")
+    run_cmd(f"{sys.executable} hemkop_protein_per_krona.py {args_str}")
 
     # 4. Kontrollera om data.json faktiskt har ändrats
     status = subprocess.run("git status --porcelain public/data.json", shell=True, capture_output=True, text=True)
