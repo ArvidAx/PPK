@@ -290,7 +290,8 @@ with st.sidebar:
 
 # --- MAIN HEADER PANEL ---
 st.markdown('<h1 class="app-title">Protein Per Krona (PPK)</h1>', unsafe_allow_html=True)
-st.markdown('<p class="app-subtitle">Ett oberoende verktyg för att jämföra kostnadseffektiviteten hos marknadens proteinkällor.</p>', unsafe_allow_html=True)
+total_products = len(df_all) if not df_all.empty else 0
+st.markdown(f'<p class="app-subtitle">Ett oberoende verktyg för att jämföra kostnadseffektiviteten hos marknadens proteinkällor. Just nu jämförs <b>{total_products}</b> analyserade produkter.</p>', unsafe_allow_html=True)
 
 
 # --- COLLAPSIBLE MATHEMATICAL EXPLAINER ---
