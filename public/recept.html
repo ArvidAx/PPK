@@ -3,17 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proteinrika Recept - PPK</title>
-    
-    <!-- Google Fonts -->
+    <title>Proteinrika Recept – Budget & Hälsa | PPK</title>
+    <meta name="description" content="Smarta, billiga och proteinrika recept baserade på de mest kostnadseffektiva råvarorna. Fyll på kroppen utan att tömma plånboken.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Navbar -->
     <nav class="navbar">
         <a href="index.html" class="logo">PPK<span class="logo-dot">.</span></a>
         <ul class="nav-links">
@@ -25,58 +22,64 @@
 
     <div class="app-container" style="display: block;">
         <div class="page-content">
-            <header class="article-header" style="text-align: left; margin-bottom: 2rem;">
+            <header style="margin-bottom: 3rem;">
                 <h1 class="app-title">Proteinrika <span class="accent-red">Recept</span></h1>
-                <p class="app-subtitle" style="margin-bottom: 0;">Smarta, billiga och proteinrika måltider baserade på databasens mest kostnadseffektiva råvaror. Fyll på kroppen utan att tömma plånboken.</p>
+                <p class="app-subtitle" style="margin-bottom: 0;">Smarta, billiga och mättande måltider baserade på databasens mest kostnadseffektiva råvaror. Proteinrikt behöver inte vara dyrt.</p>
             </header>
 
-            <!-- Recept Grid (Skelett) -->
+            <div class="recipe-filter-tabs">
+                <button class="tab-btn active" data-filter="alla">Alla</button>
+                <button class="tab-btn" data-filter="frukost">Frukost</button>
+                <button class="tab-btn" data-filter="lunch">Lunch</button>
+                <button class="tab-btn" data-filter="middag">Middag</button>
+            </div>
+
             <div class="recipe-grid">
-                
-                <!-- Recept Kort 1 -->
-                <article class="recipe-card">
-                    <div class="recipe-img"></div>
+
+                <article class="recipe-card" data-cat="middag">
+                    <div class="recipe-img" style="background-image: url('img_chicken_pasta.png');"></div>
                     <div class="recipe-content">
                         <div class="recipe-meta">
-                            <span>15 min</span>
-                            <span>Middag</span>
+                            <span>⏱ 20 min</span>
+                            <span class="recipe-badge middag">Middag</span>
                         </div>
                         <h3 class="recipe-title">Krämig Kycklingpasta</h3>
-                        <div style="margin-top: 1rem;">
-                            <span class="recipe-protein">45g Protein</span>
-                            <span style="font-size: 0.85rem; color: #64748B; margin-left: 0.5rem;">~18 kr/port</span>
+                        <p class="recipe-desc">Snabb vardagsrätt med kycklingfilé, kvarg och riven parmesan. Enkel, mättande och budgetvänlig.</p>
+                        <div class="recipe-footer">
+                            <span class="recipe-protein">💪 45g protein</span>
+                            <span class="recipe-cost">~18 kr/port</span>
                         </div>
                     </div>
                 </article>
 
-                <!-- Recept Kort 2 -->
-                <article class="recipe-card">
-                    <div class="recipe-img"></div>
+                <article class="recipe-card" data-cat="frukost">
+                    <div class="recipe-img" style="background-image: url('img_overnight_oats.png');"></div>
                     <div class="recipe-content">
                         <div class="recipe-meta">
-                            <span>10 min</span>
-                            <span>Frukost</span>
+                            <span>⏱ 5 min + natt</span>
+                            <span class="recipe-badge frukost">Frukost</span>
                         </div>
                         <h3 class="recipe-title">Overnight Oats med Kvarg</h3>
-                        <div style="margin-top: 1rem;">
-                            <span class="recipe-protein">30g Protein</span>
-                            <span style="font-size: 0.85rem; color: #64748B; margin-left: 0.5rem;">~8 kr/port</span>
+                        <p class="recipe-desc">Förbered kvällen innan. Havregryn, kvarg och bär ger en proteinrik start på dagen utan att ta en minut av morgonen.</p>
+                        <div class="recipe-footer">
+                            <span class="recipe-protein">💪 30g protein</span>
+                            <span class="recipe-cost">~8 kr/port</span>
                         </div>
                     </div>
                 </article>
 
-                <!-- Recept Kort 3 -->
-                <article class="recipe-card">
-                    <div class="recipe-img"></div>
+                <article class="recipe-card" data-cat="lunch">
+                    <div class="recipe-img" style="background-image: url('img_lentil_halloumi.png');"></div>
                     <div class="recipe-content">
                         <div class="recipe-meta">
-                            <span>25 min</span>
-                            <span>Lunch</span>
+                            <span>⏱ 25 min</span>
+                            <span class="recipe-badge lunch">Lunch</span>
                         </div>
                         <h3 class="recipe-title">Linsgryta med Halloumi</h3>
-                        <div style="margin-top: 1rem;">
-                            <span class="recipe-protein">38g Protein</span>
-                            <span style="font-size: 0.85rem; color: #64748B; margin-left: 0.5rem;">~14 kr/port</span>
+                        <p class="recipe-desc">En mustig och värmande gryta med röda linser, krossade tomater och gyllenstekt halloumi. Vegetarisk favorit.</p>
+                        <div class="recipe-footer">
+                            <span class="recipe-protein">💪 38g protein</span>
+                            <span class="recipe-cost">~14 kr/port</span>
                         </div>
                     </div>
                 </article>
@@ -84,5 +87,19 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Simple tab filter for recipes
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const filter = btn.dataset.filter;
+                document.querySelectorAll('.recipe-card').forEach(card => {
+                    card.style.display = (filter === 'alla' || card.dataset.cat === filter) ? '' : 'none';
+                });
+            });
+        });
+    </script>
 </body>
 </html>
