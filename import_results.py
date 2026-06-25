@@ -76,7 +76,8 @@ def import_data():
             carbs_per_100g=0.0,
             calories_100g=int(protein * 4), 
             nova_group=1, # Default to un-processed for now, unless we fetch OFF
-            category=cat
+            category=cat,
+            url=item.get("url")
         )
         session.add(prod)
         session.flush()

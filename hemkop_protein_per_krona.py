@@ -286,31 +286,14 @@ def parse_package_weight_g(display_volume: Optional[str], url: str = "") -> Opti
 def extract_protein_per_100g(product_detail: dict) -> Optional[float]:
     """
     Extraherar proteininnehåll per 100g från produktdetaljernas näringsvärden.
-
-    Datakällan är nutrientHeaders[].nutrientDetails[].
-    Varje element har:
-      - nutrientTypeCode: "protein", "fett", "energi", "kolhydrat", etc.
-      - quantityContained: numeriskt värde
-      - measurementUnitCode: "gram", "kilojoule", etc.
-
-    Args:
-        product_detail: Rå JSON-dict från /axfood/rest/p/{code}.
-
-    Returns:
-        Protein per 100g som float, eller None om info saknas.
+    Hanterar nu korrekt gram, milligram och mikrogram.
     """
     nutrient_headers = product_detail.get("nutrientHeaders", [])
     if not nutrient_headers:
         return None
 
-    # Itrera alla nutrientHeader-block (vanligtvis bara ett – per 100g)
     for header in nutrient_headers:
-        # Kontrollera att basen är per 100g (kan ibland vara per portion)
         basis_qty = header.get("nutrientBasisQuantity")
-        basis_unit = (header.get("nutrientBasisQuantityMeasurementUnitCode") or "").lower()
-
-        # Vi vill ha värden per 100g; om basen är per portion hoppar vi över blocket
-        # (Hemköp verkar nästan alltid returnera per 100g i första blocket)
         if basis_qty and float(basis_qty) != 100:
             continue
 
@@ -319,25 +302,34 @@ def extract_protein_per_100g(product_detail: dict) -> Optional[float]:
             type_code = (nutrient.get("nutrientTypeCode") or "").lower()
             unit = (nutrient.get("measurementUnitCode") or "").lower()
 
-            # Matcha "protein" (kan stå som "protein", "proteiner", "proteins")
-            if "protein" in type_code and "gram" in unit:
+            if "protein" in type_code:
                 qty = nutrient.get("quantityContained")
                 if qty is not None:
                     try:
-                        return float(qty)
+                        val = float(qty)
+                        if unit in ("milligram", "mg"):
+                            val /= 1000.0
+                        elif unit in ("mikrogram", "microgram", "µg", "ug"):
+                            val /= 1000000.0
+                        return val
                     except (ValueError, TypeError):
                         pass
 
-    # Fallback: Om inget per-100g-block hittades, ta det första protein-värdet
+    # Fallback: ta första bästa om 100g-block saknas
     for header in nutrient_headers:
         for nutrient in header.get("nutrientDetails", []):
             type_code = (nutrient.get("nutrientTypeCode") or "").lower()
             unit = (nutrient.get("measurementUnitCode") or "").lower()
-            if "protein" in type_code and "gram" in unit:
+            if "protein" in type_code:
                 qty = nutrient.get("quantityContained")
                 if qty is not None:
                     try:
-                        return float(qty)
+                        val = float(qty)
+                        if unit in ("milligram", "mg"):
+                            val /= 1000.0
+                        elif unit in ("mikrogram", "microgram", "µg", "ug"):
+                            val /= 1000000.0
+                        return val
                     except (ValueError, TypeError):
                         pass
 
@@ -482,6 +474,13 @@ def scrape_all_categories(
                 display_volume = raw.get("displayVolume", "")
                 package_weight_g = parse_package_weight_g(display_volume, code)
 
+                # Länk
+                url_path = raw.get("url")
+                if url_path:
+                    product_url = "https://www.hemkop.se" + url_path
+                else:
+                    product_url = f"https://www.hemkop.se/produkt/{code}"
+
                 product_entry = {
                     "name": name,
                     "brand": brand,
@@ -495,6 +494,7 @@ def scrape_all_categories(
                     "protein_per_100g": None,
                     "protein_per_krona": None,
                     "calculation_method": None,
+                    "url": product_url,
                 }
 
                 # ── Hämta näringsvärden (om aktiverat) ──

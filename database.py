@@ -56,6 +56,7 @@ class Product(Base):
     calories_100g = Column(Integer, nullable=False)
     nova_group = Column(Integer, nullable=False)
     category = Column(String(50), nullable=False)
+    url = Column(String(200), nullable=True)
 
     # Relationships
     prices = relationship("Price", back_populates="product", cascade="all, delete-orphan")
@@ -346,6 +347,7 @@ def get_all_products_prices():
             Product.nova_group.label("NOVA-Grupp"),
             Product.category.label("Kategori"),
             Product.ean.label("EAN"),
+            Product.url.label("Länk"),
             # Direct SQL computation of PPK: (package_size * protein / 100) / price
             ((Price.package_size_grams * Product.protein_per_100g) / (100.0 * Price.price_sek)).label("PPK")
         ).join(Price, Price.product_id == Product.id)\

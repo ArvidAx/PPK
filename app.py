@@ -363,7 +363,7 @@ else:
 st.markdown("### Tabellöversikt")
 if not df_filtered.empty:
     presentation_df = df_filtered[[
-        "Produkt", "Märke", "Butik", "Pris", "Storlek (g)", "Protein/100g", "Kategori", "PPK"
+        "Produkt", "Märke", "Butik", "Pris", "Storlek (g)", "Protein/100g", "Kategori", "PPK", "Länk"
     ]].copy()
     
     st.dataframe(
@@ -375,7 +375,8 @@ if not df_filtered.empty:
             "Storlek (g)": st.column_config.NumberColumn("Storlek (g)", format="%d g"),
             "Protein/100g": st.column_config.NumberColumn("Protein/100g", format="%.1f g"),
             "PPK": st.column_config.NumberColumn("PPK (g/kr)", format="%.2f"),
-            "Kategori": st.column_config.TextColumn("Kategori")
+            "Kategori": st.column_config.TextColumn("Kategori"),
+            "Länk": st.column_config.LinkColumn("Länk", display_text="Till butik")
         }
     )
 
@@ -412,6 +413,7 @@ if not df_all.empty:
 <div class="detail-row"><span class="detail-label">Protein per 100g</span><span class="detail-value">{row['Protein/100g']:.1f} g</span></div>
 <div class="detail-row"><span class="detail-label">EAN-kod</span><span class="detail-value"><code>{row['EAN']}</code></span></div>
 <div class="detail-row"><span class="detail-label">Kategori</span><span class="detail-value">{row['Kategori']}</span></div>
+<div class="detail-row"><span class="detail-label">Länk</span><span class="detail-value"><a href="{row['Länk']}" target="_blank" style="color: #E52421; text-decoration: none; font-weight: 600;">Se på Hemköp →</a></span></div>
 
 <div class="detail-footer">
 <span class="detail-ppk-label">Protein per krona (PPK):</span>
