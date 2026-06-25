@@ -36,7 +36,7 @@
 
             <div class="recipe-grid">
 
-                <article class="recipe-card" data-cat="middag">
+                <article class="recipe-card" data-cat="middag" id="chicken_pasta">
                     <div class="recipe-img" style="background-image: url('img_chicken_pasta.png');"></div>
                     <div class="recipe-content">
                         <div class="recipe-meta">
@@ -52,7 +52,7 @@
                     </div>
                 </article>
 
-                <article class="recipe-card" data-cat="frukost">
+                <article class="recipe-card" data-cat="frukost" id="overnight_oats">
                     <div class="recipe-img" style="background-image: url('img_overnight_oats.png');"></div>
                     <div class="recipe-content">
                         <div class="recipe-meta">
@@ -68,7 +68,7 @@
                     </div>
                 </article>
 
-                <article class="recipe-card" data-cat="lunch">
+                <article class="recipe-card" data-cat="lunch" id="lentil_halloumi">
                     <div class="recipe-img" style="background-image: url('img_lentil_halloumi.png');"></div>
                     <div class="recipe-content">
                         <div class="recipe-meta">
@@ -88,18 +88,16 @@
         </div>
     </div>
 
-    <script>
-        // Simple tab filter for recipes
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                const filter = btn.dataset.filter;
-                document.querySelectorAll('.recipe-card').forEach(card => {
-                    card.style.display = (filter === 'alla' || card.dataset.cat === filter) ? '' : 'none';
-                });
-            });
-        });
-    </script>
+    <!-- Recipe Detail Modal -->
+    <div id="recipeModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal-content" style="max-width: 650px;">
+            <span class="close-btn" id="closeRecipeModalBtn" aria-label="Stäng">&times;</span>
+            <div id="recipeModalBody">
+                <!-- Dynamically populated by recipe_app.js -->
+            </div>
+        </div>
+    </div>
+
+    <script src="recipe_app.js"></script>
 </body>
 </html>
