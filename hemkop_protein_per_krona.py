@@ -210,21 +210,17 @@ def fetch_product_details(session: requests.Session, product_code: str) -> dict:
 def parse_price(price_value) -> Optional[float]:
     """
     Konverterar ett prisvärde till float (SEK).
-    Hanterar både strängar ("47,27 kr") och numeriska värden (47.27).
-
-    Args:
-        price_value: Rådata från API (str eller number).
-
-    Returns:
-        Pris som float, eller None om det inte gick att tolka.
+    Hanterar både strängar ("47,27 kr", "1 000,00") och numeriska värden.
     """
     if price_value is None:
         return None
     if isinstance(price_value, (int, float)):
         return float(price_value)
     if isinstance(price_value, str):
-        # Ta bort "kr", mellanslag, byt komma mot punkt
-        cleaned = price_value.replace("kr", "").replace("\xa0", "").strip()
+        # Ta bort "kr", alla mellanslag (inkl non-breaking) och byt komma mot punkt
+        import re
+        cleaned = price_value.replace("kr", "")
+        cleaned = re.sub(r'\s+', '', cleaned) # Tar bort ALL whitespace (t.ex. i "1 000,00")
         cleaned = cleaned.replace(",", ".")
         match = re.search(r"[\d.]+", cleaned)
         if match:
