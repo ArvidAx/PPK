@@ -322,6 +322,7 @@ function addToCart(product) {
             price_sek: product.price_sek,
             protein_per_100g: product.protein_per_100g,
             package_weight_g: product.package_weight_g || 0,
+            url: product.url || '',
             qty: 1
         });
     }

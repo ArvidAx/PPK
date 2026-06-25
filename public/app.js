@@ -51,6 +51,33 @@ function fmt(val, decimals = 1, suffix = '') {
 // Init
 async function init() {
     try {
+        // Fetch and display last updated time
+        fetch('last_updated.json')
+            .then(res => {
+                if (!res.ok) throw new Error();
+                return res.json();
+            })
+            .then(data => {
+                if (data && data.updated_at) {
+                    const date = new Date(data.updated_at);
+                    const formatted = date.toLocaleString('sv-SE', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    const lastUpdatedEl = document.getElementById('lastUpdated');
+                    if (lastUpdatedEl) lastUpdatedEl.textContent = `Priserna uppdaterades: ${formatted}`;
+                    const lastUpdatedTimeEl = document.getElementById('lastUpdatedTime');
+                    if (lastUpdatedTimeEl) lastUpdatedTimeEl.textContent = `Senaste uppdatering: ${formatted}`;
+                }
+            })
+            .catch(() => {
+                const lastUpdatedEl = document.getElementById('lastUpdated');
+                if (lastUpdatedEl) lastUpdatedEl.textContent = '';
+            });
+
         const response = await fetch('data.json');
         if (!response.ok) throw new Error('Kunde inte hämta data.json');
         const rawData = await response.json();
@@ -316,6 +343,7 @@ function addToShoppingList(item) {
             price_sek: item.price_sek,
             protein_per_100g: item.protein_per_100g,
             package_weight_g: item.package_weight_g || 0,
+            url: item.url || '',
             qty: 1
         });
     }
@@ -367,12 +395,15 @@ function renderShoppingList() {
         const itemProtein = (item.protein_per_100g / 100) * weight;
         totalProtein += itemProtein * qty;
 
+        const itemUrl = item.url || ((item.store || '').toLowerCase() === 'willys' ? `https://www.willys.se/produkt/${item.code}` : `https://www.hemkop.se/produkt/${item.code}`);
+
         const li = document.createElement('li');
         li.className = 'shopping-item';
         li.innerHTML = `
             <div class="shopping-item-info">
                 <span class="shopping-item-name">${esc(item.name)}</span>
                 <span class="shopping-item-sub">${esc(item.brand)} | ${esc(item.store)}</span>
+                <a href="${esc(itemUrl)}" target="_blank" rel="noopener noreferrer" class="shopping-item-store-link">Köp på ${esc(item.store || 'butiken')} →</a>
             </div>
             <div class="shopping-item-controls">
                 <button class="btn-qty btn-minus">-</button>

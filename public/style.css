@@ -385,6 +385,19 @@ tr:hover{background-color:#f8fafc}
     font-size: 0.75rem;
     color: var(--text-muted);
 }
+.shopping-item-store-link {
+    font-size: 0.7rem;
+    color: var(--accent-red);
+    text-decoration: none;
+    font-weight: 700;
+    margin-top: 0.15rem;
+    display: inline-block;
+    transition: color 0.15s;
+}
+.shopping-item-store-link:hover {
+    color: var(--accent-red-hover);
+    text-decoration: underline;
+}
 .shopping-item-controls {
     display: flex;
     align-items: center;

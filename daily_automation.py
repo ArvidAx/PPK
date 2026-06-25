@@ -44,8 +44,8 @@ def main():
         return
 
     # 5. Lägg till och committa
-    logging.info("Sparar nya data.json till Git...")
-    run_cmd("git add public/data.json")
+    logging.info("Sparar nya data och uppdateringstid till Git...")
+    run_cmd("git add public/data.json public/last_updated.json")
     
     date_str = datetime.now().strftime("%Y-%m-%d")
     # Lägg märke till [skip ci] ifall du inte vill att github actions ska bygga, men Cloudflare Pages sköter sig självt.

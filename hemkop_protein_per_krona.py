@@ -712,10 +712,16 @@ if __name__ == "__main__":
         
     import json as _json
     import os
+    from datetime import datetime
     os.makedirs(os.path.dirname(args.output_json) or ".", exist_ok=True)
     with open(args.output_json, "w", encoding="utf-8") as f:
         _json.dump(products, f, ensure_ascii=False, indent=2)
     log.info("Resultat sparade till '%s'.", args.output_json)
+
+    last_updated_json = os.path.join(os.path.dirname(args.output_json) or ".", "last_updated.json")
+    with open(last_updated_json, "w", encoding="utf-8") as f:
+        _json.dump({"updated_at": datetime.now().isoformat()}, f, ensure_ascii=False, indent=2)
+    log.info("Uppdateringstid sparad till '%s'.", last_updated_json)
 
     ranked = display_results(products, top_n=args.top)
 
