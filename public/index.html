@@ -9,18 +9,24 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">PPK<span class="logo-dot">.</span></a>
+        <ul class="nav-links">
+            <li><a href="index.html" class="active">Kalkylator</a></li>
+            <li><a href="recept.html">Recept</a></li>
+            <li><a href="kunskap.html">Kunskapsbank</a></li>
+        </ul>
+    </nav>
+
     <div class="app-container">
         <!-- Sidebar / Filters -->
         <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>Filtrering</h2>
-            </div>
-            
             <div class="filter-group">
                 <label for="search">Sök Produkt</label>
                 <input type="text" id="search" placeholder="T.ex. Kyckling, Arla...">
@@ -35,17 +41,17 @@
             </div>
 
             <div class="filter-group">
-                <label for="maxPrice">Max Pris: <span id="maxPriceLabel">200</span> kr</label>
+                <label for="maxPrice"><span>Max Pris:</span> <span id="maxPriceLabel">200 kr</span></label>
                 <input type="range" id="maxPrice" min="0" max="500" value="200" step="1">
             </div>
 
             <div class="filter-group">
-                <label for="minProtein">Minst Protein/100g: <span id="minProteinLabel">0</span> g</label>
+                <label for="minProtein"><span>Minst Protein:</span> <span id="minProteinLabel">0 g</span></label>
                 <input type="range" id="minProtein" min="0" max="100" value="0" step="1">
             </div>
             
             <div class="sidebar-footer">
-                <p>Data hämtas direkt från Hemköp.</p>
+                <p>Data hämtas direkt från Hemköp via vår PPK-motor.</p>
             </div>
         </aside>
 
@@ -53,7 +59,7 @@
         <main class="main-content">
             <header class="header">
                 <h1 class="app-title">Protein Per Krona <span class="accent-red">(PPK)</span></h1>
-                <p class="app-subtitle">Hitta de billigaste proteinkällorna. Ett högt PPK-värde ger dig mest protein för pengarna.</p>
+                <p class="app-subtitle">Hitta de billigaste proteinkällorna på marknaden. Ett högt PPK-värde ger dig mest protein för pengarna och hjälper dig att optimera din kost.</p>
                 <div class="kpi-cards">
                     <div class="kpi-card">
                         <h3>Antal Produkter</h3>

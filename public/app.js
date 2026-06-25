@@ -147,13 +147,13 @@ function renderTable() {
         const url = item.url ? item.url : `https://www.hemkop.se/produkt/${item.ean}`;
 
         tr.innerHTML = `
-            <td><strong>${item.name || 'Okänd'}</strong></td>
-            <td>${item.brand || '-'}</td>
-            <td>${item.price_sek.toFixed(2)} kr</td>
-            <td>${item.package_size_grams} g</td>
-            <td>${item.protein_per_100g.toFixed(1)} g</td>
-            <td>${item.category || '-'}</td>
-            <td class="${ppkClass}">${item.ppk.toFixed(2)}</td>
+            <td data-label="Produkt"><strong>${item.name || 'Okänd'}</strong></td>
+            <td data-label="Märke">${item.brand || '-'}</td>
+            <td data-label="Pris">${item.price_sek.toFixed(2)} kr</td>
+            <td data-label="Storlek">${item.package_size_grams} g</td>
+            <td data-label="Protein/100g">${item.protein_per_100g.toFixed(1)} g</td>
+            <td data-label="Kategori">${item.category || '-'}</td>
+            <td data-label="PPK (g/kr)" class="${ppkClass}">${item.ppk.toFixed(2)}</td>
             <td><a href="${url}" target="_blank" class="store-link">Hemköp →</a></td>
         `;
         tableBody.appendChild(tr);
