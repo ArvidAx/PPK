@@ -123,7 +123,8 @@ function setupEventListeners() {
                 sortDesc = !sortDesc;
             } else {
                 sortCol = col;
-                sortDesc = (col === 'ppk' || col === 'ppkcal' || col === 'protein_per_100g' || col === 'price_sek');
+                // Descending by default for efficiency metrics, ascending for others
+                sortDesc = (col === 'ppk' || col === 'ppkcal' || col === 'protein_per_100g');
             }
             updateSortHeaders();
             renderTable();
@@ -205,6 +206,7 @@ function renderTable() {
     displayData.forEach(item => {
         const tr = document.createElement('tr');
         const ppkClass = item.ppk >= 2 ? 'ppk-value' : '';
+        const ppkcalClass = item.ppkcal >= 10 ? 'ppk-value' : '';
         const url = esc(item.url || `https://www.hemkop.se/produkt/${item.code}`);
         const storeClass = (item.store || '').toLowerCase() === 'willys' ? 'willys' : 'hemkop';
 
@@ -217,7 +219,7 @@ function renderTable() {
             <td data-label="Storlek">${esc(item.display_volume) || '–'}</td>
             <td data-label="Protein/100g">${fmt(item.protein_per_100g, 1)} g</td>
             <td data-label="PPK (g/kr)" class="${ppkClass}">${fmt(item.ppk, 2)}</td>
-            <td data-label="Prot/100 kcal">${fmt(item.ppkcal, 1)} g</td>
+            <td data-label="Prot/100 kcal" class="${ppkcalClass}">${fmt(item.ppkcal, 1)} g</td>
             <td></td>
         `;
 
@@ -227,16 +229,30 @@ function renderTable() {
             addToShoppingList(item);
         });
 
-        // Row click modal functionality (ignoring clicks on plus button or store link)
+        // Row click functionality
         tr.addEventListener('click', (e) => {
-            if (e.target.closest('.store-link') || e.target.closest('.add-to-list-btn')) {
+            const cell = e.target.closest('td');
+            if (!cell) return;
+            const cells = Array.from(cell.parentNode.children);
+            const index = cells.indexOf(cell);
+            
+            if (index === 0) {
+                return; // Plus button column
+            }
+            if (index === 9) {
+                // Link column clicked - trigger anchor link click
+                const anchor = cell.querySelector('.store-link');
+                if (anchor) anchor.click();
                 return;
             }
+            // Anywhere else: open modal
             openModal(item);
         });
 
         // Build link safely via DOM to prevent URL injection
         const linkCell = tr.querySelector('td:last-child');
+        linkCell.style.cursor = 'pointer';
+        
         const a = document.createElement('a');
         a.href = url;
         a.target = '_blank';
@@ -244,9 +260,15 @@ function renderTable() {
         a.className = 'store-link';
         a.textContent = 'Butik →';
         
-        // Prevent row click modal when clicking the link
+        // Prevent row click modal when clicking the button directly
         a.addEventListener('click', (e) => {
             e.stopPropagation();
+        });
+
+        // Clicking anywhere in the cell triggers the link
+        linkCell.addEventListener('click', (e) => {
+            e.stopPropagation();
+            a.click();
         });
 
         linkCell.appendChild(a);
