@@ -1,6 +1,2 @@
-streamlit
-pandas
-sqlalchemy
-openfoodfacts
 requests
 beautifulsoup4

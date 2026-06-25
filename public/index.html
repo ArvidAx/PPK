@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPK - Protein per Krona</title>
+    <meta name="description" content="Hitta de mest kostnadseffektiva proteinkällorna på Hemköp.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar / Filters -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Filtrering</h2>
+            </div>
+            
+            <div class="filter-group">
+                <label for="search">Sök Produkt</label>
+                <input type="text" id="search" placeholder="T.ex. Kyckling, Arla...">
+            </div>
+
+            <div class="filter-group">
+                <label for="category">Kategori</label>
+                <select id="category">
+                    <option value="">Alla Kategorier</option>
+                    <!-- Fylls i dynamiskt av JS -->
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="maxPrice">Max Pris: <span id="maxPriceLabel">200</span> kr</label>
+                <input type="range" id="maxPrice" min="0" max="500" value="200" step="1">
+            </div>
+
+            <div class="filter-group">
+                <label for="minProtein">Minst Protein/100g: <span id="minProteinLabel">0</span> g</label>
+                <input type="range" id="minProtein" min="0" max="100" value="0" step="1">
+            </div>
+            
+            <div class="sidebar-footer">
+                <p>Data hämtas direkt från Hemköp.</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <h1 class="app-title">Protein Per Krona <span class="accent-red">(PPK)</span></h1>
+                <p class="app-subtitle">Hitta de billigaste proteinkällorna. Ett högt PPK-värde ger dig mest protein för pengarna.</p>
+                <div class="kpi-cards">
+                    <div class="kpi-card">
+                        <h3>Antal Produkter</h3>
+                        <p id="totalProducts">0</p>
+                    </div>
+                    <div class="kpi-card highlight">
+                        <h3>Bästa PPK just nu</h3>
+                        <p id="bestPPK">0.00 <span class="unit">g/kr</span></p>
+                    </div>
+                </div>
+            </header>
+
+            <section class="table-section">
+                <div class="table-header">
+                    <h2>Resultat</h2>
+                </div>
+                <div class="table-container">
+                    <table id="resultsTable">
+                        <thead>
+                            <tr>
+                                <th data-sort="name">Produkt</th>
+                                <th data-sort="brand">Märke</th>
+                                <th data-sort="price_sek">Pris</th>
+                                <th data-sort="package_size_grams">Storlek</th>
+                                <th data-sort="protein_per_100g">Protein/100g</th>
+                                <th data-sort="category">Kategori</th>
+                                <th data-sort="ppk" class="sort-active desc">PPK (g/kr)</th>
+                                <th>Länk</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Fylls i dynamiskt -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

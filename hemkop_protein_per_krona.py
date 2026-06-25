@@ -638,11 +638,15 @@ if __name__ == "__main__":
         fetch_nutrition=not args.no_nutrition,
     )
 
-    if args.output_json:
-        import json as _json
-        with open(args.output_json, "w", encoding="utf-8") as f:
-            _json.dump(products, f, ensure_ascii=False, indent=2)
-        log.info("Resultat sparade till '%s'.", args.output_json)
+    if args.output_json is None:
+        args.output_json = "public/data.json"
+        
+    import json as _json
+    import os
+    os.makedirs(os.path.dirname(args.output_json) or ".", exist_ok=True)
+    with open(args.output_json, "w", encoding="utf-8") as f:
+        _json.dump(products, f, ensure_ascii=False, indent=2)
+    log.info("Resultat sparade till '%s'.", args.output_json)
 
     ranked = display_results(products, top_n=args.top)
 
