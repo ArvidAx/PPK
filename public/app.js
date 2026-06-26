@@ -32,7 +32,7 @@ const BASKETS = {
 
 // DOM Elements
 const tableBody = document.getElementById('tableBody');
-const categorySelect = document.getElementById('category');
+let selectedCategories = [];
 const storeSelect = document.getElementById('store');
 const searchInput = document.getElementById('search');
 const maxPriceInput = document.getElementById('maxPrice');
@@ -149,6 +149,31 @@ async function init() {
     }
 }
 
+function updateCategorySelectBtnText() {
+    const btn = document.getElementById('categorySelectBtn');
+    if (!btn) return;
+    if (selectedCategories.length === 0) {
+        btn.textContent = 'Alla kategorier';
+    } else if (selectedCategories.length === 1) {
+        const slugToName = {
+            'kott-fagel-och-chark': 'Kött, fågel & chark',
+            'frukt-och-gront': 'Frukt & grönt',
+            'mejeri-ost-och-agg': 'Mejeri, ost & ägg',
+            'skafferi': 'Skafferiet',
+            'fryst': 'Fryst',
+            'brod-och-kakor': 'Bröd & kakor',
+            'fisk-och-skaldjur': 'Fisk & skaldjur',
+            'vegetariskt': 'Vegetariskt',
+            'fardigmat': 'Färdigmat',
+            'delikatessen': 'Delikatessen',
+            'godis-snacks-och-glass': 'Godis, snacks & glass',
+        };
+        btn.textContent = slugToName[selectedCategories[0]] || selectedCategories[0];
+    } else {
+        btn.textContent = `${selectedCategories.length} valda`;
+    }
+}
+
 function populateCategories() {
     const slugToName = {
         'kott-fagel-och-chark': 'Kött, fågel & chark',
@@ -163,19 +188,58 @@ function populateCategories() {
         'delikatessen': 'Delikatessen',
         'godis-snacks-och-glass': 'Godis, snacks & glass',
     };
+    const dropdown = document.getElementById('categorySelectDropdown');
+    if (!dropdown) return;
+    dropdown.innerHTML = '';
+
     const categories = [...new Set(allData.map(d => d.category))].filter(Boolean).sort();
     categories.forEach(cat => {
-        const option = document.createElement('option');
-        option.value = cat;
-        option.textContent = slugToName[cat] || cat;
-        categorySelect.appendChild(option);
+        const label = document.createElement('label');
+        label.className = 'checkbox-label';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = cat;
+        checkbox.className = 'category-checkbox';
+        checkbox.addEventListener('change', () => {
+            if (checkbox.checked) {
+                selectedCategories.push(cat);
+            } else {
+                selectedCategories = selectedCategories.filter(c => c !== cat);
+            }
+            updateCategorySelectBtnText();
+            applyFilters(true);
+        });
+
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(' ' + (slugToName[cat] || cat)));
+        dropdown.appendChild(label);
     });
 }
 
 function setupEventListeners() {
     searchInput.addEventListener('input', () => applyFilters(true));
-    categorySelect.addEventListener('change', () => applyFilters(true));
     storeSelect.addEventListener('change', () => applyFilters(true));
+
+    const categorySelectBtn = document.getElementById('categorySelectBtn');
+    const categorySelectDropdown = document.getElementById('categorySelectDropdown');
+    const categoryMultiSelect = document.getElementById('categoryMultiSelect');
+
+    if (categorySelectBtn && categorySelectDropdown) {
+        categorySelectBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = categorySelectDropdown.style.display === 'flex';
+            categorySelectDropdown.style.display = isOpen ? 'none' : 'flex';
+            categorySelectBtn.classList.toggle('active', !isOpen);
+        });
+
+        document.addEventListener('click', (e) => {
+            if (categoryMultiSelect && !categoryMultiSelect.contains(e.target)) {
+                categorySelectDropdown.style.display = 'none';
+                categorySelectBtn.classList.remove('active');
+            }
+        });
+    }
 
     maxPriceInput.addEventListener('input', e => {
         maxPriceLabel.textContent = e.target.value + ' kr';
@@ -261,7 +325,6 @@ function applyFilters(resetPage = false) {
     }
 
     const search = searchInput.value.toLowerCase().trim();
-    const cat = categorySelect.value;
     const store = storeSelect.value;
     const maxPrice = parseFloat(maxPriceInput.value);
     const minProtein = parseFloat(minProteinInput.value);
@@ -281,7 +344,7 @@ function applyFilters(resetPage = false) {
             if (criteria.min_ppk != null && (item.ppk || 0) < criteria.min_ppk) return false;
         }
 
-        if (cat && item.category !== cat) return false;
+        if (selectedCategories.length > 0 && !selectedCategories.includes(item.category)) return false;
         if (store && item.store !== store) return false;
         if (item.price_sek > maxPrice) return false;
         if ((item.protein_per_100g || 0) < minProtein) return false;

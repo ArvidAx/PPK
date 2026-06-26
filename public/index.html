@@ -69,10 +69,13 @@
             </div>
 
             <div class="filter-group">
-                <label for="category">📂 Kategori</label>
-                <select id="category" aria-label="Filtrera efter kategori">
-                    <option value="">Alla Kategorier</option>
-                </select>
+                <label>📂 Kategori</label>
+                <div class="multi-select-container" id="categoryMultiSelect">
+                    <button type="button" class="multi-select-btn" id="categorySelectBtn">Alla kategorier</button>
+                    <div class="multi-select-dropdown" id="categorySelectDropdown" style="display: none;">
+                        <!-- Checkboxes dynamically populated by app.js -->
+                    </div>
+                </div>
             </div>
 
             <div class="filter-group">
