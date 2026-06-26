@@ -3,6 +3,32 @@ let filteredData = [];
 let sortCol = 'ppk';
 let sortDesc = true;
 let shoppingList = [];
+let activeBasket = null;
+let currentLimit = 20;
+let clickCount = 0;
+
+const BASKETS = {
+    studentpaketet: {
+        title: "Studentpaketet - Maxat protein för under 200 kr/vecka",
+        emoji: "🎓",
+        description: "De 5 absolut billigaste basvarorna i Sverige för dig som vill bygga muskler på en CSN-budget.",
+        filter_criteria: {
+            max_price: 40,
+            min_ppk: 10.0,
+            keywords: ["Vetemjöl", "Gula ärter", "Havregryn", "Linser", "Jordnötter"]
+        }
+    },
+    clean_bulking: {
+        title: "Clean Bulking-paketet - Högoktanigt protein utan fettet",
+        emoji: "💪",
+        description: "För dig som vill lägga på dig ren muskelmassa. Maxat med protein, minimalt med kalorier från fett och socker.",
+        filter_criteria: {
+            min_protein_100g: 10.0,
+            max_price: 150,
+            keywords: ["Kycklingfilé", "Kvarg", "Torsk", "Nötfärs 5%", "Tofu"]
+        }
+    }
+};
 
 // DOM Elements
 const tableBody = document.getElementById('tableBody');
@@ -105,7 +131,16 @@ async function init() {
         populateCategories();
         setupEventListeners();
         loadShoppingList();
-        applyFilters();
+        updateDynamicPPK();
+        
+        // Check for url param to pre-select basket
+        const urlParams = new URLSearchParams(window.location.search);
+        const basketParam = urlParams.get('basket');
+        if (basketParam && BASKETS[basketParam]) {
+            selectBasket(basketParam);
+        } else {
+            applyFilters(true);
+        }
     } catch (error) {
         console.error(error);
         tableBody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding: 2rem; color:#e11d48;">
@@ -138,18 +173,18 @@ function populateCategories() {
 }
 
 function setupEventListeners() {
-    searchInput.addEventListener('input', applyFilters);
-    categorySelect.addEventListener('change', applyFilters);
-    storeSelect.addEventListener('change', applyFilters);
+    searchInput.addEventListener('input', () => applyFilters(true));
+    categorySelect.addEventListener('change', () => applyFilters(true));
+    storeSelect.addEventListener('change', () => applyFilters(true));
 
     maxPriceInput.addEventListener('input', e => {
         maxPriceLabel.textContent = e.target.value + ' kr';
-        applyFilters();
+        applyFilters(true);
     });
 
     minProteinInput.addEventListener('input', e => {
         minProteinLabel.textContent = e.target.value + ' g';
-        applyFilters();
+        applyFilters(true);
     });
 
     tableHeaders.forEach(th => {
@@ -163,7 +198,7 @@ function setupEventListeners() {
                 sortDesc = (col === 'ppk' || col === 'ppkcal' || col === 'protein_per_100g');
             }
             updateSortHeaders();
-            applyFilters();
+            applyFilters(false);
         });
     });
 
@@ -181,6 +216,32 @@ function setupEventListeners() {
 
     // Clear List listener
     clearListBtn.addEventListener('click', clearShoppingList);
+
+    // Basket Button listeners
+    document.querySelectorAll('.basket-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const basketId = btn.dataset.basket;
+            selectBasket(basketId);
+        });
+    });
+
+    // Basket Banner clear listener
+    const clearBasketBtn = document.getElementById('clearBasketBtn');
+    if (clearBasketBtn) {
+        clearBasketBtn.addEventListener('click', clearActiveBasket);
+    }
+
+    // Add Basket to Cart listener
+    const addBasketToCartBtn = document.getElementById('addBasketToCartBtn');
+    if (addBasketToCartBtn) {
+        addBasketToCartBtn.addEventListener('click', addActiveBasketToCart);
+    }
+
+    // Load more listener
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', handleLoadMore);
+    }
 }
 
 function updateSortHeaders() {
@@ -193,7 +254,12 @@ function updateSortHeaders() {
     });
 }
 
-function applyFilters() {
+function applyFilters(resetPage = false) {
+    if (resetPage) {
+        currentLimit = 20;
+        clickCount = 0;
+    }
+
     const search = searchInput.value.toLowerCase().trim();
     const cat = categorySelect.value;
     const store = storeSelect.value;
@@ -201,6 +267,20 @@ function applyFilters() {
     const minProtein = parseFloat(minProteinInput.value);
 
     filteredData = allData.filter(item => {
+        if (activeBasket && BASKETS[activeBasket]) {
+            const criteria = BASKETS[activeBasket].filter_criteria;
+            
+            // Filter keywords
+            if (criteria.keywords && criteria.keywords.length > 0) {
+                const nameAndBrand = ((item.name || '') + ' ' + (item.brand || '')).toLowerCase();
+                const matchesKeyword = criteria.keywords.some(kw => nameAndBrand.includes(kw.toLowerCase()));
+                if (!matchesKeyword) return false;
+            }
+            
+            // Filter min ppk
+            if (criteria.min_ppk != null && (item.ppk || 0) < criteria.min_ppk) return false;
+        }
+
         if (cat && item.category !== cat) return false;
         if (store && item.store !== store) return false;
         if (item.price_sek > maxPrice) return false;
@@ -227,6 +307,7 @@ function applyFilters() {
 
     updateKPIs();
     renderTable();
+    updateLoadMoreButton();
 }
 
 function renderTable() {
@@ -240,10 +321,10 @@ function renderTable() {
         return;
     }
 
-    const displayData = filteredData.slice(0, 200);
+    const displayData = filteredData.slice(0, currentLimit);
     if (resultCountEl) {
-        resultCountEl.textContent = filteredData.length > 200
-            ? `(visar 200 av ${filteredData.length})`
+        resultCountEl.textContent = filteredData.length > currentLimit
+            ? `(visar ${currentLimit} av ${filteredData.length})`
             : `(${filteredData.length} produkter)`;
     }
 
@@ -466,6 +547,7 @@ function renderShoppingList() {
     summaryPriceEl.textContent = `${totalCost.toFixed(2)} kr`;
     summaryProteinEl.textContent = totalProtein > 0 ? `${totalProtein.toFixed(1)} g` : '– g';
     summaryPPKEl.textContent = `${combinedPPK.toFixed(2)} g/kr`;
+    updateBasketUI(shoppingList, allData);
 }
 
 // Modal Details Populator
@@ -599,6 +681,256 @@ function openModal(item) {
 function closeModal() {
     productModal.classList.remove('show');
     productModal.setAttribute('aria-hidden', 'true');
+}
+
+function selectBasket(basketId) {
+    if (activeBasket === basketId) {
+        clearActiveBasket();
+        return;
+    }
+
+    activeBasket = basketId;
+    const basket = BASKETS[basketId];
+
+    // Update sidebar buttons visual state
+    document.querySelectorAll('.basket-btn').forEach(btn => {
+        if (btn.dataset.basket === basketId) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+
+    // Set slider values based on criteria
+    if (basket.filter_criteria.max_price != null) {
+        maxPriceInput.value = basket.filter_criteria.max_price;
+        maxPriceLabel.textContent = basket.filter_criteria.max_price + ' kr';
+    }
+    if (basket.filter_criteria.min_protein_100g != null) {
+        minProteinInput.value = basket.filter_criteria.min_protein_100g;
+        minProteinLabel.textContent = basket.filter_criteria.min_protein_100g + ' g';
+    } else {
+        minProteinInput.value = 0;
+        minProteinLabel.textContent = '0 g';
+    }
+
+    // Show banner
+    const banner = document.getElementById('basketBanner');
+    const bannerEmoji = document.getElementById('basketBannerEmoji');
+    const bannerTitle = document.getElementById('basketBannerTitle');
+    const bannerDesc = document.getElementById('basketBannerDesc');
+
+    if (banner) {
+        if (bannerEmoji) bannerEmoji.textContent = basket.emoji;
+        if (bannerTitle) bannerTitle.textContent = basket.title;
+        if (bannerDesc) bannerDesc.textContent = basket.description;
+        banner.style.display = 'flex';
+    }
+
+    applyFilters(true);
+}
+
+function clearActiveBasket() {
+    activeBasket = null;
+
+    // Reset sidebar buttons
+    document.querySelectorAll('.basket-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+
+    // Reset sliders to default values
+    maxPriceInput.value = 200;
+    maxPriceLabel.textContent = '200 kr';
+    minProteinInput.value = 0;
+    minProteinLabel.textContent = '0 g';
+
+    // Hide banner
+    const banner = document.getElementById('basketBanner');
+    if (banner) {
+        banner.style.display = 'none';
+    }
+
+    applyFilters(true);
+}
+
+function addActiveBasketToCart() {
+    if (!activeBasket || !BASKETS[activeBasket]) return;
+
+    const basket = BASKETS[activeBasket];
+    const criteria = basket.filter_criteria;
+
+    let addedCount = 0;
+
+    criteria.keywords.forEach(kw => {
+        let matchingItems = allData.filter(item => {
+            const nameAndBrand = ((item.name || '') + ' ' + (item.brand || '')).toLowerCase();
+            if (!nameAndBrand.includes(kw.toLowerCase())) return false;
+
+            if (criteria.max_price != null && item.price_sek > criteria.max_price) return false;
+            if (criteria.min_ppk != null && (item.ppk || 0) < criteria.min_ppk) return false;
+            if (criteria.min_protein_100g != null && (item.protein_per_100g || 0) < criteria.min_protein_100g) return false;
+
+            return true;
+        });
+
+        if (matchingItems.length > 0) {
+            // Sort by PPK descending (best value first)
+            matchingItems.sort((a, b) => b.ppk - a.ppk);
+            const bestItem = matchingItems[0];
+
+            addToShoppingList(bestItem);
+            addedCount++;
+        }
+    });
+
+    if (addedCount > 0) {
+        const btn = document.getElementById('addBasketToCartBtn');
+        if (btn) {
+            const originalText = btn.textContent;
+            btn.textContent = '✓ Tillagd!';
+            btn.style.backgroundColor = 'var(--accent-green)';
+            btn.style.borderColor = 'var(--accent-green)';
+            btn.style.color = '#fff';
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.backgroundColor = '';
+                btn.style.borderColor = '';
+                btn.style.color = '';
+            }, 1500);
+        }
+    }
+}
+
+function updateDynamicPPK() {
+    const price = 249; // kr
+    const weightKg = 1; // kg
+    const proteinPct = 0.75; // 75%
+    const totalProtein = weightKg * 1000 * proteinPct; // 750g
+    const ppk = totalProtein / price; // 3.012...
+    
+    const elements = document.querySelectorAll('.dynamic-ppk');
+    elements.forEach(el => {
+        el.textContent = `~${ppk.toFixed(1)} g/kr`;
+    });
+}
+
+function updateLoadMoreButton() {
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    if (!loadMoreBtn) return;
+    
+    if (filteredData.length === 0 || filteredData.length <= currentLimit) {
+        loadMoreBtn.style.display = 'none';
+    } else {
+        loadMoreBtn.style.display = 'inline-block';
+        const nextLoad = clickCount < 3 ? 20 : 100;
+        loadMoreBtn.textContent = `Ladda ${nextLoad} till`;
+    }
+}
+
+function handleLoadMore() {
+    const increment = clickCount < 3 ? 20 : 100;
+    currentLimit += increment;
+    clickCount += 1;
+    applyFilters(false);
+}
+
+const BasketOptimizer = {
+    calculateTotalPPK(items) {
+        let totalProteinGrams = 0;
+        let totalCost = 0;
+
+        items.forEach(item => {
+            const price = parseFloat(item.price_sek);
+            const proteinPer100g = parseFloat(item.protein_per_100g);
+            const weightGrams = parseFloat(item.package_weight_g || 0);
+
+            if (!isNaN(price) && !isNaN(proteinPer100g) && !isNaN(weightGrams)) {
+                const qty = item.qty || 1;
+                const totalProteinInProduct = (proteinPer100g / 100) * weightGrams;
+                totalProteinGrams += totalProteinInProduct * qty;
+                totalCost += price * qty;
+            }
+        });
+
+        if (totalCost === 0) return 0;
+        return (totalProteinGrams / totalCost).toFixed(2);
+    },
+
+    compareStores(items, allProductsDatabase) {
+        let willysTotal = 0;
+        let hemkopTotal = 0;
+        let missingInWillys = 0;
+        let missingInHemkop = 0;
+
+        items.forEach(item => {
+            const qty = item.qty || 1;
+            const price = parseFloat(item.price_sek) || 0;
+
+            const willysMatch = allProductsDatabase.find(p => 
+                p.name === item.name && 
+                p.brand === item.brand &&
+                p.store.toLowerCase() === 'willys'
+            );
+            const hemkopMatch = allProductsDatabase.find(p => 
+                p.name === item.name && 
+                p.brand === item.brand &&
+                p.store.toLowerCase() === 'hemköp'
+            );
+
+            if (willysMatch) {
+                willysTotal += (parseFloat(willysMatch.price_sek) || price) * qty;
+            } else {
+                willysTotal += price * qty;
+                missingInWillys++;
+            }
+
+            if (hemkopMatch) {
+                hemkopTotal += (parseFloat(hemkopMatch.price_sek) || price) * qty;
+            } else {
+                hemkopTotal += price * qty;
+                missingInHemkop++;
+            }
+        });
+
+        return {
+            willys: willysTotal.toFixed(2),
+            hemkop: hemkopTotal.toFixed(2),
+            cheapest: willysTotal < hemkopTotal ? 'Willys' : 'Hemköp',
+            savings: Math.abs(willysTotal - hemkopTotal).toFixed(2)
+        };
+    }
+};
+
+function updateBasketUI(currentBasketItems, fullDatabase) {
+    const totalPPK = BasketOptimizer.calculateTotalPPK(currentBasketItems);
+    const comparison = BasketOptimizer.compareStores(currentBasketItems, fullDatabase);
+
+    const totalBasketPpkEl = document.getElementById('total-basket-ppk');
+    if (totalBasketPpkEl) {
+        totalBasketPpkEl.innerText = `${totalPPK} g/kr`;
+    }
+    
+    const summaryElement = document.getElementById('basket-store-comparison');
+    if (!summaryElement) return;
+    
+    if (currentBasketItems.length > 0) {
+        summaryElement.innerHTML = `
+            <div style="padding: 12px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: var(--radius-md); margin-top: 10px; font-size: 0.85rem;">
+                <p style="margin: 0 0 6px 0;"><strong>Butiksjämförelse:</strong></p>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                    <span>Willys total:</span> <span>${comparison.willys} kr</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <span>Hemköp total:</span> <span>${comparison.hemkop} kr</span>
+                </div>
+                <p style="margin: 6px 0 0 0; color: var(--accent-red); font-weight: bold; font-size: 0.85rem;">
+                    👉 Handla på ${comparison.cheapest} och spara ${comparison.savings} kr!
+                </p>
+            </div>
+        `;
+    } else {
+        summaryElement.innerHTML = '';
+    }
 }
 
 init();

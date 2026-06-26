@@ -55,6 +55,12 @@
 
     <div class="app-container">
         <aside class="sidebar" aria-label="Filter och shoppinglista">
+            <div class="sidebar-section-title">Standardkassar</div>
+            <div class="basket-buttons-container">
+                <button class="basket-btn" data-basket="studentpaketet" aria-label="Aktivera Studentpaketet">🎓 Studentpaketet</button>
+                <button class="basket-btn" data-basket="clean_bulking" aria-label="Aktivera Clean Bulking-paketet">💪 Clean Bulking</button>
+            </div>
+
             <div class="sidebar-section-title">Filter</div>
 
             <div class="filter-group">
@@ -102,6 +108,16 @@
                     <div class="summary-row"><span>Kostnad:</span><span id="summaryPrice">0.00 kr</span></div>
                     <div class="summary-row"><span>Total protein:</span><span id="summaryProtein">0.0 g</span></div>
                     <div class="summary-row highlight"><span>Samlat PPK:</span><span id="summaryPPK">0.00 g/kr</span></div>
+                    
+                    <!-- Denna sektion laddas dynamiskt via BasketOptimizer -->
+                    <div id="basket-summary-box" style="margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 12px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.85rem; color: var(--text-muted);">Korgens totala PPK:</span>
+                            <span id="total-basket-ppk" style="font-weight: bold; color: var(--accent-red); font-size: 1.05rem;">0.00 g/kr</span>
+                        </div>
+                        <div id="basket-store-comparison"></div>
+                    </div>
+
                     <button id="clearListBtn" class="btn-clear-list">Töm inköpslista</button>
                 </div>
             </div>
@@ -135,6 +151,19 @@
                     <h2>Resultat <span id="resultCount" class="result-count"></span></h2>
                     <p class="table-hint">Klicka på en kolumnrubrik för att sortera. Klicka på en rad för produktdetaljer.</p>
                 </div>
+                <div id="basketBanner" class="basket-banner" style="display: none;">
+                    <div class="basket-banner-content">
+                        <span class="basket-banner-emoji" id="basketBannerEmoji"></span>
+                        <div>
+                            <h3 id="basketBannerTitle"></h3>
+                            <p id="basketBannerDesc"></p>
+                        </div>
+                    </div>
+                    <div class="basket-banner-actions">
+                        <button id="addBasketToCartBtn" class="btn-primary btn-sm">Lägg kasse i lista</button>
+                        <button id="clearBasketBtn" class="basket-close-btn" aria-label="Rensa filter">×</button>
+                    </div>
+                </div>
                 <div class="table-container">
                     <table id="resultsTable" aria-label="Produkter sorterade efter protein per krona">
                         <thead>
@@ -155,6 +184,55 @@
                             <tr><td colspan="10" style="text-align:center; padding:2rem; color:#64748b;">Laddar produkter...</td></tr>
                         </tbody>
                     </table>
+                </div>
+                <div class="load-more-container">
+                    <button id="loadMoreBtn" class="btn-load-more">Ladda mer</button>
+                </div>
+            </section>
+
+            <section class="comparison-section">
+                <div class="comparison-header">
+                    <h2>Matbutiken vs. Kosttillskott: Var får du mest protein för pengarna?</h2>
+                    <p>Vi ställde de billigaste proteinkällorna från Willys och Hemköp mot standardvassle online. Resultatet kan överraska dig.</p>
+                </div>
+
+                <div class="comparison-grid">
+                    <!-- Matbutiken -->
+                    <div class="comparison-card store-card">
+                        <h3>Livsmedelsbutiken (Snittpriser)</h3>
+                        <div class="price-row">
+                            <span class="label">Lättkvarg (500g):</span>
+                            <span class="value font-bold">~6.5 g/kr</span>
+                        </div>
+                        <div class="price-row">
+                            <span class="label">Kycklingfilé (Fryst storpack):</span>
+                            <span class="value font-bold">~5.2 g/kr</span>
+                        </div>
+                        <div class="price-row">
+                            <span class="label">Nötfärs (10%, 1kg):</span>
+                            <span class="value font-bold">~2.8 g/kr</span>
+                        </div>
+                        <p class="card-footer">*Räknat på ordinarie priser 2026. Gula ärter och vetemjöl är billigare, men kräver mycket större matvolymer.</p>
+                    </div>
+
+                    <!-- VS Divider -->
+                    <div class="vs-divider">VS</div>
+
+                    <!-- Affiliate-pulver -->
+                    <div class="comparison-card affiliate-card">
+                        <div class="badge">Bäst PPK för ren proteinkälla</div>
+                        <h3>Vassleprotein (Online)</h3>
+                        <div class="price-row highlight">
+                            <span class="label">Whey-80 (1kg storpack):</span>
+                            <span class="value dynamic-ppk">~7.8 g/kr</span>
+                        </div>
+                        <p class="card-text">Ett standard Whey-80 eller isolat online slår nästan alla animaliska proteinkällor i matbutiken när man räknar om priset till rent gram protein.</p>
+                        
+                        <!-- Här hamnar din Adtraction-länk sen -->
+                        <a href="#" target="_blank" rel="noopener sponsored" class="affiliate-btn">
+                            Visa billigaste proteinpulvret just nu →
+                        </a>
+                    </div>
                 </div>
             </section>
 

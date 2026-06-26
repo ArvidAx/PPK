@@ -877,18 +877,17 @@ def scrape_all_categories(
                                     product_entry["compare_price_per_kg"] = compare_price_per_kg
                                     product_entry["compare_price"] = f"{compare_price_per_kg:.2f} kr/kg (beräknat)"
 
-                        # Omräkna jämförpris om vi hittat torrvikt men butiken saknar korrekt jämförpris
-                        if package_weight_g and price_sek and not raw.get("comparePrice"):
+                        # Omräkna jämförpris om produkten har färdigvolym (t.ex. buljong, fond) där butiken anger jämförpris på färdig utspädd produkt,
+                        # eller om jämförpris saknas helt.
+                        if (
+                            package_weight_g and price_sek
+                            and is_prepared_yield_volume(display_volume, f"{name} {product_entry['description']}")
+                        ):
+                            # Buljong m.m.: felaktigt jämförpris baserat på färdigvolym (kr/l ≈ kr/kg)
                             compare_price_per_kg = (price_sek / package_weight_g) * 1000
                             product_entry["compare_price_per_kg"] = compare_price_per_kg
                             product_entry["compare_price"] = f"{compare_price_per_kg:.2f} kr/kg (beräknat)"
-                        elif (
-                            package_weight_g and price_sek
-                            and is_prepared_yield_volume(display_volume, f"{name} {product_entry['description']}")
-                            and compare_price_per_kg
-                            and compare_price_per_kg < 5
-                        ):
-                            # Buljong m.m.: felaktigt jämförpris baserat på färdigvolym (kr/l ≈ kr/kg)
+                        elif package_weight_g and price_sek and not raw.get("comparePrice"):
                             compare_price_per_kg = (price_sek / package_weight_g) * 1000
                             product_entry["compare_price_per_kg"] = compare_price_per_kg
                             product_entry["compare_price"] = f"{compare_price_per_kg:.2f} kr/kg (beräknat)"
