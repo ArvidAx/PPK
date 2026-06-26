@@ -237,6 +237,20 @@ def parse_price(price_value) -> Optional[float]:
     return None
 
 
+# Typisk torrvikt per buljong-/fondtärning (gram)
+DEFAULT_CUBE_WEIGHT_G = 10.5
+
+# "8p/4l" = 8 tärningar ger 4 liter färdig buljong (våt volym, inte nettovikt)
+PREPARED_PIECES_PER_LITER_RE = re.compile(
+    r"(\d+)\s*(?:p|st|port|portioner)\s*/\s*(\d+[\.,]?\d*)\s*(?:l|dl)\b"
+)
+
+# "345/2,4" = 345 g torr produkt ger 2,4 liter färdig mat (t.ex. potatismos)
+PREPARED_GRAMS_PER_LITER_RE = re.compile(
+    r"^(\d+[\.,]?\d*)\s*/\s*(\d+[\.,]?\d*)\s*$"
+)
+
+
 def is_prepared_yield_volume(display_volume: Optional[str], product_text: str = "") -> bool:
     """
     Identifierar volymer som beskriver färdig mängd efter tillagning, inte torr nettovikt.
@@ -246,6 +260,11 @@ def is_prepared_yield_volume(display_volume: Optional[str], product_text: str = 
         return False
 
     text = display_volume.lower().strip()
+
+    # X tärningar / Y liter är alltid färdigvolym, oavsett produktnamn
+    if PREPARED_PIECES_PER_LITER_RE.search(text):
+        return True
+
     product_l = (product_text or "").lower()
     prepared_keywords = (
         "buljong", "fond", "sås", "sas", "soppa", "potatismos", "pulver", "tärning", "tarning"
@@ -254,7 +273,75 @@ def is_prepared_yield_volume(display_volume: Optional[str], product_text: str = 
     if not any(keyword in product_l for keyword in prepared_keywords):
         return False
 
-    return bool(re.search(r"\d+\s*(?:p|st|port|portioner)\s*/\s*\d+[\.,]?\d*\s*(?:l|dl)\b", text))
+    return bool(PREPARED_GRAMS_PER_LITER_RE.match(text))
+
+
+def estimate_dry_package_weight_g(
+    display_volume: Optional[str],
+    name: str = "",
+    description: str = "",
+    product_detail: Optional[dict] = None,
+) -> Optional[float]:
+    """
+    Uppskattar torr nettovikt för koncentrat som säljs med färdigvolym (buljong, fond m.m.).
+    """
+    if not display_volume:
+        return None
+
+    text = display_volume.lower().strip()
+    search_text = " ".join(filter(None, [name, description, (product_detail or {}).get("description", "")])).lower()
+
+    # Försök hitta explicit nettovikt i text, t.ex. "88 g" eller "Nettovikt 88 gram"
+    for source in [search_text, text]:
+        net_match = re.search(
+            r"(?:nettovikt|netto(?:vikt)?|innehåll)?\s*(\d+[\.,]?\d*)\s*(?:g|gram)\b",
+            source,
+        )
+        if net_match:
+            return float(net_match.group(1).replace(",", "."))
+
+    # X tärningar / Y liter → antal tärningar * typisk tärningsvikt
+    pieces_match = PREPARED_PIECES_PER_LITER_RE.search(text)
+    if pieces_match:
+        piece_count = int(pieces_match.group(1))
+        if piece_count > 0:
+            return piece_count * DEFAULT_CUBE_WEIGHT_G
+
+    # Torr gram / färdig liter, t.ex. potatismos "345/2,4"
+    grams_match = PREPARED_GRAMS_PER_LITER_RE.match(text)
+    if grams_match and is_prepared_yield_volume(display_volume, search_text):
+        return float(grams_match.group(1).replace(",", "."))
+
+    return None
+
+
+def resolve_package_weight_g(
+    display_volume: Optional[str],
+    name: str = "",
+    description: str = "",
+    url: str = "",
+    product_detail: Optional[dict] = None,
+) -> Optional[float]:
+    """
+    Bestämmer förpackningens torra nettovikt i gram.
+    Hanterar buljong/fond (färdigvolym) och vanliga viktangivelser.
+    """
+    product_text = " ".join(filter(None, [name, description]))
+
+    weight = parse_package_weight_g(display_volume, url, product_text)
+    if weight:
+        return weight
+
+    dry_weight = estimate_dry_package_weight_g(
+        display_volume=display_volume,
+        name=name,
+        description=description,
+        product_detail=product_detail,
+    )
+    if dry_weight:
+        return dry_weight
+
+    return parse_package_weight_g(name, url, product_text)
 
 
 def parse_package_weight_g(display_volume: Optional[str], url: str = "", product_text: str = "") -> Optional[float]:
@@ -274,8 +361,13 @@ def parse_package_weight_g(display_volume: Optional[str], url: str = "", product
     if is_prepared_yield_volume(text, product_text):
         return None
 
-    # Multipel förpackning med vikter/volymer, t.ex. "2x400g", "12x35g", "3p/25cl", "3x250ml"
-    multi_match = re.search(r"(\d+)\s*(?:x|×|p/|st[x*])\s*(\d+[\.,]?\d*)\s*(kg|g|l|dl|cl|ml|gram)", text)
+    # Undvik att tolka "32p/5l" eller "345/2,4" som gram/liter-vikt
+    if PREPARED_PIECES_PER_LITER_RE.search(text) or PREPARED_GRAMS_PER_LITER_RE.match(text):
+        return None
+
+    # Multipel förpackning med vikter/volymer, t.ex. "2x400g", "12x35g", "3x250ml"
+    # Obs: "p/" exkluderas – "8p/4l" är färdigvolym, inte multipack
+    multi_match = re.search(r"(\d+)\s*(?:x|×|st[x*])\s*(\d+[\.,]?\d*)\s*(kg|g|l|dl|cl|ml|gram)", text)
     if multi_match:
         count = float(multi_match.group(1))
         amount = float(multi_match.group(2).replace(",", "."))
@@ -308,13 +400,14 @@ def parse_package_weight_g(display_volume: Optional[str], url: str = "", product
     if g_ml_match:
         return float(g_ml_match.group(1).replace(",", "."))
 
-    # Rent numeriskt värde (tolkas som gram)
-    num_match = re.search(r"(\d+[\.,]?\d*)", text)
-    if num_match:
-        val = float(num_match.group(1).replace(",", "."))
-        # Siffror < 20 är troligen styck (t.ex. "6p"), inte gram
-        if val >= 20:
-            return val
+    # Rent numeriskt värde (tolkas som gram) – men inte för "32p/5l"-liknande format
+    if not re.search(r"\bp/|\d+/\d", text):
+        num_match = re.search(r"(\d+[\.,]?\d*)", text)
+        if num_match:
+            val = float(num_match.group(1).replace(",", "."))
+            # Siffror < 20 är troligen styck (t.ex. "6p"), inte gram
+            if val >= 20:
+                return val
 
     return None
 
@@ -386,21 +479,97 @@ def estimate_egg_package_weight(display_volume: Optional[str], name: str, descri
     return egg_count * avg_weight
 
 
-def extract_nutrition_per_100g(product_detail: dict) -> dict:
+def normalize_energy_kcal(kj_value: Optional[float], kcal_value: Optional[float]) -> Optional[float]:
     """
-    Extraherar näringsvärden (protein, kalorier, fett, kolhydrater, salt) per 100g.
+    Normaliserar energi till kcal. Hanterar produkter som bara anger kJ
+    och API-fall där kJ felaktigt märkts som kilokalori (värden >900).
     """
+    candidates = []
+
+    if kj_value is not None and kj_value > 0:
+        candidates.append(kj_value / 4.184)
+
+    if kcal_value is not None and kcal_value > 0:
+        if kcal_value > 1000:
+            # Typiskt kJ-värde felmärkt som kcal (t.ex. pasta 1514 kJ → "1514 kcal")
+            candidates.append(kcal_value / 4.184)
+        else:
+            candidates.append(kcal_value)
+
+    if not candidates:
+        return None
+
+    # Välj mest rimligt värde; filtrera bort uppenbart för låga kJ-tolkningar
+    plausible = [c for c in candidates if 20 <= c <= 950]
+    if plausible:
+        return round(max(plausible), 1)
+
+    return round(max(candidates), 1)
+
+
+def _header_basis_unit(header: dict) -> str:
+    return (header.get("nutrientBasisQuantityMeasurementUnitCode") or "").lower()
+
+
+def _header_protein_g(header: dict) -> float:
+    for nutrient in header.get("nutrientDetails", []):
+        type_code = (nutrient.get("nutrientTypeCode") or "").lower()
+        if "protein" in type_code:
+            try:
+                return float(nutrient.get("quantityContained") or 0)
+            except (ValueError, TypeError):
+                return 0.0
+    return 0.0
+
+
+def _select_nutrient_header(nutrient_headers: list, product_detail: dict) -> Optional[dict]:
+    """
+    Väljer näringsdeklaration per 100 g torr produkt framför per 100 ml färdig produkt.
+    """
+    candidates = []
+    nutrition_desc = (product_detail.get("nutritionDescription") or "").lower()
+
+    for header in nutrient_headers:
+        basis_qty = header.get("nutrientBasisQuantity")
+        try:
+            if basis_qty is not None and float(basis_qty) != 100:
+                continue
+        except (ValueError, TypeError):
+            continue
+
+        basis_unit = _header_basis_unit(header)
+        protein = _header_protein_g(header)
+
+        score = protein
+        if basis_unit in ("gram", "g"):
+            score += 100
+        elif basis_unit in ("milliliter", "ml"):
+            score -= 50
+
+        if "100 gram" in nutrition_desc and basis_unit in ("gram", "g"):
+            score += 20
+        if "100 ml" in nutrition_desc and basis_unit in ("milliliter", "ml"):
+            score += 20
+
+        candidates.append((score, header))
+
+    if not candidates:
+        return None
+
+    candidates.sort(key=lambda item: item[0], reverse=True)
+    return candidates[0][1]
+
+
+def _extract_nutrients_from_header(header: dict) -> dict:
     result = {
         "protein": None,
         "calories": None,
         "fat": None,
         "carbohydrates": None,
-        "salt": None
+        "salt": None,
+        "energy_kj": None,
+        "energy_kcal_raw": None,
     }
-    
-    nutrient_headers = product_detail.get("nutrientHeaders", [])
-    if not nutrient_headers:
-        return result
 
     def _parse_val(nutrient, convert_energy_to_kcal: bool = False):
         qty = nutrient.get("quantityContained")
@@ -419,57 +588,69 @@ def extract_nutrition_per_100g(product_detail: dict) -> dict:
         except (ValueError, TypeError):
             return None
 
-    for header in nutrient_headers:
-        basis_qty = header.get("nutrientBasisQuantity")
-        if basis_qty and float(basis_qty) != 100:
+    for nutrient in header.get("nutrientDetails", []):
+        type_code = (nutrient.get("nutrientTypeCode") or "").lower()
+        unit = (nutrient.get("measurementUnitCode") or "").lower()
+        val = _parse_val(nutrient, convert_energy_to_kcal=False)
+
+        if val is None:
             continue
 
-        for nutrient in header.get("nutrientDetails", []):
-            type_code = (nutrient.get("nutrientTypeCode") or "").lower()
-            unit = (nutrient.get("measurementUnitCode") or "").lower()
-            val = _parse_val(nutrient, convert_energy_to_kcal="energi" in type_code)
-            
-            if val is not None:
-                if "protein" in type_code:
-                    result["protein"] = val
-                elif "energi" in type_code and "kilokalori" in unit:
-                    result["calories"] = val
-                elif "energi" in type_code and result["calories"] is None and unit in ("kilojoule", "kj"):
-                    result["calories"] = round(val, 1)
-                elif type_code == "fett":
-                    result["fat"] = val
-                elif type_code == "kolhydrat":
-                    result["carbohydrates"] = val
-                elif "salt" in type_code:
-                    result["salt"] = val
-                    
-        if result["protein"] is not None:
-            break
+        if "protein" in type_code:
+            result["protein"] = val
+        elif "energi" in type_code and unit in ("kilojoule", "kj"):
+            result["energy_kj"] = val
+        elif "energi" in type_code and "kilokalori" in unit:
+            result["energy_kcal_raw"] = val
+        elif type_code == "fett":
+            result["fat"] = val
+        elif type_code == "kolhydrat":
+            result["carbohydrates"] = val
+        elif "salt" in type_code:
+            result["salt"] = val
 
-    # Fallback om ingen 100g basis fanns
-    if result["protein"] is None:
-        for header in nutrient_headers:
-            for nutrient in header.get("nutrientDetails", []):
-                type_code = (nutrient.get("nutrientTypeCode") or "").lower()
-                unit = (nutrient.get("measurementUnitCode") or "").lower()
-                val = _parse_val(nutrient, convert_energy_to_kcal="energi" in type_code)
-                if val is not None:
-                    if "protein" in type_code:
-                        result["protein"] = val
-                    elif "energi" in type_code and "kilokalori" in unit:
-                        result["calories"] = val
-                    elif "energi" in type_code and result["calories"] is None and unit in ("kilojoule", "kj"):
-                        result["calories"] = round(val, 1)
-                    elif type_code == "fett":
-                        result["fat"] = val
-                    elif type_code == "kolhydrat":
-                        result["carbohydrates"] = val
-                    elif "salt" in type_code:
-                        result["salt"] = val
-            if result["protein"] is not None:
-                break
-                
+    result["calories"] = normalize_energy_kcal(result["energy_kj"], result["energy_kcal_raw"])
     return result
+
+
+def extract_nutrition_per_100g(product_detail: dict, display_volume: str = "", product_name: str = "") -> dict:
+    """
+    Extraherar näringsvärden (protein, kalorier, fett, kolhydrater, salt) per 100g.
+    """
+    empty = {
+        "protein": None,
+        "calories": None,
+        "fat": None,
+        "carbohydrates": None,
+        "salt": None,
+    }
+
+    nutrient_headers = product_detail.get("nutrientHeaders", [])
+    if not nutrient_headers:
+        return empty
+
+    header = _select_nutrient_header(nutrient_headers, product_detail)
+    if header is None:
+        return empty
+
+    result = _extract_nutrients_from_header(header)
+
+    # Buljong/fond med enbart näringsvärden per 100 ml färdig produkt – hoppa över
+    product_text = f"{product_name} {product_detail.get('description', '')}"
+    if (
+        is_prepared_yield_volume(display_volume, product_text)
+        and _header_basis_unit(header) in ("milliliter", "ml")
+        and (result["protein"] or 0) < 1.0
+    ):
+        return empty
+
+    return {
+        "protein": result["protein"],
+        "calories": result["calories"],
+        "fat": result["fat"],
+        "carbohydrates": result["carbohydrates"],
+        "salt": result["salt"],
+    }
 
 
 # ── Beräkningsfunktioner ─────────────────────────────────────────────────────
@@ -624,11 +805,13 @@ def scrape_all_categories(
                         elif compare_unit_clean in ("cl", "centiliter"):
                             compare_price_per_kg = compare_price_sek * 100
 
-                    # Förpackningsvikt
+                    # Förpackningsvikt (preliminärt från listningen; uppdateras efter produktdetaljer)
                     display_volume = raw.get("displayVolume", "")
-                    package_weight_g = parse_package_weight_g(display_volume, code)
-                    if not package_weight_g:
-                        package_weight_g = parse_package_weight_g(name, code)
+                    package_weight_g = resolve_package_weight_g(
+                        display_volume=display_volume,
+                        name=name,
+                        url=code,
+                    )
 
                     # Länk
                     url_path = raw.get("url")
@@ -665,7 +848,18 @@ def scrape_all_categories(
                         detail = fetch_product_details(session, base_url, code)
                         
                         product_entry["description"] = detail.get("description", "")
-                        
+
+                        # Uppdatera vikt med full produktkontext (buljong, fond m.m.)
+                        package_weight_g = resolve_package_weight_g(
+                            display_volume=display_volume,
+                            name=name,
+                            description=product_entry["description"],
+                            url=code,
+                            product_detail=detail,
+                        )
+                        if package_weight_g:
+                            product_entry["package_weight_g"] = package_weight_g
+
                         # Särskild hantering för ägg där vikt saknas men kan uppskattas från beskrivning/namn
                         if not package_weight_g:
                             egg_weight = estimate_egg_package_weight(
@@ -682,8 +876,28 @@ def scrape_all_categories(
                                     compare_price_per_kg = (price_sek / package_weight_g) * 1000
                                     product_entry["compare_price_per_kg"] = compare_price_per_kg
                                     product_entry["compare_price"] = f"{compare_price_per_kg:.2f} kr/kg (beräknat)"
-                        
-                        nutrition = extract_nutrition_per_100g(detail)
+
+                        # Omräkna jämförpris om vi hittat torrvikt men butiken saknar korrekt jämförpris
+                        if package_weight_g and price_sek and not raw.get("comparePrice"):
+                            compare_price_per_kg = (price_sek / package_weight_g) * 1000
+                            product_entry["compare_price_per_kg"] = compare_price_per_kg
+                            product_entry["compare_price"] = f"{compare_price_per_kg:.2f} kr/kg (beräknat)"
+                        elif (
+                            package_weight_g and price_sek
+                            and is_prepared_yield_volume(display_volume, f"{name} {product_entry['description']}")
+                            and compare_price_per_kg
+                            and compare_price_per_kg < 5
+                        ):
+                            # Buljong m.m.: felaktigt jämförpris baserat på färdigvolym (kr/l ≈ kr/kg)
+                            compare_price_per_kg = (price_sek / package_weight_g) * 1000
+                            product_entry["compare_price_per_kg"] = compare_price_per_kg
+                            product_entry["compare_price"] = f"{compare_price_per_kg:.2f} kr/kg (beräknat)"
+
+                        nutrition = extract_nutrition_per_100g(
+                            detail,
+                            display_volume=display_volume,
+                            product_name=name,
+                        )
                         protein = nutrition["protein"]
                         
                         product_entry["protein_per_100g"] = protein
