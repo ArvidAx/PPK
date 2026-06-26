@@ -42,7 +42,10 @@
 </head>
 <body>
     <nav class="navbar" aria-label="Huvudnavigation">
-        <a href="index.html" class="logo">PPK<span class="logo-dot">.</span></a>
+        <a href="index.html" class="logo" aria-label="PPK proteinpriser.se startsida">
+            <span class="logo-main">PPK</span>
+            <span class="logo-domain">proteinpriser.se<span class="logo-dot">.</span></span>
+        </a>
         <ul class="nav-links" role="list">
             <li><a href="index.html" class="active" aria-current="page">Kalkylator</a></li>
             <li><a href="recept.html">Recept</a></li>
@@ -76,19 +79,19 @@
             </div>
 
             <div class="filter-group">
-                <label for="maxPrice"><span>💰 Max Pris</span><span id="maxPriceLabel">200 kr</span></label>
+                <label for="maxPrice"><span>💰 Max Pris</span><span id="maxPriceLabel" class="range-value">200 kr</span></label>
                 <input type="range" id="maxPrice" min="0" max="500" value="200" step="1" aria-label="Max pris i kronor">
                 <div class="range-labels"><span>0 kr</span><span>500 kr</span></div>
             </div>
 
             <div class="filter-group">
-                <label for="minProtein"><span>💪 Minst Protein/100g</span><span id="minProteinLabel">0 g</span></label>
+                <label for="minProtein"><span>💪 Minst Protein/100g</span><span id="minProteinLabel" class="range-value">0 g</span></label>
                 <input type="range" id="minProtein" min="0" max="50" value="0" step="1" aria-label="Minsta proteininnehåll per 100 gram">
                 <div class="range-labels"><span>0 g</span><span>50 g</span></div>
             </div>
 
             <!-- Shopping List Section -->
-            <div class="sidebar-section-title" style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Shoppinglista</div>
+            <div class="sidebar-section-title shopping-title">Shoppinglista</div>
             <div class="shopping-list-container">
                 <div id="shoppingListEmpty" class="shopping-list-empty">
                     Din lista är tom. Klicka på <span class="plus-icon-inline" aria-hidden="true">+</span> på en produkt för att lägga till den.
@@ -136,7 +139,7 @@
                     <table id="resultsTable" aria-label="Produkter sorterade efter protein per krona">
                         <thead>
                             <tr>
-                                <th scope="col" style="width: 60px; text-align: center;">Korg</th>
+                                <th scope="col" style="width: 60px;">Korg</th>
                                 <th scope="col" data-sort="name">Produkt</th>
                                 <th scope="col" data-sort="brand">Märke</th>
                                 <th scope="col" data-sort="store">Butik</th>
@@ -152,6 +155,18 @@
                             <tr><td colspan="10" style="text-align:center; padding:2rem; color:#64748b;">Laddar produkter...</td></tr>
                         </tbody>
                     </table>
+                </div>
+            </section>
+
+            <section class="seo-section" aria-labelledby="seo-ppk-heading">
+                <div class="seo-content">
+                    <h2 id="seo-ppk-heading">Hur fungerar Protein Per Krona (PPK)?</h2>
+                    <p>Protein Per Krona, ofta förkortat PPK, visar hur många gram protein du får för varje krona du spenderar. Kalkylen är enkel: produktens totala mängd protein divideras med priset, eller protein per 100 gram räknas mot jämförpriset när det finns tillgängligt.</p>
+                    <p>Resultatet blir ett snabbt och rättvist sätt att jämföra proteinrika livsmedel oavsett förpackningsstorlek, butik och varumärke. För dig som tränar, bygger muskler eller bara vill äta mer protein utan att spräcka matbudgeten är PPK ett av de mest praktiska måtten att följa.</p>
+
+                    <h2>De billigaste proteinkällorna i Sverige 2026</h2>
+                    <p>De billigaste proteinkällorna är inte alltid de produkter som marknadsförs som proteinrika. Basvaror som vetemjöl, gula ärter, linser, bönor, kvarg, ägg och fryst kyckling kan ofta ge mycket protein per spenderad krona, men placeringen ändras när pris, kampanjer och förpackningsstorlekar skiftar.</p>
+                    <p>Med proteinpriser.se kan du se hur produkter från Willys och Hemköp står sig mot varandra och utnyttja prisskillnaderna butik för butik. När samma typ av produkt finns hos flera kedjor blir PPK ett enkelt sätt att hitta var din matkrona gör mest nytta.</p>
                 </div>
             </section>
 

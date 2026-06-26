@@ -265,7 +265,7 @@ function renderTable() {
         const storeClass = (item.store || '').toLowerCase() === 'willys' ? 'willys' : 'hemkop';
 
         tr.innerHTML = `
-            <td style="text-align: center;">
+            <td>
                 <button class="add-to-list-btn" aria-label="Lägg till ${esc(item.name)} i shoppinglistan" title="Lägg till i shoppinglistan">+</button>
             </td>
             <td data-label="Produkt"><strong>${esc(item.name)}</strong></td>
