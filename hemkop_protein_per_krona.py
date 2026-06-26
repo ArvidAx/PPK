@@ -237,7 +237,27 @@ def parse_price(price_value) -> Optional[float]:
     return None
 
 
-def parse_package_weight_g(display_volume: Optional[str], url: str = "") -> Optional[float]:
+def is_prepared_yield_volume(display_volume: Optional[str], product_text: str = "") -> bool:
+    """
+    Identifierar volymer som beskriver färdig mängd efter tillagning, inte torr nettovikt.
+    Exempel: buljong "8p/4l" betyder 8 tärningar ger 4 liter buljong.
+    """
+    if not display_volume:
+        return False
+
+    text = display_volume.lower().strip()
+    product_l = (product_text or "").lower()
+    prepared_keywords = (
+        "buljong", "fond", "sås", "sas", "soppa", "potatismos", "pulver", "tärning", "tarning"
+    )
+
+    if not any(keyword in product_l for keyword in prepared_keywords):
+        return False
+
+    return bool(re.search(r"\d+\s*(?:p|st|port|portioner)\s*/\s*\d+[\.,]?\d*\s*(?:l|dl)\b", text))
+
+
+def parse_package_weight_g(display_volume: Optional[str], url: str = "", product_text: str = "") -> Optional[float]:
     """
     Tolkar förpackningsvikt/-volym till gram (eller ml).
     Hanterar: "500g", "1 kg", "1l", "5dl", "33cl", "250ml", multipack som "3x250ml", etc.
@@ -250,6 +270,9 @@ def parse_package_weight_g(display_volume: Optional[str], url: str = "") -> Opti
         return None
 
     text = display_volume.lower().strip()
+
+    if is_prepared_yield_volume(text, product_text):
+        return None
 
     # Multipel förpackning med vikter/volymer, t.ex. "2x400g", "12x35g", "3p/25cl", "3x250ml"
     multi_match = re.search(r"(\d+)\s*(?:x|×|p/|st[x*])\s*(\d+[\.,]?\d*)\s*(kg|g|l|dl|cl|ml|gram)", text)
@@ -379,14 +402,16 @@ def extract_nutrition_per_100g(product_detail: dict) -> dict:
     if not nutrient_headers:
         return result
 
-    def _parse_val(nutrient):
+    def _parse_val(nutrient, convert_energy_to_kcal: bool = False):
         qty = nutrient.get("quantityContained")
         if qty is None:
             return None
         unit = (nutrient.get("measurementUnitCode") or "").lower()
         try:
             val = float(qty)
-            if unit in ("milligram", "mg"):
+            if convert_energy_to_kcal and unit in ("kilojoule", "kj"):
+                val /= 4.184
+            elif unit in ("milligram", "mg"):
                 val /= 1000.0
             elif unit in ("mikrogram", "microgram", "µg", "ug"):
                 val /= 1000000.0
@@ -402,13 +427,15 @@ def extract_nutrition_per_100g(product_detail: dict) -> dict:
         for nutrient in header.get("nutrientDetails", []):
             type_code = (nutrient.get("nutrientTypeCode") or "").lower()
             unit = (nutrient.get("measurementUnitCode") or "").lower()
-            val = _parse_val(nutrient)
+            val = _parse_val(nutrient, convert_energy_to_kcal="energi" in type_code)
             
             if val is not None:
                 if "protein" in type_code:
                     result["protein"] = val
                 elif "energi" in type_code and "kilokalori" in unit:
                     result["calories"] = val
+                elif "energi" in type_code and result["calories"] is None and unit in ("kilojoule", "kj"):
+                    result["calories"] = round(val, 1)
                 elif type_code == "fett":
                     result["fat"] = val
                 elif type_code == "kolhydrat":
@@ -425,12 +452,14 @@ def extract_nutrition_per_100g(product_detail: dict) -> dict:
             for nutrient in header.get("nutrientDetails", []):
                 type_code = (nutrient.get("nutrientTypeCode") or "").lower()
                 unit = (nutrient.get("measurementUnitCode") or "").lower()
-                val = _parse_val(nutrient)
+                val = _parse_val(nutrient, convert_energy_to_kcal="energi" in type_code)
                 if val is not None:
                     if "protein" in type_code:
                         result["protein"] = val
                     elif "energi" in type_code and "kilokalori" in unit:
                         result["calories"] = val
+                    elif "energi" in type_code and result["calories"] is None and unit in ("kilojoule", "kj"):
+                        result["calories"] = round(val, 1)
                     elif type_code == "fett":
                         result["fat"] = val
                     elif type_code == "kolhydrat":
