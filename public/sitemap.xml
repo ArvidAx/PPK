@@ -1,38 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://ppk.arvid.dev/</loc>
+        <loc>https://proteinpriser.se/</loc>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>https://ppk.arvid.dev/recept.html</loc>
+        <loc>https://proteinpriser.se/recept.html</loc>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://ppk.arvid.dev/kunskap.html</loc>
+        <loc>https://proteinpriser.se/kunskap.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://ppk.arvid.dev/artikel-varfor-protein.html</loc>
+        <loc>https://proteinpriser.se/artikel-varfor-protein.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
-        <loc>https://ppk.arvid.dev/artikel-hur-mycket.html</loc>
+        <loc>https://proteinpriser.se/artikel-hur-mycket.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
-        <loc>https://ppk.arvid.dev/artikel-proteinkvalitet.html</loc>
+        <loc>https://proteinpriser.se/artikel-proteinkvalitet.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
-        <loc>https://ppk.arvid.dev/artikel-mat-vs-pulver.html</loc>
+        <loc>https://proteinpriser.se/artikel-mat-vs-pulver.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://proteinpriser.se/integritetspolicy.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.3</priority>
     </url>
 </urlset>

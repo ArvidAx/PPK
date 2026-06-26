@@ -39,7 +39,7 @@ cd public && python -m http.server
 Kör `daily_automation.py` via crontab (Linux) eller Schemaläggaren (Windows):
 
 ```cron
-0 4 * * * /usr/bin/python3 /path/to/PPK/daily_automation.py >> /path/to/PPK/cron_log.txt 2>&1
+0 2 * * * /path/to/PPK/venv/bin/python /path/to/PPK/daily_automation.py >> /path/to/PPK/cron_log.txt 2>&1
 ```
 
 Skriptet skrapar, committar ny `data.json` och pushar till GitHub. Cloudflare Pages sätter igång automatiskt.

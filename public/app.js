@@ -70,6 +70,7 @@ async function init() {
                 if (data && data.updated_at) {
                     const date = new Date(data.updated_at);
                     const formatted = date.toLocaleString('sv-SE', {
+                        timeZone: 'Europe/Stockholm',
                         year: 'numeric',
                         month: '2-digit',
                         day: '2-digit',
@@ -162,7 +163,7 @@ function setupEventListeners() {
                 sortDesc = (col === 'ppk' || col === 'ppkcal' || col === 'protein_per_100g');
             }
             updateSortHeaders();
-            renderTable();
+            applyFilters();
         });
     });
 

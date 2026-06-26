@@ -5,4 +5,4 @@ Allow: /
 Disallow: /data.json
 Disallow: /last_updated.json
 
-Sitemap: https://ppk.arvid.dev/sitemap.xml
+Sitemap: https://proteinpriser.se/sitemap.xml

@@ -239,15 +239,8 @@ def parse_price(price_value) -> Optional[float]:
 
 def parse_package_weight_g(display_volume: Optional[str], url: str = "") -> Optional[float]:
     """
-    Tolkar förpackningsvikt/-volym till gram.
-    Hanterar: "500g", "1 kg", "1,5 kg", "2x400g", "12x35g", "_KG" suffix i URL.
-
-    Args:
-        display_volume: Textsträng med vikt/volym, t.ex. "500g" eller "1 kg".
-        url: Produkt-URL (används för att detektera viktsbaserade produkter).
-
-    Returns:
-        Vikt i gram som float, eller None om det inte gick att tolka.
+    Tolkar förpackningsvikt/-volym till gram (eller ml).
+    Hanterar: "500g", "1 kg", "1l", "5dl", "33cl", "250ml", multipack som "3x250ml", etc.
     """
     # Viktsbaserad produkt (säljs per kg) – defaulta till 1000g
     if url and re.search(r"[/_]KG$", url, re.IGNORECASE):
@@ -258,35 +251,116 @@ def parse_package_weight_g(display_volume: Optional[str], url: str = "") -> Opti
 
     text = display_volume.lower().strip()
 
-    # Multipel förpackning: "2x400g" → 2 * 400 = 800g, "12x35g" → 420g
-    multi_match = re.search(r"(\d+)\s*[xX×]\s*(\d+[\.,]?\d*)\s*(kg|g)", text)
+    # Multipel förpackning med vikter/volymer, t.ex. "2x400g", "12x35g", "3p/25cl", "3x250ml"
+    multi_match = re.search(r"(\d+)\s*(?:x|×|p/|st[x*])\s*(\d+[\.,]?\d*)\s*(kg|g|l|dl|cl|ml|gram)", text)
     if multi_match:
         count = float(multi_match.group(1))
         amount = float(multi_match.group(2).replace(",", "."))
         unit = multi_match.group(3)
-        if unit == "kg":
+        if unit in ("kg", "l"):
             return count * amount * 1000
+        elif unit == "dl":
+            return count * amount * 100
+        elif unit == "cl":
+            return count * amount * 10
         return count * amount
 
-    # Kilogram
-    kg_match = re.search(r"(\d+[\.,]?\d*)\s*(kg|kilo|kilogram)", text)
-    if kg_match:
-        return float(kg_match.group(1).replace(",", ".")) * 1000
+    # Kilogram / Liter (t.ex. "1,5kg", "1l", "1.5 liter")
+    kg_l_match = re.search(r"(\d+[\.,]?\d*)\s*(kg|kilo|kilogram|l|lit|liter)\b", text)
+    if kg_l_match:
+        return float(kg_l_match.group(1).replace(",", ".")) * 1000
 
-    # Gram
-    g_match = re.search(r"(\d+[\.,]?\d*)\s*(g|gram|gr)\b", text)
-    if g_match:
-        return float(g_match.group(1).replace(",", "."))
+    # Deciliter (t.ex. "5dl")
+    dl_match = re.search(r"(\d+[\.,]?\d*)\s*(dl|deciliter|desiliter)\b", text)
+    if dl_match:
+        return float(dl_match.group(1).replace(",", ".")) * 100
+
+    # Centiliter (t.ex. "33cl")
+    cl_match = re.search(r"(\d+[\.,]?\d*)\s*(cl|centiliter)\b", text)
+    if cl_match:
+        return float(cl_match.group(1).replace(",", ".")) * 10
+
+    # Gram / Milliliter (t.ex. "500g", "250ml")
+    g_ml_match = re.search(r"(\d+[\.,]?\d*)\s*(g|gram|gr|ml|milliliter)\b", text)
+    if g_ml_match:
+        return float(g_ml_match.group(1).replace(",", "."))
 
     # Rent numeriskt värde (tolkas som gram)
     num_match = re.search(r"(\d+[\.,]?\d*)", text)
     if num_match:
         val = float(num_match.group(1).replace(",", "."))
-        # Siffror < 20 är troligen styck, inte gram
+        # Siffror < 20 är troligen styck (t.ex. "6p"), inte gram
         if val >= 20:
             return val
 
     return None
+
+
+def estimate_egg_package_weight(display_volume: Optional[str], name: str, description: str) -> Optional[float]:
+    """
+    Uppskattar vikten på en äggförpackning i gram.
+    1. Hittar antal ägg i förpackningen.
+    2. Letar efter viktintervall för ett ägg i beskrivningen (t.ex. '53-73 gram').
+    3. Om inget intervall hittas, gissar vi baserat på storleksklass (S, M, L, XL, M/L).
+    4. Returnerar antal_ägg * medelvikt.
+    """
+    is_egg = False
+    name_l = name.lower()
+    desc_l = description.lower() if description else ""
+    
+    if re.search(r"\bägg\b", name_l) or re.search(r"\bägg\b", desc_l):
+        is_egg = True
+        
+    exclusions = ["nudlar", "pastej", "röra", "sallad", "smörgås", "skinka", "bacon", "paj", "glass", "våffla", "kakor", "bröd", "ost"]
+    for excl in exclusions:
+        if excl in name_l:
+            is_egg = False
+            break
+            
+    if not is_egg:
+        return None
+
+    # 1. Hitta antal ägg (t.ex. "15p", "6p", "10-pack", "15 stycken")
+    egg_count = None
+    for text in [display_volume, name, description]:
+        if not text:
+            continue
+        count_match = re.search(r"(\d+)\s*(?:p|st|pack|stycken|packe)\b", text.lower())
+        if count_match:
+            egg_count = int(count_match.group(1))
+            break
+            
+    if not egg_count or egg_count <= 0:
+        return None
+
+    # 2. Hitta viktintervall i beskrivningen, t.ex. "(53-73 gram)", "53-73g"
+    if description:
+        interval_match = re.search(r"(\d+)\s*[-–]\s*(\d+)\s*(?:g|gram)", desc_l)
+        if interval_match:
+            min_w = float(interval_match.group(1))
+            max_w = float(interval_match.group(2))
+            avg_weight = (min_w + max_w) / 2.0
+            return egg_count * avg_weight
+
+    # 3. Fallback till storleksklass i namn eller beskrivning
+    text_to_search = (name_l + " " + desc_l)
+    
+    if "l/xl" in text_to_search or "large/x-large" in text_to_search or "l-xl" in text_to_search:
+        avg_weight = 73.0
+    elif "m/l" in text_to_search or "medium/large" in text_to_search or "m-l" in text_to_search or "mediumstora och stora" in text_to_search:
+        avg_weight = 63.0
+    elif "xl" in text_to_search or "extra large" in text_to_search:
+        avg_weight = 78.0
+    elif "large" in text_to_search or "stora ägg" in text_to_search or "storlek l" in text_to_search:
+        avg_weight = 68.0
+    elif "medium" in text_to_search or "mellan" in text_to_search or "mediumstora" in text_to_search or "storlek m" in text_to_search:
+        avg_weight = 58.0
+    elif "small" in text_to_search or "små ägg" in text_to_search or "storlek s" in text_to_search:
+        avg_weight = 48.0
+    else:
+        avg_weight = 63.0
+
+    return egg_count * avg_weight
 
 
 def extract_nutrition_per_100g(product_detail: dict) -> dict:
@@ -508,19 +582,24 @@ def scrape_all_categories(
                     compare_price_sek = parse_price(compare_price_str)
                     compare_price_unit = (raw.get("comparePriceUnit") or "").lower()
 
-                    # Jämförpris per KG (normalisera om enheten är "liter" eller "100g" etc.)
+                    # Jämförpris per KG (normalisera om enheten är "liter", "100ml" etc.)
                     compare_price_per_kg = None
                     if compare_price_sek is not None:
-                        if compare_price_unit in ("kg", "kilo"):
+                        compare_unit_clean = compare_price_unit.replace(" ", "").strip()
+                        if compare_unit_clean in ("kg", "kilo", "l", "lit", "liter"):
                             compare_price_per_kg = compare_price_sek
-                        elif compare_price_unit in ("100g", "100 g"):
+                        elif compare_unit_clean in ("100g", "100ml", "100 g", "100 ml", "dl", "deciliter"):
                             compare_price_per_kg = compare_price_sek * 10
-                        elif compare_price_unit in ("g", "gram"):
+                        elif compare_unit_clean in ("g", "gram", "ml", "milliliter"):
                             compare_price_per_kg = compare_price_sek * 1000
+                        elif compare_unit_clean in ("cl", "centiliter"):
+                            compare_price_per_kg = compare_price_sek * 100
 
                     # Förpackningsvikt
                     display_volume = raw.get("displayVolume", "")
                     package_weight_g = parse_package_weight_g(display_volume, code)
+                    if not package_weight_g:
+                        package_weight_g = parse_package_weight_g(name, code)
 
                     # Länk
                     url_path = raw.get("url")
@@ -557,6 +636,23 @@ def scrape_all_categories(
                         detail = fetch_product_details(session, base_url, code)
                         
                         product_entry["description"] = detail.get("description", "")
+                        
+                        # Särskild hantering för ägg där vikt saknas men kan uppskattas från beskrivning/namn
+                        if not package_weight_g:
+                            egg_weight = estimate_egg_package_weight(
+                                display_volume=display_volume,
+                                name=name,
+                                description=product_entry["description"]
+                            )
+                            if egg_weight:
+                                package_weight_g = egg_weight
+                                product_entry["package_weight_g"] = package_weight_g
+                                
+                                # Om jämförpris saknas för äggen, räkna ut det baserat på estimerad vikt
+                                if not compare_price_per_kg and price_sek:
+                                    compare_price_per_kg = (price_sek / package_weight_g) * 1000
+                                    product_entry["compare_price_per_kg"] = compare_price_per_kg
+                                    product_entry["compare_price"] = f"{compare_price_per_kg:.2f} kr/kg (beräknat)"
                         
                         nutrition = extract_nutrition_per_100g(detail)
                         protein = nutrition["protein"]
@@ -720,7 +816,7 @@ if __name__ == "__main__":
 
     last_updated_json = os.path.join(os.path.dirname(args.output_json) or ".", "last_updated.json")
     with open(last_updated_json, "w", encoding="utf-8") as f:
-        _json.dump({"updated_at": datetime.now().isoformat()}, f, ensure_ascii=False, indent=2)
+        _json.dump({"updated_at": datetime.now().astimezone().isoformat()}, f, ensure_ascii=False, indent=2)
     log.info("Uppdateringstid sparad till '%s'.", last_updated_json)
 
     ranked = display_results(products, top_n=args.top)
