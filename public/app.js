@@ -366,6 +366,37 @@ function updateSortHeaders() {
     });
 }
 
+function isSmartMatch(text, query) {
+    text = text.toLowerCase();
+    query = query.toLowerCase().trim();
+    
+    // Special case: Kycklingbröst synonym expansion
+    if (query === 'kycklingbröst') {
+        return text.includes('kycklingbröst') || text.includes('kycklingfilé') || text.includes('kycklinginnerfilé') || (text.includes('kyckling') && text.includes('filé'));
+    }
+    
+    // Sök efter "ost" - undvik ord som "rostade", "frukost", "kosttillskott", "ostronskivling"
+    if (query === 'ost') {
+        if (!text.includes('ost')) return false;
+        const words = text.split(/[\s,.\-()]+/);
+        return words.some(word => {
+            if (word.includes('ost')) {
+                const isExcluded = word.includes('rostad') || 
+                                   word.includes('rosta') || 
+                                   word.includes('rostat') || 
+                                   word.includes('frukost') || 
+                                   word.includes('kosttillskott') || 
+                                   word.includes('ostron') ||
+                                   word.includes('frost');
+                return !isExcluded;
+            }
+            return false;
+        });
+    }
+    
+    return text.includes(query);
+}
+
 function applyFilters(resetPage = false) {
     if (resetPage) {
         currentLimit = 20;
@@ -397,8 +428,8 @@ function applyFilters(resetPage = false) {
         if (item.price_sek > maxPrice) return false;
         if ((item.protein_per_100g || 0) < minProtein) return false;
         if (search) {
-            const nameMatch = item.name && item.name.toLowerCase().includes(search);
-            const brandMatch = item.brand && item.brand.toLowerCase().includes(search);
+            const nameMatch = item.name && isSmartMatch(item.name, search);
+            const brandMatch = item.brand && isSmartMatch(item.brand, search);
             if (!nameMatch && !brandMatch) return false;
         }
         return true;
@@ -457,6 +488,7 @@ function renderTable() {
         const storeClass = (item.store || '').toLowerCase() === 'willys' ? 'willys' : 'hemkop';
 
         tr.innerHTML = `
+            <td data-label="PPK (g/kr)" class="${ppkClass}"><strong>${fmt(item.ppk, 2)}</strong></td>
             <td>
                 <button class="add-to-list-btn" aria-label="Lägg till ${esc(item.name)} i shoppinglistan" title="Lägg till i shoppinglistan">+</button>
             </td>
@@ -466,7 +498,6 @@ function renderTable() {
             <td data-label="Pris">${fmt(item.price_sek, 2)} kr</td>
             <td data-label="Storlek">${esc(item.display_volume) || '–'}</td>
             <td data-label="Protein/100g">${fmt(item.protein_per_100g, 1)} g</td>
-            <td data-label="PPK (g/kr)" class="${ppkClass}">${fmt(item.ppk, 2)}</td>
             <td data-label="Prot/100 kcal" class="${ppkcalClass}">${fmt(item.ppkcal, 1)} g</td>
             <td data-label="Länk"></td>
         `;
@@ -484,14 +515,14 @@ function renderTable() {
             }, 1200);
         });
 
-        // Row click: open modal (except first and last col)
+        // Row click: open modal (except Korg and Länk columns)
         tr.addEventListener('click', (e) => {
             const cell = e.target.closest('td');
             if (!cell) return;
             const cells = Array.from(cell.parentNode.children);
             const index = cells.indexOf(cell);
-            if (index === 0) return;
-            if (index === 9) {
+            if (index === 1) return; // bypass Korg add button
+            if (index === 9) { // bypass Länk button
                 const anchor = cell.querySelector('.store-link');
                 if (anchor) anchor.click();
                 return;

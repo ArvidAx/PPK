@@ -447,52 +447,66 @@ th, td {
     border-bottom: 1px solid var(--border-color);
 }
 
-.table-container th:nth-child(1),
-.table-container td:nth-child(1),
-.table-container th:nth-child(2),
-.table-container td:nth-child(2),
-.table-container th:nth-child(3),
+.table-container th:nth-child(1), /* PPK */
+.table-container td:nth-child(1) {
+    text-align: center;
+}
+.table-container th:nth-child(2), /* Korg */
+.table-container td:nth-child(2) {
+    text-align: center;
+}
+.table-container th:nth-child(3), /* Produkt */
 .table-container td:nth-child(3),
-.table-container th:nth-child(4),
-.table-container td:nth-child(4) {
+.table-container th:nth-child(4), /* Märke */
+.table-container td:nth-child(4),
+.table-container th:nth-child(5), /* Butik */
+.table-container td:nth-child(5) {
     text-align: left;
 }
 
-.table-container th:nth-child(5),
-.table-container td:nth-child(5),
-.table-container th:nth-child(6),
+.table-container th:nth-child(6), /* Pris */
 .table-container td:nth-child(6),
-.table-container th:nth-child(7),
+.table-container th:nth-child(7), /* Storlek */
 .table-container td:nth-child(7),
-.table-container th:nth-child(8),
+.table-container th:nth-child(8), /* Protein/100g */
 .table-container td:nth-child(8),
-.table-container th:nth-child(9),
+.table-container th:nth-child(9), /* Prot/100 kcal */
 .table-container td:nth-child(9) {
     text-align: right;
 }
 
-.table-container th:nth-child(10),
+.table-container th:nth-child(10), /* Länk */
 .table-container td:nth-child(10) {
     text-align: center;
 }
 
-/* Sticky first and second columns (Korg + Produkt) */
+/* Sticky first three columns (PPK + Korg + Produkt) */
 .table-container th:nth-child(1),
 .table-container td:nth-child(1) {
     position: sticky;
     left: 0;
     z-index: 10;
     background-color: var(--card-bg);
-    width: 54px;
-    min-width: 54px;
-    max-width: 54px;
-    text-align: left;
+    width: 80px;
+    min-width: 80px;
+    max-width: 80px;
 }
 
 .table-container th:nth-child(2),
 .table-container td:nth-child(2) {
     position: sticky;
-    left: 54px;
+    left: 80px;
+    z-index: 10;
+    background-color: var(--card-bg);
+    width: 60px;
+    min-width: 60px;
+    max-width: 60px;
+}
+
+.table-container th:nth-child(3),
+.table-container td:nth-child(3) {
+    position: sticky;
+    left: 140px;
     z-index: 10;
     background-color: var(--card-bg);
     min-width: 180px;
@@ -506,13 +520,15 @@ th, td {
 }
 
 .table-container th:nth-child(1),
-.table-container th:nth-child(2) {
+.table-container th:nth-child(2),
+.table-container th:nth-child(3) {
     background-color: #f8fafc;
     z-index: 11;
 }
 
 tr:hover td:nth-child(1),
-tr:hover td:nth-child(2) {
+tr:hover td:nth-child(2),
+tr:hover td:nth-child(3) {
     background-color: #f8fafc;
 }
 
@@ -1741,5 +1757,214 @@ tbody tr {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* =========================================
+   LAYOUT IMPROVEMENTS & ADAPTIVITY
+   ========================================= */
+
+/* Hero tag buttons design alignment: make package buttons pill-shaped like search tags */
+.hero-search-container .tag-btn {
+    border-radius: 9999px !important;
+    padding: 0.45rem 0.9rem !important;
+    font-size: 0.85rem !important;
+    font-weight: 500 !important;
+    text-align: center !important;
+    justify-content: center !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    background: #fff !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-main) !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    gap: 0.3rem !important;
+}
+.hero-search-container .tag-btn:hover {
+    border-color: var(--accent-red) !important;
+    color: var(--accent-red) !important;
+    background-color: #fff1f2 !important;
+}
+.hero-search-container .tag-btn.active {
+    background-color: var(--accent-red) !important;
+    border-color: var(--accent-red) !important;
+    color: #fff !important;
+}
+
+/* Page content widening on larger screens */
+@media (min-width: 1200px) {
+    .main-content {
+        max-width: 1250px !important;
+    }
+}
+@media (min-width: 1600px) {
+    .main-content {
+        max-width: 1450px !important;
+    }
+}
+
+/* Mobile responsive layout: Turn the table list into a 2-column card grid */
+@media (max-width: 768px) {
+    .table-container {
+        overflow: visible;
+    }
+    
+    table, thead, tbody, tr, td {
+        display: block;
+    }
+    
+    thead {
+        display: none !important; /* Hide headers */
+    }
+    
+    #tableBody {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        padding: 0.5rem 0;
+    }
+    
+    /* Make each row look like a card */
+    #tableBody tr {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        padding: 0.85rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+        box-shadow: var(--shadow-sm);
+        position: relative;
+        height: 100%;
+        box-sizing: border-box;
+    }
+    
+    /* Disable sticky columns on mobile */
+    .table-container th:nth-child(1), .table-container td:nth-child(1),
+    .table-container th:nth-child(2), .table-container td:nth-child(2),
+    .table-container th:nth-child(3), .table-container td:nth-child(3) {
+        position: static !important;
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        background-color: transparent !important;
+        box-shadow: none !important;
+        border-right: none !important;
+        padding: 0 !important;
+    }
+    
+    #tableBody td {
+        border-bottom: none;
+        padding: 0;
+        font-size: 0.85rem;
+        text-align: left !important;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+    
+    /* Row 1: PPK Badge */
+    #tableBody td:nth-child(1) { /* PPK */
+        order: -2;
+        background: #ecfdf5;
+        color: var(--accent-green);
+        padding: 0.25rem 0.5rem !important;
+        border-radius: var(--radius-sm);
+        display: inline-flex;
+        font-size: 0.95rem;
+        font-weight: 800;
+        width: auto;
+        align-self: flex-start;
+    }
+    #tableBody td:nth-child(1)::before {
+        content: "PPK: ";
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: var(--text-muted);
+        margin-right: 0.25rem;
+    }
+    
+    /* Plus (+) button inside the card */
+    #tableBody td:nth-child(2) { /* Korg (+) button */
+        position: absolute !important;
+        top: 0.75rem;
+        right: 0.75rem;
+        width: auto !important;
+        z-index: 5;
+    }
+    
+    /* Produkt Name */
+    #tableBody td:nth-child(3) { /* Produkt */
+        order: -1;
+        font-size: 0.95rem;
+        font-weight: 700;
+        white-space: normal;
+        margin-top: 0.25rem;
+        display: block;
+    }
+    #tableBody td:nth-child(3) strong {
+        display: block;
+        line-height: 1.3;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+    
+    /* Märke */
+    #tableBody td:nth-child(4) { /* Märke */
+        color: var(--text-muted);
+        font-size: 0.78rem;
+        margin-bottom: 0.15rem;
+        display: block;
+    }
+    
+    /* Butik Badge */
+    #tableBody td:nth-child(5) { /* Butik */
+        width: auto;
+        align-self: flex-start;
+        margin-bottom: 0.4rem;
+        display: block;
+    }
+    
+    /* Other cells: Label & Value */
+    #tableBody td:nth-child(6)::before, /* Pris */
+    #tableBody td:nth-child(7)::before, /* Storlek */
+    #tableBody td:nth-child(8)::before, /* Protein */
+    #tableBody td:nth-child(9)::before { /* Prot/100kcal */
+        content: attr(data-label) ": ";
+        font-weight: 600;
+        color: var(--text-muted);
+        font-size: 0.72rem;
+    }
+    
+    /* Länk button */
+    #tableBody td:nth-child(10) { /* Länk */
+        margin-top: 0.5rem;
+        width: 100%;
+        display: block;
+    }
+    #tableBody td:nth-child(10) .store-link {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0.4rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #tableBody {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+    #tableBody tr {
+        padding: 0.65rem;
+    }
+    #tableBody td {
+        font-size: 0.8rem;
+    }
 }
 
