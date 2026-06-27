@@ -54,9 +54,31 @@
             </div>
 
             <div class="recipe-page-container">
-                <!-- Vänster kolumn (Innehåll) -->
+                <!-- Vänster kolumn (Bred - Instruktioner & Motivering) -->
                 <div>
-                    <h2 class="recipe-section-title">Ingredienser</h2>
+                    <h2 class="recipe-section-title">Gör så här</h2>
+                    <ol class="recipe-instructions-list">
+                        <li>Mixa havregrynen i en mixer eller matberedare till ett fint mjöl.</li>
+                        <li>Vispa ihop havremjölet med äggvita, vatten, salt och oregano i en skål till en jämn och rinnande smet.</li>
+                        <li>Hetta upp en non-stick stekpanna med en aning olja och häll i smeten. Stek på medelhög värme i 3-4 minuter tills smeten stelnat och botten blivit krispig och gyllenbrun.</li>
+                        <li>Vänd på pizzabotten. Bred direkt på tomatpuré över den stekta sidan, lägg på strimlad skinka och toppa med riven mager ost och oregano.</li>
+                        <li>Lägg på ett lock över stekpannan och låt stå på svag värme i ytterligare 3-4 minuter tills osten har smält ordentligt. Servera och njut av en nyttig pizza!</li>
+                    </ol>
+                    
+                    <div style="margin-top: 2.5rem;">
+                        <div class="recipe-motivation-box">
+                        <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--text-main); margin: 0 0 0.5rem 0;">Protein & Kalorimotivering</h3>
+                        <p>
+                            Klassisk köpepizza är en kaloribomb fylld med fett och vitt mjöl. Vår "faux-pizza" använder en bas av näringsrik havre och proteinrik äggvita vilket ger en krispig botten full av fibrer och protein. Toppad med mager skinka och mager ost får vi en proteinmängd på över 40 gram till minimalt med kalorier och fett, vilket gör detta till en fantastisk träningsmat!
+                        </p>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Höger kolumn (Smal Sidebar - Ingredienser, Näring & Butikspriser) -->
+                <div>
+                    <div class="recipe-data-box">
+                        <h2 class="recipe-section-title">Ingredienser</h2>
                     <ul class="recipe-ingredients-list">
                         <li><span>Havregryn (mixat till havremjöl)</span><strong>1 dl</strong></li>
                         <li><span>Äggvita</span><strong>1 dl</strong></li>
@@ -67,26 +89,50 @@
                         <li><span>Mager skinka (strimlad)</span><strong>50 g</strong></li>
                         <li><span>Riven ost (max 10% fetthalt)</span><strong>50 g</strong></li>
                     </ul>
-
-                    <h2 class="recipe-section-title">Gör så här</h2>
-                    <ol class="recipe-instructions-list">
-                        <li>Mixa havregrynen i en mixer eller matberedare till ett fint mjöl.</li>
-                        <li>Vispa ihop havremjölet med äggvita, vatten, salt och oregano i en skål till en jämn och rinnande smet.</li>
-                        <li>Hetta upp en non-stick stekpanna med en aning olja och häll i smeten. Stek på medelhög värme i 3-4 minuter tills smeten stelnat och botten blivit krispig och gyllenbrun.</li>
-                        <li>Vänd på pizzabotten. Bred direkt på tomatpuré över den stekta sidan, lägg på strimlad skinka och toppa med riven mager ost och oregano.</li>
-                        <li>Lägg på ett lock över stekpannan och låt stå på svag värme i ytterligare 3-4 minuter tills osten har smält ordentligt. Servera och njut av en nyttig pizza!</li>
-                    </ol>
-
-                    <div class="recipe-motivation-box">
-                        <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--text-main); margin: 0 0 0.5rem 0;">Protein & Kalorimotivering</h3>
-                        <p>
-                            Klassisk köpepizza är en kaloribomb fylld med fett och vitt mjöl. Vår "faux-pizza" använder en bas av näringsrik havre och proteinrik äggvita vilket ger en krispig botten full av fibrer och protein. Toppad med mager skinka och mager ost får vi en proteinmängd på över 40 gram till minimalt med kalorier och fett, vilket gör detta till en fantastisk träningsmat!
-                        </p>
                     </div>
-                </div>
-
-                <!-- Höger kolumn (Data & Ekonomi) -->
-                <div>
+                    
+                    <div class="recipe-data-box">
+                        <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin: 0 0 1rem 0;">Näringsvärde (per portion)</h3>
+                        <div class="recipe-nutrition-grid">
+                            <div class="recipe-nutrition-card highlight">
+                                <span class="recipe-nutrition-label">💪 Protein</span>
+                                <span class="recipe-nutrition-value highlight-red">42 g</span>
+                            </div>
+                            <div class="recipe-nutrition-card">
+                                <span class="recipe-nutrition-label">🔥 Kalorier</span>
+                                <span class="recipe-nutrition-value">480 kcal</span>
+                            </div>
+                            <div class="recipe-nutrition-card">
+                                <span class="recipe-nutrition-label">🌾 Kolhydrater</span>
+                                <span class="recipe-nutrition-value">32 g</span>
+                            </div>
+                            <div class="recipe-nutrition-card">
+                                <span class="recipe-nutrition-label">🥑 Fett</span>
+                                <span class="recipe-nutrition-value">14 g</span>
+                            </div>
+                        </div>
+                    
+                    <div class="recipe-data-box">
+                        <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin: 0 0 1rem 0;">Näringsvärde (per portion)</h3>
+                        <div class="recipe-nutrition-grid">
+                            <div class="recipe-nutrition-card highlight">
+                                <span class="recipe-nutrition-label">💪 Protein</span>
+                                <span class="recipe-nutrition-value highlight-red">42 g</span>
+                            </div>
+                            <div class="recipe-nutrition-card">
+                                <span class="recipe-nutrition-label">🔥 Kalorier</span>
+                                <span class="recipe-nutrition-value">480 kcal</span>
+                            </div>
+                            <div class="recipe-nutrition-card">
+                                <span class="recipe-nutrition-label">🌾 Kolhydrater</span>
+                                <span class="recipe-nutrition-value">32 g</span>
+                            </div>
+                            <div class="recipe-nutrition-card">
+                                <span class="recipe-nutrition-label">🥑 Fett</span>
+                                <span class="recipe-nutrition-value">14 g</span>
+                            </div>
+                        </div>
+                    
                     <div class="recipe-data-box">
                         <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin: 0 0 1rem 0;">Näringsvärde (per portion)</h3>
                         <div class="recipe-nutrition-grid">
@@ -116,11 +162,8 @@
                                 Laddar live-priser från Willys & Hemköp...
                             </div>
                         </div>
-                    </div>
                 </div>
-            </div>
-
-            <footer class="app-footer" style="text-align: center; padding: 2rem 0; border-top: 1px solid var(--border-color); margin-top: 4rem; font-size: 0.85rem; color: var(--text-muted);">
+            </div><footer class="app-footer" style="text-align: center; padding: 2rem 0; border-top: 1px solid var(--border-color); margin-top: 4rem; font-size: 0.85rem; color: var(--text-muted);">
                 <p>&copy; 2026 proteinpriser.se. Alla rättigheter reserverade. | <a href="../integritetspolicy.html" style="color: var(--accent-red); text-decoration: none; font-weight: 600;">Integritetspolicy</a></p>
             </footer>
         </div>

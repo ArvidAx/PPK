@@ -54,9 +54,31 @@
             </div>
 
             <div class="recipe-page-container">
-                <!-- Vänster kolumn (Innehåll) -->
+                <!-- Vänster kolumn (Bred - Instruktioner & Motivering) -->
                 <div>
-                    <h2 class="recipe-section-title">Ingredienser</h2>
+                    <h2 class="recipe-section-title">Gör så här</h2>
+                    <ol class="recipe-instructions-list">
+                        <li>Sätt ugnen på 225°C. Skär kycklingfilén i lagom stora tärningar (nuggetstorlek).</li>
+                        <li>Förbered tre skålar för paneringen: en med vetemjöl, en med vispat ägg, och en med majsstärkelse. Vänd kycklingbitarna först i mjöl, sen i ägg, och slutligen i majsstärkelse.</li>
+                        <li>Lägg bitarna på en plåt med bakplåtspapper. Ugnsbaka mitt i ugnen i 15-20 minuter tills de är krispiga och helt genomstekta.</li>
+                        <li>Under tiden pressar du vitlök och blandar glazeingredienserna (gochujang, soja, honung och vitlök) i en stor skål.</li>
+                        <li>Ta ut kycklingbitarna och vänd dem direkt i glazen så att alla nuggets täcks jämnt. Servera direkt!</li>
+                    </ol>
+                    
+                    <div style="margin-top: 2.5rem;">
+                        <div class="recipe-motivation-box">
+                        <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--text-main); margin: 0 0 0.5rem 0;">Protein & Kalorimotivering</h3>
+                        <p>
+                            Kycklingfilé är en av databasens mest proteinrika råvaror sett till kalorimängd, vilket ger ett fantastiskt makrovärde. Genom att ugnsbaka kycklingen istället för att fritera den sparar vi in enorma mängder dolt fett och onödiga kalorier, utan att tumma på krispigheten tack vare paneringen av majsstärkelse. Gochujangglazen ger en djup, fyllig smak som lyfter rätten.
+                        </p>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Höger kolumn (Smal Sidebar - Ingredienser, Näring & Butikspriser) -->
+                <div>
+                    <div class="recipe-data-box">
+                        <h2 class="recipe-section-title">Ingredienser</h2>
                     <ul class="recipe-ingredients-list">
                         <li><span>Kycklingfilé</span><strong>500 g</strong></li>
                         <li><span>Vetemjöl</span><strong>1 dl</strong></li>
@@ -67,26 +89,50 @@
                         <li><span>Honung</span><strong>1 msk</strong></li>
                         <li><span>Vitlöksklyftor</span><strong>2 st</strong></li>
                     </ul>
-
-                    <h2 class="recipe-section-title">Gör så här</h2>
-                    <ol class="recipe-instructions-list">
-                        <li>Sätt ugnen på 225°C. Skär kycklingfilén i lagom stora tärningar (nuggetstorlek).</li>
-                        <li>Förbered tre skålar för paneringen: en med vetemjöl, en med vispat ägg, och en med majsstärkelse. Vänd kycklingbitarna först i mjöl, sen i ägg, och slutligen i majsstärkelse.</li>
-                        <li>Lägg bitarna på en plåt med bakplåtspapper. Ugnsbaka mitt i ugnen i 15-20 minuter tills de är krispiga och helt genomstekta.</li>
-                        <li>Under tiden pressar du vitlök och blandar glazeingredienserna (gochujang, soja, honung och vitlök) i en stor skål.</li>
-                        <li>Ta ut kycklingbitarna och vänd dem direkt i glazen så att alla nuggets täcks jämnt. Servera direkt!</li>
-                    </ol>
-
-                    <div class="recipe-motivation-box">
-                        <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--text-main); margin: 0 0 0.5rem 0;">Protein & Kalorimotivering</h3>
-                        <p>
-                            Kycklingfilé är en av databasens mest proteinrika råvaror sett till kalorimängd, vilket ger ett fantastiskt makrovärde. Genom att ugnsbaka kycklingen istället för att fritera den sparar vi in enorma mängder dolt fett och onödiga kalorier, utan att tumma på krispigheten tack vare paneringen av majsstärkelse. Gochujangglazen ger en djup, fyllig smak som lyfter rätten.
-                        </p>
                     </div>
-                </div>
-
-                <!-- Höger kolumn (Data & Ekonomi) -->
-                <div>
+                    
+                    <div class="recipe-data-box">
+                        <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin: 0 0 1rem 0;">Näringsvärde (per portion)</h3>
+                        <div class="recipe-nutrition-grid">
+                            <div class="recipe-nutrition-card highlight">
+                                <span class="recipe-nutrition-label">💪 Protein</span>
+                                <span class="recipe-nutrition-value highlight-red">35 g</span>
+                            </div>
+                            <div class="recipe-nutrition-card">
+                                <span class="recipe-nutrition-label">🔥 Kalorier</span>
+                                <span class="recipe-nutrition-value">450 kcal</span>
+                            </div>
+                            <div class="recipe-nutrition-card">
+                                <span class="recipe-nutrition-label">🌾 Kolhydrater</span>
+                                <span class="recipe-nutrition-value">45 g</span>
+                            </div>
+                            <div class="recipe-nutrition-card">
+                                <span class="recipe-nutrition-label">🥑 Fett</span>
+                                <span class="recipe-nutrition-value">12 g</span>
+                            </div>
+                        </div>
+                    
+                    <div class="recipe-data-box">
+                        <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin: 0 0 1rem 0;">Näringsvärde (per portion)</h3>
+                        <div class="recipe-nutrition-grid">
+                            <div class="recipe-nutrition-card highlight">
+                                <span class="recipe-nutrition-label">💪 Protein</span>
+                                <span class="recipe-nutrition-value highlight-red">35 g</span>
+                            </div>
+                            <div class="recipe-nutrition-card">
+                                <span class="recipe-nutrition-label">🔥 Kalorier</span>
+                                <span class="recipe-nutrition-value">450 kcal</span>
+                            </div>
+                            <div class="recipe-nutrition-card">
+                                <span class="recipe-nutrition-label">🌾 Kolhydrater</span>
+                                <span class="recipe-nutrition-value">45 g</span>
+                            </div>
+                            <div class="recipe-nutrition-card">
+                                <span class="recipe-nutrition-label">🥑 Fett</span>
+                                <span class="recipe-nutrition-value">12 g</span>
+                            </div>
+                        </div>
+                    
                     <div class="recipe-data-box">
                         <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin: 0 0 1rem 0;">Näringsvärde (per portion)</h3>
                         <div class="recipe-nutrition-grid">
@@ -116,11 +162,8 @@
                                 Laddar live-priser från Willys & Hemköp...
                             </div>
                         </div>
-                    </div>
                 </div>
-            </div>
-
-            <footer class="app-footer" style="text-align: center; padding: 2rem 0; border-top: 1px solid var(--border-color); margin-top: 4rem; font-size: 0.85rem; color: var(--text-muted);">
+            </div><footer class="app-footer" style="text-align: center; padding: 2rem 0; border-top: 1px solid var(--border-color); margin-top: 4rem; font-size: 0.85rem; color: var(--text-muted);">
                 <p>&copy; 2026 proteinpriser.se. Alla rättigheter reserverade. | <a href="../integritetspolicy.html" style="color: var(--accent-red); text-decoration: none; font-weight: 600;">Integritetspolicy</a></p>
             </footer>
         </div>
