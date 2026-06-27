@@ -6,6 +6,7 @@ let shoppingList = [];
 let activeBasket = null;
 let currentLimit = 20;
 let clickCount = 0;
+let currentView = 'list';
 
 const BASKETS = {
     studentpaketet: {
@@ -389,6 +390,36 @@ function setupEventListeners() {
             }
         });
     });
+
+    // View toggle event listener
+    const viewToggleBtn = document.getElementById('view-toggle-btn');
+    if (viewToggleBtn) {
+        viewToggleBtn.addEventListener('click', () => {
+            if (window.innerWidth > 768) {
+                currentView = currentView === 'list' ? 'grid' : 'list';
+                updateViewToggleUI();
+                renderTable();
+            }
+        });
+    }
+
+    // Sort select listener
+    const sortSelect = document.getElementById('sortSelect');
+    if (sortSelect) {
+        sortSelect.value = sortCol;
+        sortSelect.addEventListener('change', (e) => {
+            const col = e.target.value;
+            sortCol = col;
+            sortDesc = (col === 'ppk' || col === 'ppkcal' || col === 'protein_per_100g');
+            updateSortHeaders();
+            applyFilters(false);
+        });
+    }
+
+    // Handle resize to automatically fallback / sync layout
+    window.addEventListener('resize', () => {
+        renderTable();
+    });
 }
 
 function updateSortHeaders() {
@@ -399,6 +430,22 @@ function updateSortHeaders() {
             if (sortDesc) th.classList.add('desc');
         }
     });
+    const sortSelect = document.getElementById('sortSelect');
+    if (sortSelect) {
+        sortSelect.value = sortCol;
+    }
+}
+
+function updateViewToggleUI() {
+    const viewToggleBtn = document.getElementById('view-toggle-btn');
+    if (!viewToggleBtn) return;
+    if (currentView === "grid") {
+        viewToggleBtn.innerHTML = 'Listvy / Tabell ☰';
+        viewToggleBtn.classList.add('active');
+    } else {
+        viewToggleBtn.innerHTML = 'Fyrkantsvy / Kort ⊞';
+        viewToggleBtn.classList.remove('active');
+    }
 }
 
 const SYNONYMS = {
@@ -509,98 +556,193 @@ function applyFilters(resetPage = false) {
 }
 
 function renderTable() {
-    tableBody.innerHTML = '';
+    const isDesktop = window.innerWidth > 768;
+    const isGridView = currentView === "grid" && isDesktop;
 
-    if (filteredData.length === 0) {
-        tableBody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding: 3rem; color: #64748b;">
-            Inga produkter matchar dina filter.
-        </td></tr>`;
-        if (resultCountEl) resultCountEl.textContent = '(0 produkter)';
-        return;
+    const resultsTable = document.getElementById('resultsTable');
+    const resultsGrid = document.getElementById('resultsGrid');
+
+    if (resultsTable && resultsGrid) {
+        if (isGridView) {
+            resultsTable.style.display = 'none';
+            resultsGrid.style.display = 'grid';
+        } else {
+            resultsTable.style.display = '';
+            resultsGrid.style.display = 'none';
+        }
     }
 
-    const displayData = filteredData.slice(0, currentLimit);
-    if (resultCountEl) {
-        resultCountEl.textContent = filteredData.length > currentLimit
-            ? `(visar ${currentLimit} av ${filteredData.length})`
-            : `(${filteredData.length} produkter)`;
+    if (isGridView && resultsGrid) {
+        resultsGrid.innerHTML = '';
+        if (filteredData.length === 0) {
+            resultsGrid.innerHTML = `<div style="grid-column: 1 / -1; text-align:center; padding: 3rem; color: #64748b;">
+                Inga produkter matchar dina filter.
+            </div>`;
+            if (resultCountEl) resultCountEl.textContent = '(0 produkter)';
+            return;
+        }
+
+        const displayData = filteredData.slice(0, currentLimit);
+        if (resultCountEl) {
+            resultCountEl.textContent = filteredData.length > currentLimit
+                ? `(visar ${currentLimit} av ${filteredData.length})`
+                : `(${filteredData.length} produkter)`;
+        }
+
+        displayData.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            
+            let ppkClass = '';
+            if (item.ppk >= 2) ppkClass = 'ppk-high';
+            else if (item.ppk >= 1) ppkClass = 'ppk-mid';
+
+            const fallbackUrl = (item.store || '').toLowerCase() === 'willys'
+                ? `https://www.willys.se/produkt/${item.code}`
+                : `https://www.hemkop.se/produkt/${item.code}`;
+            const validUrl = safeUrl(item.url, fallbackUrl);
+            const storeClass = (item.store || '').toLowerCase() === 'willys' ? 'willys' : 'hemkop';
+            const imgUrl = item.image_url || '';
+
+            card.innerHTML = `
+                <button class="add-to-list-btn card-add-btn" aria-label="Lägg till ${esc(item.name)} i shoppinglistan" title="Lägg till i shoppinglistan">+</button>
+                <div class="card-image-box">
+                    ${imgUrl ? `<img src="${esc(imgUrl)}" alt="${esc(item.name)}" loading="lazy">` : `<div class="card-img-placeholder">💪</div>`}
+                </div>
+                <div class="card-content">
+                    <span class="card-brand">${esc(item.brand) || '–'}</span>
+                    <h3 class="card-title">${esc(item.name)}</h3>
+                    <div class="card-stats">
+                        <div class="card-stat-item">
+                            <span class="stat-label">PPK (g/kr)</span>
+                            <span class="stat-value highlight-ppk ${ppkClass}"><strong>${fmt(item.ppk, 2)}</strong></span>
+                        </div>
+                        <div class="card-stat-item">
+                            <span class="stat-label">Prot/100 kcal</span>
+                            <span class="stat-value">${fmt(item.ppkcal, 1)} g</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-price">${fmt(item.price_sek, 2)} kr</span>
+                        <div style="display: flex; gap: 0.5rem; align-items: center;">
+                            <span class="store-badge ${storeClass}">${esc(item.store) || 'Hemköp'}</span>
+                            <a href="${esc(validUrl)}" target="_blank" rel="noopener noreferrer sponsored" class="card-store-link" title="Gå till butik">🔗</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            card.addEventListener('click', (e) => {
+                if (e.target.closest('.add-to-list-btn') || e.target.closest('.card-store-link')) {
+                    return;
+                }
+                openModal(item);
+            });
+
+            const addBtn = card.querySelector('.add-to-list-btn');
+            addBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                addToShoppingList(item);
+                addBtn.textContent = '✓';
+                addBtn.classList.add('added');
+                setTimeout(() => {
+                    addBtn.textContent = '+';
+                    addBtn.classList.remove('added');
+                }, 1200);
+            });
+
+            resultsGrid.appendChild(card);
+        });
+
+    } else {
+        tableBody.innerHTML = '';
+
+        if (filteredData.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding: 3rem; color: #64748b;">
+                Inga produkter matchar dina filter.
+            </td></tr>`;
+            if (resultCountEl) resultCountEl.textContent = '(0 produkter)';
+            return;
+        }
+
+        const displayData = filteredData.slice(0, currentLimit);
+        if (resultCountEl) {
+            resultCountEl.textContent = filteredData.length > currentLimit
+                ? `(visar ${currentLimit} av ${filteredData.length})`
+                : `(${filteredData.length} produkter)`;
+        }
+
+        displayData.forEach(item => {
+            const tr = document.createElement('tr');
+
+            let ppkClass = '';
+            if (item.ppk >= 2) ppkClass = 'ppk-high';
+            else if (item.ppk >= 1) ppkClass = 'ppk-mid';
+
+            const ppkcalClass = item.ppkcal >= 10 ? 'ppk-value' : '';
+
+            const fallbackUrl = (item.store || '').toLowerCase() === 'willys'
+                ? `https://www.willys.se/produkt/${item.code}`
+                : `https://www.hemkop.se/produkt/${item.code}`;
+            const validUrl = safeUrl(item.url, fallbackUrl);
+            const storeClass = (item.store || '').toLowerCase() === 'willys' ? 'willys' : 'hemkop';
+
+            tr.innerHTML = `
+                <td>
+                    <button class="add-to-list-btn" aria-label="Lägg till ${esc(item.name)} i shoppinglistan" title="Lägg till i shoppinglistan">+</button>
+                </td>
+                <td data-label="Produkt"><strong>${esc(item.name)}</strong></td>
+                <td data-label="Märke">${esc(item.brand) || '–'}</td>
+                <td data-label="Butik"><span class="store-badge ${storeClass}">${esc(item.store) || 'Hemköp'}</span></td>
+                <td data-label="Pris">${fmt(item.price_sek, 2)} kr</td>
+                <td data-label="Storlek">${esc(item.display_volume) || '–'}</td>
+                <td data-label="Protein/100g">${fmt(item.protein_per_100g, 1)} g</td>
+                <td data-label="Prot/100 kcal" class="${ppkcalClass}">${fmt(item.ppkcal, 1)} g</td>
+                <td data-label="PPK (g/kr)" class="${ppkClass}"><strong>${fmt(item.ppk, 2)}</strong></td>
+                <td data-label="Länk"></td>
+            `;
+
+            const addBtn = tr.querySelector('.add-to-list-btn');
+            addBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                addToShoppingList(item);
+                addBtn.textContent = '✓';
+                addBtn.classList.add('added');
+                setTimeout(() => {
+                    addBtn.textContent = '+';
+                    addBtn.classList.remove('added');
+                }, 1200);
+            });
+
+            tr.addEventListener('click', (e) => {
+                const cell = e.target.closest('td');
+                if (!cell) return;
+                const cells = Array.from(cell.parentNode.children);
+                const index = cells.indexOf(cell);
+                if (index === 0) return;
+                if (index === 9) {
+                    const anchor = cell.querySelector('.store-link');
+                    if (anchor) anchor.click();
+                    return;
+                }
+                openModal(item);
+            });
+
+            const linkCell = tr.querySelector('td:last-child');
+            linkCell.style.cursor = 'pointer';
+            const a = document.createElement('a');
+            a.href = validUrl;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer sponsored';
+            a.className = 'store-link';
+            a.textContent = 'Butik →';
+            a.addEventListener('click', e => e.stopPropagation());
+            linkCell.addEventListener('click', (e) => { e.stopPropagation(); a.click(); });
+            linkCell.appendChild(a);
+
+            tableBody.appendChild(tr);
+        });
     }
-
-    displayData.forEach(item => {
-        const tr = document.createElement('tr');
-
-        // Color-code PPK: green >= 2, yellow >= 1, neutral otherwise
-        let ppkClass = '';
-        if (item.ppk >= 2) ppkClass = 'ppk-high';
-        else if (item.ppk >= 1) ppkClass = 'ppk-mid';
-
-        // Color-code PPKcal: green >= 10g/100kcal
-        const ppkcalClass = item.ppkcal >= 10 ? 'ppk-value' : '';
-
-        const fallbackUrl = (item.store || '').toLowerCase() === 'willys'
-            ? `https://www.willys.se/produkt/${item.code}`
-            : `https://www.hemkop.se/produkt/${item.code}`;
-        const validUrl = safeUrl(item.url, fallbackUrl);
-        const storeClass = (item.store || '').toLowerCase() === 'willys' ? 'willys' : 'hemkop';
-
-        tr.innerHTML = `
-            <td>
-                <button class="add-to-list-btn" aria-label="Lägg till ${esc(item.name)} i shoppinglistan" title="Lägg till i shoppinglistan">+</button>
-            </td>
-            <td data-label="Produkt"><strong>${esc(item.name)}</strong></td>
-            <td data-label="Märke">${esc(item.brand) || '–'}</td>
-            <td data-label="Butik"><span class="store-badge ${storeClass}">${esc(item.store) || 'Hemköp'}</span></td>
-            <td data-label="Pris">${fmt(item.price_sek, 2)} kr</td>
-            <td data-label="Storlek">${esc(item.display_volume) || '–'}</td>
-            <td data-label="Protein/100g">${fmt(item.protein_per_100g, 1)} g</td>
-            <td data-label="Prot/100 kcal" class="${ppkcalClass}">${fmt(item.ppkcal, 1)} g</td>
-            <td data-label="PPK (g/kr)" class="${ppkClass}"><strong>${fmt(item.ppk, 2)}</strong></td>
-            <td data-label="Länk"></td>
-        `;
-
-        // Add to list button with visual feedback
-        const addBtn = tr.querySelector('.add-to-list-btn');
-        addBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            addToShoppingList(item);
-            addBtn.textContent = '✓';
-            addBtn.classList.add('added');
-            setTimeout(() => {
-                addBtn.textContent = '+';
-                addBtn.classList.remove('added');
-            }, 1200);
-        });
-
-        // Row click: open modal (except Korg and Länk columns)
-        tr.addEventListener('click', (e) => {
-            const cell = e.target.closest('td');
-            if (!cell) return;
-            const cells = Array.from(cell.parentNode.children);
-            const index = cells.indexOf(cell);
-            if (index === 0) return; // bypass Korg add button
-            if (index === 9) { // bypass Länk button
-                const anchor = cell.querySelector('.store-link');
-                if (anchor) anchor.click();
-                return;
-            }
-            openModal(item);
-        });
-
-        // Build link via DOM (safe against URL injection)
-        const linkCell = tr.querySelector('td:last-child');
-        linkCell.style.cursor = 'pointer';
-        const a = document.createElement('a');
-        a.href = validUrl;
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer sponsored';
-        a.className = 'store-link';
-        a.textContent = 'Butik →';
-        a.addEventListener('click', e => e.stopPropagation());
-        linkCell.addEventListener('click', (e) => { e.stopPropagation(); a.click(); });
-        linkCell.appendChild(a);
-
-        tableBody.appendChild(tr);
-    });
 }
 
 function updateKPIs() {
