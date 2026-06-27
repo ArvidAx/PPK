@@ -6,7 +6,7 @@ let shoppingList = [];
 let activeBasket = null;
 let currentLimit = 20;
 let clickCount = 0;
-let currentView = 'list';
+let currentView = 'grid';
 
 const BASKETS = {
     studentpaketet: {
@@ -394,6 +394,7 @@ function setupEventListeners() {
     // View toggle event listener
     const viewToggleBtn = document.getElementById('view-toggle-btn');
     if (viewToggleBtn) {
+        updateViewToggleUI();
         viewToggleBtn.addEventListener('click', () => {
             if (window.innerWidth > 768) {
                 currentView = currentView === 'list' ? 'grid' : 'list';
