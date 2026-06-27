@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html lang="sv">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="favicon.png">
     <title>PPK – Protein per Krona | Jämför billigaste proteinet på Hemköp & Willys</title>
-    <meta name="description" content="Hitta de mest kostnadseffektiva proteinkällorna på Hemköp och Willys. Jämför gram protein per krona (PPK) för hundratals produkter – uppdateras automatiskt varje natt.">
+    <meta name="description"
+        content="Hitta de mest kostnadseffektiva proteinkällorna på Hemköp och Willys. Jämför gram protein per krona (PPK) för hundratals produkter – uppdateras automatiskt varje natt.">
     <link rel="canonical" href="https://ppk.arvid.dev/index.html">
 
     <!-- Open Graph / Social sharing -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://ppk.arvid.dev/">
     <meta property="og:title" content="PPK – Protein per Krona | Jämför billigaste proteinet på Hemköp & Willys">
-    <meta property="og:description" content="Hitta de mest kostnadseffektiva proteinkällorna på Hemköp och Willys. Jämför gram protein per krona för hundratals produkter – uppdateras varje natt.">
+    <meta property="og:description"
+        content="Hitta de mest kostnadseffektiva proteinkällorna på Hemköp och Willys. Jämför gram protein per krona för hundratals produkter – uppdateras varje natt.">
     <meta property="og:locale" content="sv_SE">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="PPK – Protein per Krona">
@@ -37,10 +40,12 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script defer src="app.js"></script>
 </head>
+
 <body>
     <nav class="navbar" aria-label="Huvudnavigation">
         <a href="index.html" class="logo" aria-label="PPK proteinpriser.se startsida">
@@ -60,7 +65,10 @@
             <header class="page-header hero-section">
                 <h1 class="app-title">Protein Per Krona <span class="accent-red">(PPK)</span></h1>
                 <p class="app-subtitle">
-                    Välkommen till Sveriges mest kompletta verktyg för smartare och billigare matinköp. Vi skannar automatiskt över 12 000 produkter från Willys och Hemköp varje dag för att hjälpa dig maximera ditt Protein Per Krona (PPK). Oavsett om du bygger muskler på en stram budget eller bara vill handla ekonomiskt, hittar du de bästa priserna och de renaste proteinkällorna här på proteinpriser.se.
+                    Välkommen till Sveriges mest kompletta verktyg för smartare och billigare matinköp. Vi skannar
+                    automatiskt över 12 000 produkter från Willys och Hemköp varje dag för att hjälpa dig maximera ditt
+                    Protein Per Krona (PPK). Oavsett om du bygger muskler på en stram budget eller bara vill handla
+                    ekonomiskt, hittar du de bästa priserna och de renaste proteinkällorna här på proteinpriser.se.
                 </p>
 
                 <!-- Statistikboxar (Kompakta & diskreta) -->
@@ -79,12 +87,16 @@
                 <div class="hero-search-container">
                     <div class="search-input-wrapper">
                         <span class="search-icon">🔍</span>
-                        <input type="text" id="search" placeholder="Sök bland över 12 000 produkter efter kyckling, kvarg, pasta..." autocomplete="off" aria-label="Sök bland produkter">
+                        <input type="text" id="search"
+                            placeholder="Sök bland över 12 000 produkter efter kyckling, kvarg, pasta..."
+                            autocomplete="off" aria-label="Sök bland produkter">
                     </div>
                     <div class="quick-choices">
                         <span class="quick-choices-label">Snabbval:</span>
-                        <button class="basket-btn tag-btn" data-basket="studentpaketet" aria-label="Aktivera Studentpaketet">🎓 Studentpaketet</button>
-                        <button class="basket-btn tag-btn" data-basket="clean_bulking" aria-label="Aktivera Clean Bulking-paketet">💪 Clean Bulking</button>
+                        <button class="basket-btn tag-btn" data-basket="studentpaketet"
+                            aria-label="Aktivera Studentpaketet">🎓 Studentpaketet</button>
+                        <button class="basket-btn tag-btn" data-basket="clean_bulking"
+                            aria-label="Aktivera Clean Bulking-paketet">💪 Clean Bulking</button>
                         <button class="quick-search-btn tag-btn" data-search="Kycklingbröst">🐔 Kycklingbröst</button>
                         <button class="quick-search-btn tag-btn" data-search="Pasta">🍝 Pasta</button>
                         <button class="quick-search-btn tag-btn" data-search="Ost">🧀 Ost</button>
@@ -92,7 +104,9 @@
                     </div>
                 </div>
 
-                <span id="lastUpdated" style="display: inline-block; margin-top: 1rem; font-size: 0.85rem; font-weight: 600; color: var(--text-muted);" aria-live="polite">Laddar uppdateringstid...</span>
+                <span id="lastUpdated"
+                    style="display: inline-block; margin-top: 1rem; font-size: 0.85rem; font-weight: 600; color: var(--text-muted);"
+                    aria-live="polite">Laddar uppdateringstid...</span>
             </header>
 
             <!-- 3. Reglage- och Filterpanel (Horisontell, kompakt rad under Hero-sektionen) -->
@@ -101,7 +115,8 @@
                     <div class="filter-item">
                         <label>📂 Kategori</label>
                         <div class="multi-select-container" id="categoryMultiSelect">
-                            <button type="button" class="multi-select-btn" id="categorySelectBtn">Alla kategorier</button>
+                            <button type="button" class="multi-select-btn" id="categorySelectBtn">Alla
+                                kategorier</button>
                             <div class="multi-select-dropdown" id="categorySelectDropdown" style="display: none;">
                                 <!-- Checkboxes dynamically populated by app.js -->
                             </div>
@@ -122,7 +137,8 @@
                             <span>💰 Max Pris</span>
                             <span id="maxPriceLabel" class="range-value">200 kr</span>
                         </label>
-                        <input type="range" id="maxPrice" min="0" max="500" value="200" step="1" aria-label="Max pris i kronor">
+                        <input type="range" id="maxPrice" min="0" max="500" value="200" step="1"
+                            aria-label="Max pris i kronor">
                         <div class="range-labels"><span>0 kr</span><span>500 kr</span></div>
                     </div>
 
@@ -131,7 +147,8 @@
                             <span>💪 Minst Protein/100g</span>
                             <span id="minProteinLabel" class="range-value">0 g</span>
                         </label>
-                        <input type="range" id="minProtein" min="0" max="50" value="0" step="1" aria-label="Minsta proteininnehåll per 100 gram">
+                        <input type="range" id="minProtein" min="0" max="50" value="0" step="1"
+                            aria-label="Minsta proteininnehåll per 100 gram">
                         <div class="range-labels"><span>0 g</span><span>50 g</span></div>
                     </div>
                 </div>
@@ -145,26 +162,36 @@
                     </div>
                     <div class="shopping-list-content-wrapper">
                         <div id="shoppingListEmpty" class="shopping-list-empty">
-                            Din lista är tom. Klicka på <span class="plus-icon-inline" aria-hidden="true">+</span> på en produkt för att lägga till den.
+                            Din lista är tom. Klicka på <span class="plus-icon-inline" aria-hidden="true">+</span> på en
+                            produkt för att lägga till den.
                         </div>
                         <ul id="shoppingList" class="shopping-list" aria-label="Shoppinglista" aria-live="polite"></ul>
-                        
-                        <div id="shoppingListSummary" class="shopping-list-summary-grid" style="display: none;" aria-live="polite">
+
+                        <div id="shoppingListSummary" class="shopping-list-summary-grid" style="display: none;"
+                            aria-live="polite">
                             <div class="summary-details">
-                                <div class="summary-row"><span>Antal varor:</span><strong id="summaryCount">0 st</strong></div>
-                                <div class="summary-row"><span>Kostnad:</span><strong id="summaryPrice">0.00 kr</strong></div>
-                                <div class="summary-row"><span>Total protein:</span><strong id="summaryProtein">0.0 g</strong></div>
-                                <div class="summary-row highlight"><span>Samlat PPK:</span><strong id="summaryPPK" style="color:var(--accent-red)">0.00 g/kr</strong></div>
+                                <div class="summary-row"><span>Antal varor:</span><strong id="summaryCount">0
+                                        st</strong></div>
+                                <div class="summary-row"><span>Kostnad:</span><strong id="summaryPrice">0.00 kr</strong>
+                                </div>
+                                <div class="summary-row"><span>Total protein:</span><strong id="summaryProtein">0.0
+                                        g</strong></div>
+                                <div class="summary-row highlight"><span>Samlat PPK:</span><strong id="summaryPPK"
+                                        style="color:var(--accent-red)">0.00 g/kr</strong></div>
                             </div>
-                            
+
                             <div id="basket-summary-box">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                    <span style="font-size: 0.85rem; color: var(--text-muted);">Korgens totala PPK:</span>
-                                    <span id="total-basket-ppk" style="font-weight: bold; color: var(--accent-red); font-size: 1.05rem;">0.00 g/kr</span>
+                                <div
+                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                    <span style="font-size: 0.85rem; color: var(--text-muted);">Korgens totala
+                                        PPK:</span>
+                                    <span id="total-basket-ppk"
+                                        style="font-weight: bold; color: var(--accent-red); font-size: 1.05rem;">0.00
+                                        g/kr</span>
                                 </div>
                                 <div id="basket-store-comparison"></div>
                             </div>
-                            
+
                             <div class="summary-actions">
                                 <button id="clearListBtn" class="btn-clear-list">Töm inköpslista</button>
                             </div>
@@ -176,7 +203,8 @@
             <section class="table-section" aria-label="Produktlista">
                 <div class="table-header">
                     <h2>Resultat <span id="resultCount" class="result-count"></span></h2>
-                    <p class="table-hint">Klicka på en kolumnrubrik för att sortera. Klicka på en rad för produktdetaljer.</p>
+                    <p class="table-hint">Klicka på en kolumnrubrik för att sortera. Klicka på en rad för
+                        produktdetaljer.</p>
                 </div>
                 <div id="basketBanner" class="basket-banner" style="display: none;">
                     <div class="basket-banner-content">
@@ -195,7 +223,6 @@
                     <table id="resultsTable" aria-label="Produkter sorterade efter protein per krona">
                         <thead>
                             <tr>
-                                <th scope="col" data-sort="ppk" class="sort-active desc">PPK (g/kr)</th>
                                 <th scope="col" style="width: 60px;">Korg</th>
                                 <th scope="col" data-sort="name">Produkt</th>
                                 <th scope="col" data-sort="brand">Märke</th>
@@ -204,11 +231,15 @@
                                 <th scope="col" data-sort="display_volume">Storlek</th>
                                 <th scope="col" data-sort="protein_per_100g">Protein/100g</th>
                                 <th scope="col" data-sort="ppkcal">Prot/100 kcal</th>
+                                <th scope="col" data-sort="ppk" class="sort-active desc">PPK (g/kr)</th>
                                 <th scope="col">Länk</th>
                             </tr>
                         </thead>
                         <tbody id="tableBody">
-                            <tr><td colspan="10" style="text-align:center; padding:2rem; color:#64748b;">Laddar produkter...</td></tr>
+                            <tr>
+                                <td colspan="10" style="text-align:center; padding:2rem; color:#64748b;">Laddar
+                                    produkter...</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -220,7 +251,8 @@
             <section class="comparison-section">
                 <div class="comparison-header">
                     <h2>Matbutiken vs. Kosttillskott: Var får du mest protein för pengarna?</h2>
-                    <p>Vi ställde de billigaste proteinkällorna från Willys och Hemköp mot standardvassle online. Resultatet kan överraska dig.</p>
+                    <p>Vi ställde de billigaste proteinkällorna från Willys och Hemköp mot standardvassle online.
+                        Resultatet kan överraska dig.</p>
                 </div>
 
                 <div class="comparison-grid">
@@ -239,7 +271,8 @@
                             <span class="label">Nötfärs (10%, 1kg):</span>
                             <span class="value font-bold">~2.8 g/kr</span>
                         </div>
-                        <p class="card-footer">*Räknat på ordinarie priser 2026. Gula ärter och vetemjöl är billigare, men kräver mycket större matvolymer.</p>
+                        <p class="card-footer">*Räknat på ordinarie priser 2026. Gula ärter och vetemjöl är billigare,
+                            men kräver mycket större matvolymer.</p>
                     </div>
 
                     <!-- VS Divider -->
@@ -247,14 +280,14 @@
 
                     <!-- Affiliate-pulver -->
                     <div class="comparison-card affiliate-card">
-                        <div class="badge">Bäst PPK för ren proteinkälla</div>
+                        <div class="badge">Smidigast & renast makron</div>
                         <h3>Vassleprotein (Online)</h3>
                         <div class="price-row highlight">
                             <span class="label">Whey-80 (1kg storpack):</span>
                             <span class="value dynamic-ppk">~7.8 g/kr</span>
                         </div>
-                        <p class="card-text">Ett standard Whey-80 eller isolat online slår nästan alla animaliska proteinkällor i matbutiken när man räknar om priset till rent gram protein.</p>
-                        
+                        <p class="card-text">Ett standard Whey-80 online ger dig inte bara ett av marknadens absolut bästa PPK-värden. Det ger dig också en nästintill ren proteinkälla med minimalt med kalorier från fett och kolhydrater. Perfekt för att boosta dagsintaget utan att behöva laga mat, tugga dig igenom tonvis med kyckling eller ligga i kaloriöverskott.</p>
+
                         <!-- Här hamnar din Adtraction-länk sen -->
                         <a href="#" target="_blank" rel="noopener sponsored" class="affiliate-btn">
                             Visa billigaste proteinpulvret just nu →
@@ -266,12 +299,21 @@
             <section class="seo-section" aria-labelledby="seo-ppk-heading">
                 <div class="seo-content">
                     <h2 id="seo-ppk-heading">Hur fungerar Protein Per Krona (PPK)?</h2>
-                    <p>Protein Per Krona, ofta förkortat PPK, visar hur många gram protein du får för varje krona du spenderar. Kalkylen är enkel: produktens totala mängd protein divideras med priset, eller protein per 100 gram räknas mot jämförpriset när det finns tillgängligt.</p>
-                    <p>Resultatet blir ett snabbt och rättvist sätt att jämföra proteinrika livsmedel oavsett förpackningsstorlek, butik och varumärke. För dig som tränar, bygger muskler eller bara vill äta mer protein utan att spräcka matbudgeten är PPK ett av de mest praktiska måtten att följa.</p>
+                    <p>Protein Per Krona, ofta förkortat PPK, visar hur många gram protein du får för varje krona du
+                        spenderar. Kalkylen är enkel: produktens totala mängd protein divideras med priset, eller
+                        protein per 100 gram räknas mot jämförpriset när det finns tillgängligt.</p>
+                    <p>Resultatet blir ett snabbt och rättvist sätt att jämföra proteinrika livsmedel oavsett
+                        förpackningsstorlek, butik och varumärke. För dig som tränar, bygger muskler eller bara vill äta
+                        mer protein utan att spräcka matbudgeten är PPK ett av de mest praktiska måtten att följa.</p>
 
                     <h2>De billigaste proteinkällorna i Sverige 2026</h2>
-                    <p>De billigaste proteinkällorna är inte alltid de produkter som marknadsförs som proteinrika. Basvaror som vetemjöl, gula ärter, linser, bönor, kvarg, ägg och fryst kyckling kan ofta ge mycket protein per spenderad krona, men placeringen ändras när pris, kampanjer och förpackningsstorlekar skiftar.</p>
-                    <p>Med proteinpriser.se kan du se hur produkter från Willys och Hemköp står sig mot varandra och utnyttja prisskillnaderna butik för butik. När samma typ av produkt finns hos flera kedjor blir PPK ett enkelt sätt att hitta var din matkrona gör mest nytta.</p>
+                    <p>De billigaste proteinkällorna är inte alltid de produkter som marknadsförs som proteinrika.
+                        Basvaror som vetemjöl, gula ärter, linser, bönor, kvarg, ägg och fryst kyckling kan ofta ge
+                        mycket protein per spenderad krona, men placeringen ändras när pris, kampanjer och
+                        förpackningsstorlekar skiftar.</p>
+                    <p>Med proteinpriser.se kan du se hur produkter från Willys och Hemköp står sig mot varandra och
+                        utnyttja prisskillnaderna butik för butik. När samma typ av produkt finns hos flera kedjor blir
+                        PPK ett enkelt sätt att hitta var din matkrona gör mest nytta.</p>
                 </div>
             </section>
 
@@ -280,7 +322,9 @@
                     <span class="info-icon" aria-hidden="true">🔄</span>
                     <div>
                         <strong>Alltid uppdaterad</strong>
-                        <p>Priser och produkter hämtas automatiskt varje natt. <span id="lastUpdatedTime" style="display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem;" aria-live="polite"></span></p>
+                        <p>Priser och produkter hämtas automatiskt varje natt. <span id="lastUpdatedTime"
+                                style="display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem;"
+                                aria-live="polite"></span></p>
                     </div>
                 </div>
                 <div class="info-item">
@@ -298,14 +342,18 @@
                     </div>
                 </div>
             </section>
-            <footer class="app-footer" style="text-align: center; padding: 2rem 0; border-top: 1px solid var(--border-color); margin-top: 4rem; font-size: 0.85rem; color: var(--text-muted);">
-                <p>&copy; 2026 proteinpriser.se. Alla rättigheter reserverade. | <a href="integritetspolicy.html" style="color: var(--accent-red); text-decoration: none; font-weight: 600;">Integritetspolicy</a></p>
+            <footer class="app-footer"
+                style="text-align: center; padding: 2rem 0; border-top: 1px solid var(--border-color); margin-top: 4rem; font-size: 0.85rem; color: var(--text-muted);">
+                <p>&copy; 2026 proteinpriser.se. Alla rättigheter reserverade. | <a href="integritetspolicy.html"
+                        style="color: var(--accent-red); text-decoration: none; font-weight: 600;">Integritetspolicy</a>
+                </p>
             </footer>
         </main>
     </div>
 
     <!-- Product Detail Modal -->
-    <div id="productModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalProductTitle">
+    <div id="productModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true"
+        aria-labelledby="modalProductTitle">
         <div class="modal-content">
             <button class="close-btn" id="closeModalBtn" aria-label="Stäng produktdetaljer">×</button>
             <div id="modalBody">
@@ -315,4 +363,5 @@
     </div>
 
 </body>
+
 </html>

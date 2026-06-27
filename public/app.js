@@ -366,9 +366,22 @@ function updateSortHeaders() {
     });
 }
 
+const SYNONYMS = {
+    'fryspizza': ['pizza', 'grandiosa', 'oetker', 'billys'],
+    'pulver': ['whey', 'vassle', 'protein-pulver', 'proteinpulver'],
+    'proteinpulver': ['whey', 'vassle', 'protein-pulver', 'kosttillskott'],
+    'vassle': ['whey', 'vassleprotein'],
+    'bacon': ['tulip', 'skivad bacon']
+};
+
 function isSmartMatch(text, query) {
     text = text.toLowerCase();
     query = query.toLowerCase().trim();
+    
+    // Synonym expansion
+    if (SYNONYMS[query]) {
+        return SYNONYMS[query].some(syn => text.includes(syn)) || text.includes(query);
+    }
     
     // Special case: Kycklingbröst synonym expansion
     if (query === 'kycklingbröst') {
@@ -430,7 +443,8 @@ function applyFilters(resetPage = false) {
         if (search) {
             const nameMatch = item.name && isSmartMatch(item.name, search);
             const brandMatch = item.brand && isSmartMatch(item.brand, search);
-            if (!nameMatch && !brandMatch) return false;
+            const categoryMatch = item.underkategori && item.underkategori.some(sub => isSmartMatch(sub, search));
+            if (!nameMatch && !brandMatch && !categoryMatch) return false;
         }
         return true;
     });
@@ -488,7 +502,6 @@ function renderTable() {
         const storeClass = (item.store || '').toLowerCase() === 'willys' ? 'willys' : 'hemkop';
 
         tr.innerHTML = `
-            <td data-label="PPK (g/kr)" class="${ppkClass}"><strong>${fmt(item.ppk, 2)}</strong></td>
             <td>
                 <button class="add-to-list-btn" aria-label="Lägg till ${esc(item.name)} i shoppinglistan" title="Lägg till i shoppinglistan">+</button>
             </td>
@@ -499,6 +512,7 @@ function renderTable() {
             <td data-label="Storlek">${esc(item.display_volume) || '–'}</td>
             <td data-label="Protein/100g">${fmt(item.protein_per_100g, 1)} g</td>
             <td data-label="Prot/100 kcal" class="${ppkcalClass}">${fmt(item.ppkcal, 1)} g</td>
+            <td data-label="PPK (g/kr)" class="${ppkClass}"><strong>${fmt(item.ppk, 2)}</strong></td>
             <td data-label="Länk"></td>
         `;
 
@@ -521,7 +535,7 @@ function renderTable() {
             if (!cell) return;
             const cells = Array.from(cell.parentNode.children);
             const index = cells.indexOf(cell);
-            if (index === 1) return; // bypass Korg add button
+            if (index === 0) return; // bypass Korg add button
             if (index === 9) { // bypass Länk button
                 const anchor = cell.querySelector('.store-link');
                 if (anchor) anchor.click();
@@ -944,11 +958,7 @@ function addActiveBasketToCart() {
 }
 
 function updateDynamicPPK() {
-    const price = 249; // kr
-    const weightKg = 1; // kg
-    const proteinPct = 0.75; // 75%
-    const totalProtein = weightKg * 1000 * proteinPct; // 750g
-    const ppk = totalProtein / price; // 3.012...
+    const ppk = 7.5;
     
     const elements = document.querySelectorAll('.dynamic-ppk');
     elements.forEach(el => {
