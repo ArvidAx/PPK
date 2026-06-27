@@ -89,7 +89,7 @@ function setFiltersEnabled(enabled) {
         if (input) input.disabled = !enabled;
     });
 
-    document.querySelectorAll('.basket-btn').forEach(btn => {
+    document.querySelectorAll('.basket-btn, .quick-search-btn').forEach(btn => {
         btn.disabled = !enabled;
         btn.style.opacity = enabled ? '1' : '0.6';
         btn.style.cursor = enabled ? 'pointer' : 'not-allowed';
@@ -344,6 +344,16 @@ function setupEventListeners() {
     if (loadMoreBtn) {
         loadMoreBtn.addEventListener('click', handleLoadMore);
     }
+
+    // Quick-search choice buttons
+    document.querySelectorAll('.quick-search-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (searchInput) {
+                searchInput.value = btn.dataset.search;
+                searchInput.dispatchEvent(new Event('input'));
+            }
+        });
+    });
 }
 
 function updateSortHeaders() {

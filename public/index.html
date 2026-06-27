@@ -54,101 +54,124 @@
         </ul>
     </nav>
 
-    <div class="app-container">
-        <aside class="sidebar" aria-label="Filter och shoppinglista">
-            <div class="sidebar-section-title">Standardkassar</div>
-            <div class="basket-buttons-container">
-                <button class="basket-btn" data-basket="studentpaketet" aria-label="Aktivera Studentpaketet">🎓 Studentpaketet</button>
-                <button class="basket-btn" data-basket="clean_bulking" aria-label="Aktivera Clean Bulking-paketet">💪 Clean Bulking</button>
-            </div>
-
-            <div class="sidebar-section-title">Filter</div>
-
-            <div class="filter-group">
-                <label for="search">🔍 Sök Produkt</label>
-                <input type="text" id="search" placeholder="T.ex. Kyckling, Arla..." autocomplete="off" aria-label="Sök bland produkter">
-            </div>
-
-            <div class="filter-group">
-                <label>📂 Kategori</label>
-                <div class="multi-select-container" id="categoryMultiSelect">
-                    <button type="button" class="multi-select-btn" id="categorySelectBtn">Alla kategorier</button>
-                    <div class="multi-select-dropdown" id="categorySelectDropdown" style="display: none;">
-                        <!-- Checkboxes dynamically populated by app.js -->
-                    </div>
-                </div>
-            </div>
-
-            <div class="filter-group">
-                <label for="store">🏪 Butik</label>
-                <select id="store" aria-label="Filtrera efter butik">
-                    <option value="">Alla Butiker</option>
-                    <option value="Hemköp">Hemköp</option>
-                    <option value="Willys">Willys</option>
-                </select>
-            </div>
-
-            <div class="filter-group">
-                <label for="maxPrice"><span>💰 Max Pris</span><span id="maxPriceLabel" class="range-value">200 kr</span></label>
-                <input type="range" id="maxPrice" min="0" max="500" value="200" step="1" aria-label="Max pris i kronor">
-                <div class="range-labels"><span>0 kr</span><span>500 kr</span></div>
-            </div>
-
-            <div class="filter-group">
-                <label for="minProtein"><span>💪 Minst Protein/100g</span><span id="minProteinLabel" class="range-value">0 g</span></label>
-                <input type="range" id="minProtein" min="0" max="50" value="0" step="1" aria-label="Minsta proteininnehåll per 100 gram">
-                <div class="range-labels"><span>0 g</span><span>50 g</span></div>
-            </div>
-
-            <!-- Shopping List Section -->
-            <div class="sidebar-section-title shopping-title">Shoppinglista</div>
-            <div class="shopping-list-container">
-                <div id="shoppingListEmpty" class="shopping-list-empty">
-                    Din lista är tom. Klicka på <span class="plus-icon-inline" aria-hidden="true">+</span> på en produkt för att lägga till den.
-                </div>
-                <ul id="shoppingList" class="shopping-list" aria-label="Shoppinglista" aria-live="polite"></ul>
-                <div id="shoppingListSummary" class="shopping-list-summary" style="display: none;" aria-live="polite">
-                    <div class="summary-row"><span>Antal varor:</span><span id="summaryCount">0 st</span></div>
-                    <div class="summary-row"><span>Kostnad:</span><span id="summaryPrice">0.00 kr</span></div>
-                    <div class="summary-row"><span>Total protein:</span><span id="summaryProtein">0.0 g</span></div>
-                    <div class="summary-row highlight"><span>Samlat PPK:</span><span id="summaryPPK">0.00 g/kr</span></div>
-                    
-                    <!-- Denna sektion laddas dynamiskt via BasketOptimizer -->
-                    <div id="basket-summary-box" style="margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 12px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                            <span style="font-size: 0.85rem; color: var(--text-muted);">Korgens totala PPK:</span>
-                            <span id="total-basket-ppk" style="font-weight: bold; color: var(--accent-red); font-size: 1.05rem;">0.00 g/kr</span>
-                        </div>
-                        <div id="basket-store-comparison"></div>
-                    </div>
-
-                    <button id="clearListBtn" class="btn-clear-list">Töm inköpslista</button>
-                </div>
-            </div>
-
-            <div class="sidebar-explainer">
-                <p><strong>Vad är PPK?</strong></p>
-                <p>Protein per Krona = gram protein du får för varje spenderad krona. Ju högre siffra, desto bättre bang for your buck.</p>
-            </div>
-        </aside>
-
+    <div class="app-container single-column">
         <main class="main-content" id="main-content">
-            <header class="page-header">
+            <!-- 1. Centrerad och utökad Hero-sektion -->
+            <header class="page-header hero-section">
                 <h1 class="app-title">Protein Per Krona <span class="accent-red">(PPK)</span></h1>
-                <p class="app-subtitle">Sveriges mest kompletta verktyg för att hitta de billigaste proteinkällorna. All data hämtas och uppdateras automatiskt direkt från Hemköp och Willys.<br><span id="lastUpdated" style="display: inline-block; margin-top: 0.5rem; font-size: 0.85rem; font-weight: 600; color: var(--text-muted);" aria-live="polite">Laddar uppdateringstid...</span></p>
-                <div class="kpi-cards">
-                    <div class="kpi-card">
-                        <div class="kpi-icon" aria-hidden="true">📦</div>
+                <p class="app-subtitle">
+                    Välkommen till Sveriges mest kompletta verktyg för smartare och billigare matinköp. Vi skannar automatiskt över 12 000 produkter från Willys och Hemköp varje dag för att hjälpa dig maximera ditt Protein Per Krona (PPK). Oavsett om du bygger muskler på en stram budget eller bara vill handla ekonomiskt, hittar du de bästa priserna och de renaste proteinkällorna här på proteinpriser.se.
+                </p>
+
+                <!-- Statistikboxar (Kompakta & diskreta) -->
+                <div class="kpi-cards compact">
+                    <div class="kpi-card compact">
                         <h2>Antal Produkter</h2>
                         <p id="totalProducts">–</p>
                     </div>
-                    <div class="kpi-card highlight">
-                        <div class="kpi-icon" aria-hidden="true">🏆</div>
+                    <div class="kpi-card compact highlight">
                         <h2>Bästa PPK just nu</h2>
                         <p id="bestPPK">– <span class="unit">g/kr</span></p>
                     </div>
                 </div>
+
+                <!-- 2. Integrerat Sök & Snabbval -->
+                <div class="hero-search-container">
+                    <div class="search-input-wrapper">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="search" placeholder="Sök bland över 12 000 produkter efter kyckling, kvarg, pasta..." autocomplete="off" aria-label="Sök bland produkter">
+                    </div>
+                    <div class="quick-choices">
+                        <span class="quick-choices-label">Snabbval:</span>
+                        <button class="basket-btn tag-btn" data-basket="studentpaketet" aria-label="Aktivera Studentpaketet">🎓 Studentpaketet</button>
+                        <button class="basket-btn tag-btn" data-basket="clean_bulking" aria-label="Aktivera Clean Bulking-paketet">💪 Clean Bulking</button>
+                        <button class="quick-search-btn tag-btn" data-search="Kycklingbröst">🐔 Kycklingbröst</button>
+                        <button class="quick-search-btn tag-btn" data-search="Pasta">🍝 Pasta</button>
+                        <button class="quick-search-btn tag-btn" data-search="Ost">🧀 Ost</button>
+                        <button class="quick-search-btn tag-btn" data-search="Ägg">🥚 Ägg</button>
+                    </div>
+                </div>
+
+                <span id="lastUpdated" style="display: inline-block; margin-top: 1rem; font-size: 0.85rem; font-weight: 600; color: var(--text-muted);" aria-live="polite">Laddar uppdateringstid...</span>
             </header>
+
+            <!-- 3. Reglage- och Filterpanel (Horisontell, kompakt rad under Hero-sektionen) -->
+            <section class="filter-panel" aria-label="Filterinställningar">
+                <div class="filter-row">
+                    <div class="filter-item">
+                        <label>📂 Kategori</label>
+                        <div class="multi-select-container" id="categoryMultiSelect">
+                            <button type="button" class="multi-select-btn" id="categorySelectBtn">Alla kategorier</button>
+                            <div class="multi-select-dropdown" id="categorySelectDropdown" style="display: none;">
+                                <!-- Checkboxes dynamically populated by app.js -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filter-item">
+                        <label for="store">🏪 Butik</label>
+                        <select id="store" aria-label="Filtrera efter butik">
+                            <option value="">Alla Butiker</option>
+                            <option value="Hemköp">Hemköp</option>
+                            <option value="Willys">Willys</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-item slider-item">
+                        <label for="maxPrice">
+                            <span>💰 Max Pris</span>
+                            <span id="maxPriceLabel" class="range-value">200 kr</span>
+                        </label>
+                        <input type="range" id="maxPrice" min="0" max="500" value="200" step="1" aria-label="Max pris i kronor">
+                        <div class="range-labels"><span>0 kr</span><span>500 kr</span></div>
+                    </div>
+
+                    <div class="filter-item slider-item">
+                        <label for="minProtein">
+                            <span>💪 Minst Protein/100g</span>
+                            <span id="minProteinLabel" class="range-value">0 g</span>
+                        </label>
+                        <input type="range" id="minProtein" min="0" max="50" value="0" step="1" aria-label="Minsta proteininnehåll per 100 gram">
+                        <div class="range-labels"><span>0 g</span><span>50 g</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. Inköpslista (fullbredd och centrerad i botten/nederst av layouten) -->
+            <section class="shopping-list-section" aria-label="Shoppinglista">
+                <div class="shopping-list-card">
+                    <div class="shopping-list-header">
+                        <h2>📋 Din Inköpslista</h2>
+                    </div>
+                    <div class="shopping-list-content-wrapper">
+                        <div id="shoppingListEmpty" class="shopping-list-empty">
+                            Din lista är tom. Klicka på <span class="plus-icon-inline" aria-hidden="true">+</span> på en produkt för att lägga till den.
+                        </div>
+                        <ul id="shoppingList" class="shopping-list" aria-label="Shoppinglista" aria-live="polite"></ul>
+                        
+                        <div id="shoppingListSummary" class="shopping-list-summary-grid" style="display: none;" aria-live="polite">
+                            <div class="summary-details">
+                                <div class="summary-row"><span>Antal varor:</span><strong id="summaryCount">0 st</strong></div>
+                                <div class="summary-row"><span>Kostnad:</span><strong id="summaryPrice">0.00 kr</strong></div>
+                                <div class="summary-row"><span>Total protein:</span><strong id="summaryProtein">0.0 g</strong></div>
+                                <div class="summary-row highlight"><span>Samlat PPK:</span><strong id="summaryPPK" style="color:var(--accent-red)">0.00 g/kr</strong></div>
+                            </div>
+                            
+                            <div id="basket-summary-box">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                    <span style="font-size: 0.85rem; color: var(--text-muted);">Korgens totala PPK:</span>
+                                    <span id="total-basket-ppk" style="font-weight: bold; color: var(--accent-red); font-size: 1.05rem;">0.00 g/kr</span>
+                                </div>
+                                <div id="basket-store-comparison"></div>
+                            </div>
+                            
+                            <div class="summary-actions">
+                                <button id="clearListBtn" class="btn-clear-list">Töm inköpslista</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             <section class="table-section" aria-label="Produktlista">
                 <div class="table-header">
