@@ -4,112 +4,167 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="favicon.png">
-    <title>Proteinrika Recept – Budget & Hälsa | PPK</title>
+    <title>Billig Proteinrik Mat – Recept för Smarta Matinköp | PPK</title>
     <meta name="description" content="Smarta, billiga och proteinrika recept baserade på de mest kostnadseffektiva råvarorna. Fyll på kroppen utan att tömma plånboken.">
     <link rel="canonical" href="https://ppk.arvid.dev/recept.html">
 
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://ppk.arvid.dev/recept.html">
-    <meta property="og:title" content="Proteinrika Recept – Budget & Hälsa | PPK">
+    <meta property="og:title" content="Billig Proteinrik Mat – Recept för Smarta Matinköp | PPK">
     <meta property="og:description" content="Smarta, billiga och proteinrika recept baserade på de mest kostnadseffektiva råvarorna. Fyll på kroppen utan att tömma plånboken.">
     <meta property="og:locale" content="sv_SE">
     <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Billig Proteinrik Mat – Recept | PPK">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script defer src="app.js"></script>
 </head>
 <body>
     <nav class="navbar" aria-label="Huvudnavigation">
-        <a href="index.html" class="logo">PPK<span class="logo-dot">.</span></a>
-        <ul class="nav-links" role="list">
-            <li><a href="index.html">Kalkylator</a></li>
-            <li><a href="recept.html" class="active" aria-current="page">Recept</a></li>
-            <li><a href="kunskap.html">Kunskapsbank</a></li>
-        </ul>
+        <a href="index.html" class="logo" aria-label="PPK proteinpriser.se startsida">
+            <span class="logo-main">PPK</span>
+            <span class="logo-domain">proteinpriser.se<span class="logo-dot">.</span></span>
+        </a>
+        <button class="hamburger-menu" aria-label="Öppna meny">☰</button>
+        <nav class="nav-links">
+            <ul role="list">
+                <li><a href="index.html">Kalkylator</a></li>
+                <li><a href="recept.html" class="active" aria-current="page">Recept</a></li>
+                <li><a href="kunskap.html">Kunskapsbank</a></li>
+            </ul>
+        </nav>
     </nav>
 
     <main>
-        <div class="page-content">
-            <header style="margin-bottom: 3rem;">
-                <h1 class="app-title">Proteinrika <span class="accent-red">Recept</span></h1>
-                <p class="app-subtitle" style="margin-bottom: 0;">Smarta, billiga och mättande måltider baserade på databasens mest kostnadseffektiva råvaror. Proteinrikt behöver inte vara dyrt.</p>
+        <div class="page-content" style="max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem;">
+            <header style="margin-bottom: 3rem; text-align: center;">
+                <h1 class="app-title" style="font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem;">Billig Proteinrik Mat &ndash; <span class="accent-red">Recept för Smarta Matinköp</span></h1>
+                <p class="app-subtitle" style="max-width: 800px; margin: 0 auto; line-height: 1.65; font-size: 1.05rem; color: var(--text-muted);">
+                    Maximera dina resultat utan att tömma plånboken. Alla våra recept är framtagna baserat på råvaror med högt Protein Per Krona (PPK) från vår databas. Tips: Använd alltid sökfältet på startsidan för att hitta exakt vilken butik som säljer ingredienserna billigast just nu!
+                </p>
             </header>
 
-            <div class="recipe-filter-tabs" role="tablist" aria-label="Filtrera recept">
-                <button class="tab-btn active" data-filter="alla" role="tab" aria-selected="true">Alla</button>
-                <button class="tab-btn" data-filter="frukost" role="tab" aria-selected="false">Frukost</button>
-                <button class="tab-btn" data-filter="lunch" role="tab" aria-selected="false">Lunch</button>
-                <button class="tab-btn" data-filter="middag" role="tab" aria-selected="false">Middag</button>
+            <div class="recipe-filter-tabs" role="tablist" aria-label="Filtrera recept" style="display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 2rem;">
+                <button class="tab-btn active" data-filter="alla" role="tab" aria-selected="true" style="padding: 0.5rem 1.25rem; border-radius: 9999px; border: 1px solid var(--border-color); background: var(--card-bg); font-weight: 600; cursor: pointer; color: var(--text-main);">Alla</button>
+                <button class="tab-btn" data-filter="frukost" role="tab" aria-selected="false" style="padding: 0.5rem 1.25rem; border-radius: 9999px; border: 1px solid var(--border-color); background: var(--card-bg); font-weight: 600; cursor: pointer; color: var(--text-main);">Frukost</button>
+                <button class="tab-btn" data-filter="lunch" role="tab" aria-selected="false" style="padding: 0.5rem 1.25rem; border-radius: 9999px; border: 1px solid var(--border-color); background: var(--card-bg); font-weight: 600; cursor: pointer; color: var(--text-main);">Lunch</button>
+                <button class="tab-btn" data-filter="middag" role="tab" aria-selected="false" style="padding: 0.5rem 1.25rem; border-radius: 9999px; border: 1px solid var(--border-color); background: var(--card-bg); font-weight: 600; cursor: pointer; color: var(--text-main);">Middag</button>
             </div>
 
-            <div class="recipe-grid" role="tabpanel">
+            <div class="recipe-grid" role="tabpanel" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem;">
 
-                <article class="recipe-card" data-cat="middag" id="chicken_pasta" tabindex="0" role="button" aria-label="Öppna recept: Krämig Kycklingpasta">
-                    <div class="recipe-img" style="background-image: url('img_chicken_pasta.png');" role="img" aria-label="Krämig Kycklingpasta"></div>
-                    <div class="recipe-content">
-                        <div class="recipe-meta">
+                <!-- 1. Koreanska Chicken Nuggets -->
+                <article class="recipe-card" data-cat="middag" style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--shadow-sm); transition: transform 0.2s;">
+                    <div class="recipe-img"><img src="img_korean_nuggets.png" alt="Högprotein Koreanska Chicken Nuggets"></div>
+                    <div class="recipe-content" style="padding: 1.5rem; display: flex; flex-direction: column; flex-grow: 1; gap: 0.75rem;">
+                        <div class="recipe-meta" style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-muted);">
                             <span>⏱ 20 min</span>
-                            <span class="recipe-badge middag">Middag</span>
+                            <span class="recipe-badge middag" style="background: #fee2e2; color: #e11d48; padding: 0.15rem 0.5rem; border-radius: 4px; font-weight: 700; font-size: 0.75rem;">Middag</span>
                         </div>
-                        <h2 class="recipe-title">Krämig Kycklingpasta</h2>
-                        <p class="recipe-desc">Snabb vardagsrätt med kycklingfilé, kvarg och riven parmesan. Enkel, mättande och budgetvänlig.</p>
-                        <div class="recipe-footer">
-                            <span class="recipe-protein">💪 45g protein</span>
-                            <span class="recipe-cost">~18 kr/port</span>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="recipe-card" data-cat="frukost" id="overnight_oats" tabindex="0" role="button" aria-label="Öppna recept: Overnight Oats med Kvarg">
-                    <div class="recipe-img" style="background-image: url('img_overnight_oats.png');" role="img" aria-label="Overnight Oats med Kvarg"></div>
-                    <div class="recipe-content">
-                        <div class="recipe-meta">
-                            <span>⏱ 5 min + natt</span>
-                            <span class="recipe-badge frukost">Frukost</span>
-                        </div>
-                        <h2 class="recipe-title">Overnight Oats med Kvarg</h2>
-                        <p class="recipe-desc">Förbered kvällen innan. Havregryn, kvarg och bär ger en proteinrik start på dagen utan att ta en minut av morgonen.</p>
-                        <div class="recipe-footer">
-                            <span class="recipe-protein">💪 30g protein</span>
-                            <span class="recipe-cost">~8 kr/port</span>
+                        <h2 class="recipe-title" style="font-size: 1.2rem; font-weight: 800; color: var(--text-main); margin: 0; line-height: 1.3;">Högprotein Koreanska Chicken Nuggets</h2>
+                        <p class="recipe-desc" style="font-size: 0.9rem; color: var(--text-muted); margin: 0; line-height: 1.5; flex-grow: 1;">Krispiga nuggets ugnsbakade för minimalt fett, vända i en smakrik och stark gochujangglaze.</p>
+                        <div class="recipe-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: auto; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+                            <span class="recipe-protein" style="font-weight: 700; color: var(--accent-red); font-size: 0.95rem;">💪 35g protein</span>
+                            <a href="recept/korean-nuggets.html" class="affiliate-btn" style="display: inline-block; padding: 0.4rem 1rem; background: var(--accent-red); color: #fff; text-decoration: none; border-radius: 9999px; font-size: 0.85rem; font-weight: 700; transition: background 0.2s;">Visa recept →</a>
                         </div>
                     </div>
                 </article>
 
-                <article class="recipe-card" data-cat="lunch" id="lentil_halloumi" tabindex="0" role="button" aria-label="Öppna recept: Linsgryta med Halloumi">
-                    <div class="recipe-img" style="background-image: url('img_lentil_halloumi.png');" role="img" aria-label="Linsgryta med Halloumi"></div>
-                    <div class="recipe-content">
-                        <div class="recipe-meta">
-                            <span>⏱ 25 min</span>
-                            <span class="recipe-badge lunch">Lunch</span>
+                <!-- 2. Krämig Kycklingpasta -->
+                <article class="recipe-card" data-cat="lunch" style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--shadow-sm); transition: transform 0.2s;">
+                    <div class="recipe-img"><img src="img_chicken_pasta.png" alt="Krämig Kycklingpasta med Thailändsk Basilika"></div>
+                    <div class="recipe-content" style="padding: 1.5rem; display: flex; flex-direction: column; flex-grow: 1; gap: 0.75rem;">
+                        <div class="recipe-meta" style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-muted);">
+                            <span>⏱ 20 min</span>
+                            <span class="recipe-badge lunch" style="background: #e0f2fe; color: #0284c7; padding: 0.15rem 0.5rem; border-radius: 4px; font-weight: 700; font-size: 0.75rem;">Lunch</span>
                         </div>
-                        <h2 class="recipe-title">Linsgryta med Halloumi</h2>
-                        <p class="recipe-desc">En mustig och värmande gryta med röda linser, krossade tomater och gyllenstekt halloumi. Vegetarisk favorit.</p>
-                        <div class="recipe-footer">
-                            <span class="recipe-protein">💪 38g protein</span>
-                            <span class="recipe-cost">~14 kr/port</span>
+                        <h2 class="recipe-title" style="font-size: 1.2rem; font-weight: 800; color: var(--text-main); margin: 0; line-height: 1.3;">Krämig Kycklingpasta med Thailändsk Basilika</h2>
+                        <p class="recipe-desc" style="font-size: 0.9rem; color: var(--text-muted); margin: 0; line-height: 1.5; flex-grow: 1;">Krämig pasta där grädden byts ut mot lättkvarg för lägre fetthalt och mer protein, smaksatt med färsk basilika.</p>
+                        <div class="recipe-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: auto; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+                            <span class="recipe-protein" style="font-weight: 700; color: var(--accent-red); font-size: 0.95rem;">💪 45g protein</span>
+                            <a href="recept/chicken-pasta.html" class="affiliate-btn" style="display: inline-block; padding: 0.4rem 1rem; background: var(--accent-red); color: #fff; text-decoration: none; border-radius: 9999px; font-size: 0.85rem; font-weight: 700; transition: background 0.2s;">Visa recept →</a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 3. Proteinboostad Gröt -->
+                <article class="recipe-card" data-cat="frukost" style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--shadow-sm); transition: transform 0.2s;">
+                    <div class="recipe-img"><img src="img_overnight_oats.png" alt="Proteinboostad Gröt med Äggvita och Kvarg"></div>
+                    <div class="recipe-content" style="padding: 1.5rem; display: flex; flex-direction: column; flex-grow: 1; gap: 0.75rem;">
+                        <div class="recipe-meta" style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-muted);">
+                            <span>⏱ 5 min</span>
+                            <span class="recipe-badge frukost" style="background: #fef3c7; color: #d97706; padding: 0.15rem 0.5rem; border-radius: 4px; font-weight: 700; font-size: 0.75rem;">Frukost</span>
+                        </div>
+                        <h2 class="recipe-title" style="font-size: 1.2rem; font-weight: 800; color: var(--text-main); margin: 0; line-height: 1.3;">Proteinboostad Gröt med Äggvita och Kvarg</h2>
+                        <p class="recipe-desc" style="font-size: 0.9rem; color: var(--text-muted); margin: 0; line-height: 1.5; flex-grow: 1;">Havregrynsgröt förstärkt med äggvita och krämig lättkvarg för ett kalorisnålt men extremt mättande mål.</p>
+                        <div class="recipe-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: auto; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+                            <span class="recipe-protein" style="font-weight: 700; color: var(--accent-red); font-size: 0.95rem;">💪 32g protein</span>
+                            <a href="recept/overnight-oats.html" class="affiliate-btn" style="display: inline-block; padding: 0.4rem 1rem; background: var(--accent-red); color: #fff; text-decoration: none; border-radius: 9999px; font-size: 0.85rem; font-weight: 700; transition: background 0.2s;">Visa recept →</a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 4. Gula Ärter Falafel -->
+                <article class="recipe-card" data-cat="lunch" style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--shadow-sm); transition: transform 0.2s;">
+                    <div class="recipe-img"><img src="img_pea_falafel.png" alt="Gula Ärter Falafel med Rågsikts-Tunnbröd"></div>
+                    <div class="recipe-content" style="padding: 1.5rem; display: flex; flex-direction: column; flex-grow: 1; gap: 0.75rem;">
+                        <div class="recipe-meta" style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-muted);">
+                            <span>⏱ 30 min</span>
+                            <span class="recipe-badge lunch" style="background: #e0f2fe; color: #0284c7; padding: 0.15rem 0.5rem; border-radius: 4px; font-weight: 700; font-size: 0.75rem;">Lunch</span>
+                        </div>
+                        <h2 class="recipe-title" style="font-size: 1.2rem; font-weight: 800; color: var(--text-main); margin: 0; line-height: 1.3;">Gula Ärter Falafel med Rågsikts-Tunnbröd</h2>
+                        <p class="recipe-desc" style="font-size: 0.9rem; color: var(--text-muted); margin: 0; line-height: 1.5; flex-grow: 1;">Ugnsbakad falafel på svenska gula ärter som ger maximalt med protein per krona, i hembakat tunnbröd.</p>
+                        <div class="recipe-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: auto; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+                            <span class="recipe-protein" style="font-weight: 700; color: var(--accent-red); font-size: 0.95rem;">💪 28g protein</span>
+                            <a href="recept/pea-falafel.html" class="affiliate-btn" style="display: inline-block; padding: 0.4rem 1rem; background: var(--accent-red); color: #fff; text-decoration: none; border-radius: 9999px; font-size: 0.85rem; font-weight: 700; transition: background 0.2s;">Visa recept →</a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 5. Faux-Pizza -->
+                <article class="recipe-card" data-cat="middag" style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--shadow-sm); transition: transform 0.2s;">
+                    <div class="recipe-img"><img src="img_faux-pizza.png" alt="Proteinrik Faux-Pizza på Havresmet och Kvarg"></div>
+                    <div class="recipe-content" style="padding: 1.5rem; display: flex; flex-direction: column; flex-grow: 1; gap: 0.75rem;">
+                        <div class="recipe-meta" style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-muted);">
+                            <span>⏱ 15 min</span>
+                            <span class="recipe-badge middag" style="background: #fee2e2; color: #e11d48; padding: 0.15rem 0.5rem; border-radius: 4px; font-weight: 700; font-size: 0.75rem;">Middag</span>
+                        </div>
+                        <h2 class="recipe-title" style="font-size: 1.2rem; font-weight: 800; color: var(--text-main); margin: 0; line-height: 1.3;">Proteinrik Faux-Pizza på Havresmet och Kvarg</h2>
+                        <p class="recipe-desc" style="font-size: 0.9rem; color: var(--text-muted); margin: 0; line-height: 1.5; flex-grow: 1;">En proteinsnabb pizza med en botten gjord på havremjöl och äggvita, klar på en kvart.</p>
+                        <div class="recipe-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: auto; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+                            <span class="recipe-protein" style="font-weight: 700; color: var(--accent-red); font-size: 0.95rem;">💪 42g protein</span>
+                            <a href="recept/faux-pizza.html" class="affiliate-btn" style="display: inline-block; padding: 0.4rem 1rem; background: var(--accent-red); color: #fff; text-decoration: none; border-radius: 9999px; font-size: 0.85rem; font-weight: 700; transition: background 0.2s;">Visa recept →</a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 6. Bakad Havrebar -->
+                <article class="recipe-card" data-cat="frukost" style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--shadow-sm); transition: transform 0.2s;">
+                    <div class="recipe-img"><img src="img_oat_bar.png" alt="Bakad Högprotein-Havrebar med Whey-80"></div>
+                    <div class="recipe-content" style="padding: 1.5rem; display: flex; flex-direction: column; flex-grow: 1; gap: 0.75rem;">
+                        <div class="recipe-meta" style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-muted);">
+                            <span>⏱ 20 min</span>
+                            <span class="recipe-badge frukost" style="background: #fef3c7; color: #d97706; padding: 0.15rem 0.5rem; border-radius: 4px; font-weight: 700; font-size: 0.75rem;">Frukost</span>
+                        </div>
+                        <h2 class="recipe-title" style="font-size: 1.2rem; font-weight: 800; color: var(--text-main); margin: 0; line-height: 1.3;">Bakad Högprotein-Havrebar med Whey-80</h2>
+                        <p class="recipe-desc" style="font-size: 0.9rem; color: var(--text-muted); margin: 0; line-height: 1.5; flex-grow: 1;">Praktiska bars bakade på havregryn och Whey-80, utmärkta för billigt och smidigt mellanmål.</p>
+                        <div class="recipe-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: auto; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+                            <span class="recipe-protein" style="font-weight: 700; color: var(--accent-red); font-size: 0.95rem;">💪 18g protein</span>
+                            <a href="recept/oat-bar.html" class="affiliate-btn" style="display: inline-block; padding: 0.4rem 1rem; background: var(--accent-red); color: #fff; text-decoration: none; border-radius: 9999px; font-size: 0.85rem; font-weight: 700; transition: background 0.2s;">Visa recept →</a>
                         </div>
                     </div>
                 </article>
 
             </div>
+            
             <footer class="app-footer" style="text-align: center; padding: 2rem 0; border-top: 1px solid var(--border-color); margin-top: 4rem; font-size: 0.85rem; color: var(--text-muted);">
                 <p>&copy; 2026 proteinpriser.se. Alla rättigheter reserverade. | <a href="integritetspolicy.html" style="color: var(--accent-red); text-decoration: none; font-weight: 600;">Integritetspolicy</a></p>
             </footer>
         </div>
     </main>
-
-    <!-- Recipe Detail Modal -->
-    <div id="recipeModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="recipeModalTitle">
-        <div class="modal-content" style="max-width: 650px;">
-            <button class="close-btn" id="closeRecipeModalBtn" aria-label="Stäng recept">×</button>
-            <div id="recipeModalBody">
-                <!-- Dynamically populated by recipe_app.js -->
-            </div>
-        </div>
-    </div>
 
     <script src="recipe_app.js"></script>
 </body>

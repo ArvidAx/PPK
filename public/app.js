@@ -103,8 +103,43 @@ function setFiltersEnabled(enabled) {
     }
 }
 
+function initHamburgerMenu() {
+    const hamburger = document.querySelector('.hamburger-menu');
+    const navLinks = document.querySelector('.nav-links');
+    if (!hamburger || !navLinks) return;
+
+    hamburger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = navLinks.classList.toggle('active');
+        hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        hamburger.textContent = isOpen ? '✕' : '☰';
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+            navLinks.classList.remove('active');
+            hamburger.setAttribute('aria-expanded', 'false');
+            hamburger.textContent = '☰';
+        }
+    });
+
+    // Close menu on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+            navLinks.classList.remove('active');
+            hamburger.setAttribute('aria-expanded', 'false');
+            hamburger.textContent = '☰';
+        }
+    });
+}
+
 // Init
 async function init() {
+    initHamburgerMenu();
+    if (!document.getElementById('search')) {
+        return;
+    }
     try {
         // Setup event listeners, load existing shopping list and dynamic values immediately (non-blocking)
         setupEventListeners();
@@ -375,8 +410,13 @@ const SYNONYMS = {
 };
 
 function isSmartMatch(text, query) {
-    text = text.toLowerCase();
-    query = query.toLowerCase().trim();
+    // Guard against null, non-string, or dangerous input
+    if (text == null || query == null) return false;
+    text = String(text).toLowerCase().trim();
+    // Strip any characters that aren't letters, digits, spaces or Swedish chars
+    // This prevents regex DoS and XSS via crafted search strings
+    query = String(query).toLowerCase().trim().replace(/[^a-zåäöA-ZÅÄÖ0-9\s\-]/g, '');
+    if (query.length === 0) return false;
     
     // Synonym expansion
     if (SYNONYMS[query]) {
@@ -416,10 +456,12 @@ function applyFilters(resetPage = false) {
         clickCount = 0;
     }
 
-    const search = searchInput.value.toLowerCase().trim();
-    const store = storeSelect.value;
-    const maxPrice = parseFloat(maxPriceInput.value);
-    const minProtein = parseFloat(minProteinInput.value);
+    // Sanitize: strip non-alphanumeric/Swedish chars to prevent XSS and regex DoS
+    const rawSearch = searchInput ? (searchInput.value || '') : '';
+    const search = rawSearch.toLowerCase().trim().replace(/[^a-zåäöA-ZÅÄÖ0-9\s\-]/g, '');
+    const store = storeSelect ? storeSelect.value : '';
+    const maxPrice = parseFloat(maxPriceInput ? maxPriceInput.value : Infinity) || Infinity;
+    const minProtein = parseFloat(minProteinInput ? minProteinInput.value : 0) || 0;
 
     filteredData = allData.filter(item => {
         if (activeBasket && BASKETS[activeBasket]) {
@@ -550,7 +592,7 @@ function renderTable() {
         const a = document.createElement('a');
         a.href = validUrl;
         a.target = '_blank';
-        a.rel = 'noopener noreferrer';
+        a.rel = 'noopener noreferrer sponsored';
         a.className = 'store-link';
         a.textContent = 'Butik →';
         a.addEventListener('click', e => e.stopPropagation());
@@ -676,7 +718,7 @@ function renderShoppingList() {
                 <span class="shopping-item-name">${esc(item.name)}</span>
                 <span class="shopping-item-sub">${esc(item.brand)} | ${esc(item.store)}</span>
                 <span class="shopping-item-price-unit">${fmt(price, 2)} kr/st</span>
-                <a href="${esc(itemUrl)}" target="_blank" rel="noopener noreferrer" class="shopping-item-store-link">Köp på ${esc(item.store || 'butiken')} →</a>
+                <a href="${esc(itemUrl)}" target="_blank" rel="noopener noreferrer sponsored" class="shopping-item-store-link">Köp på ${esc(item.store || 'butiken')} →</a>
             </div>
             <div class="shopping-item-controls">
                 <button class="btn-qty btn-minus" aria-label="Minska antal ${esc(item.name)}">−</button>
@@ -812,7 +854,7 @@ function openModal(item) {
 
         <div class="modal-footer">
             <button class="btn btn-secondary" id="closeModalFooterBtn">Stäng</button>
-            <a class="btn btn-primary" href="${esc(validUrl)}" target="_blank" rel="noopener noreferrer">Visa på ${esc(item.store) || 'butiken'} →</a>
+            <a class="btn btn-primary" href="${esc(validUrl)}" target="_blank" rel="noopener noreferrer sponsored">Visa på ${esc(item.store) || 'butiken'} →</a>
         </div>
     `;
 
@@ -958,7 +1000,7 @@ function addActiveBasketToCart() {
 }
 
 function updateDynamicPPK() {
-    const ppk = 7.5;
+    const ppk = 3.0;
     
     const elements = document.querySelectorAll('.dynamic-ppk');
     elements.forEach(el => {
