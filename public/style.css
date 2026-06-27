@@ -2184,13 +2184,12 @@ tbody tr {
 /* =========================================
    RESULTS CONTROL BAR & GRID/CARD VIEW
    ========================================= */
-.results-controls-bar {
+.results-controls-bar, .controls-wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 1.5rem 0 1rem 0;
-    gap: 1rem;
-    flex-wrap: wrap;
+    margin-bottom: 20px;
+    padding: 0 10px;
 }
 .sort-controls {
     display: flex;
@@ -2203,19 +2202,19 @@ tbody tr {
     color: var(--text-muted);
 }
 .sort-dropdown {
-    padding: 0.4rem 1.75rem 0.4rem 0.75rem;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-    background: var(--card-bg) url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 0.75rem center;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 8px 32px 8px 12px;
+    background: #ffffff url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 0.75rem center;
     background-size: 1rem;
     font-family: inherit;
     font-size: 0.9rem;
     color: var(--text-main);
     font-weight: 600;
     cursor: pointer;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
 }
 .sort-dropdown:focus {
     outline: none;
@@ -2225,11 +2224,11 @@ tbody tr {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    background: var(--card-bg);
-    color: var(--text-main);
+    padding: 8px 16px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    background: #f8fafc;
+    color: #334155;
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
@@ -2238,11 +2237,12 @@ tbody tr {
 .view-toggle:hover {
     border-color: var(--accent-red);
     color: var(--accent-red);
+    background: #f8fafc;
 }
 .view-toggle.active {
-    background: var(--accent-red);
-    color: #fff;
     border-color: var(--accent-red);
+    color: var(--accent-red);
+    background: #f8fafc;
 }
 
 /* Results Grid container when toggled */
@@ -2277,18 +2277,22 @@ tbody tr {
 .results-grid .card-image-box {
     position: relative;
     width: 100%;
-    height: 160px;
-    background: #f8fafc;
+    height: 180px;
+    background: #ffffff;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
     border-bottom: 1px solid var(--border-color);
+    padding: 12px;
+    box-sizing: border-box;
 }
 .results-grid .card-image-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
     display: block;
     will-change: transform;
 }

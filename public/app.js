@@ -440,10 +440,10 @@ function updateViewToggleUI() {
     const viewToggleBtn = document.getElementById('view-toggle-btn');
     if (!viewToggleBtn) return;
     if (currentView === "grid") {
-        viewToggleBtn.innerHTML = 'Listvy / Tabell ☰';
+        viewToggleBtn.innerHTML = '&#9776; Lista';
         viewToggleBtn.classList.add('active');
     } else {
-        viewToggleBtn.innerHTML = 'Fyrkantsvy / Kort ⊞';
+        viewToggleBtn.innerHTML = '&#8862; Kort';
         viewToggleBtn.classList.remove('active');
     }
 }
