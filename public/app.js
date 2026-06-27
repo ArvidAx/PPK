@@ -83,10 +83,45 @@ function fmt(val, decimals = 1, suffix = '') {
     return Number(val).toFixed(decimals) + suffix;
 }
 
+function setFiltersEnabled(enabled) {
+    const inputs = [searchInput, storeSelect, maxPriceInput, minProteinInput];
+    inputs.forEach(input => {
+        if (input) input.disabled = !enabled;
+    });
+
+    document.querySelectorAll('.basket-btn').forEach(btn => {
+        btn.disabled = !enabled;
+        btn.style.opacity = enabled ? '1' : '0.6';
+        btn.style.cursor = enabled ? 'pointer' : 'not-allowed';
+    });
+
+    const categoryBtn = document.getElementById('categorySelectBtn');
+    if (categoryBtn) {
+        categoryBtn.disabled = !enabled;
+        categoryBtn.style.opacity = enabled ? '1' : '0.6';
+        categoryBtn.style.cursor = enabled ? 'pointer' : 'not-allowed';
+    }
+}
+
 // Init
 async function init() {
     try {
-        // Fetch and display last updated time (non-blocking)
+        // Setup event listeners, load existing shopping list and dynamic values immediately (non-blocking)
+        setupEventListeners();
+        loadShoppingList();
+        updateDynamicPPK();
+        setFiltersEnabled(false);
+
+        // Show a loading indicator in the table body
+        if (tableBody) {
+            tableBody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding: 4rem 2rem; color: var(--text-muted);">
+                <div class="loading-spinner"></div>
+                <div style="font-weight: 600; font-size: 1.05rem; margin-top: 0.5rem;">Laddar över 12 000 produkter...</div>
+                <div style="font-size: 0.85rem; margin-top: 0.25rem;">Hämtar färska proteindata från Hemköp och Willys</div>
+            </td></tr>`;
+        }
+
+        // Fetch and display last updated time (non-blocking, async background check)
         fetch('last_updated.json')
             .then(res => {
                 if (!res.ok) throw new Error();
@@ -114,6 +149,7 @@ async function init() {
                 if (lastUpdatedEl) lastUpdatedEl.textContent = '';
             });
 
+        // Fetch and load products database in the background without blocking main UI thread
         const response = await fetch('data.json');
         if (!response.ok) throw new Error('Kunde inte hämta data.json');
         const rawData = await response.json();
@@ -128,10 +164,10 @@ async function init() {
             };
         }).filter(item => item.price_sek != null && item.protein_per_100g != null);
 
+        // Populate filters, re-render shopping list (to resolve store comparisons), enable filters and show data
         populateCategories();
-        setupEventListeners();
-        loadShoppingList();
-        updateDynamicPPK();
+        renderShoppingList();
+        setFiltersEnabled(true);
         
         // Check for url param to pre-select basket
         const urlParams = new URLSearchParams(window.location.search);
@@ -143,9 +179,11 @@ async function init() {
         }
     } catch (error) {
         console.error(error);
-        tableBody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding: 2rem; color:#e11d48;">
-            Kunde inte ladda produktdata. Kör skrapan och försök igen.
-        </td></tr>`;
+        if (tableBody) {
+            tableBody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding: 2rem; color:#e11d48; font-weight:600;">
+                Kunde inte ladda produktdata. Kör skrapan och försök igen.
+            </td></tr>`;
+        }
     }
 }
 
