@@ -1,7 +1,7 @@
 # PPK – Protein per Krona
 
 En webbaserad kalkylator som hittar de mest kostnadseffektiva proteinkällorna på Hemköp och Willys, mätt i gram protein per spenderad krona (PPK).
-Hitta den på proteinpriser.se
+Hitta den på Hitta den på [proteinpriser.se](https://proteinpriser.se)
 
 ## Arkitektur
 
