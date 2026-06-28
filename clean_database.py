@@ -32,7 +32,32 @@ def clean_data_file(filepath):
         display_volume = item.get("display_volume", "")
         protein_100g = item.get("protein_per_100g")
         
-        if price is None or price <= 0 or protein_100g is None:
+        if price is None or price <= 0:
+            continue
+
+        name_lower = name.lower()
+        brand_lower = (item.get("brand") or "").lower()
+        
+        # 1. Permanent Blocklist for invalid names and brands
+        blacklisted_names = ["vanilj syrup sockerfri", "grönt te", "fänkålsfrön hela burk", "shirataki nudlar"]
+        blacklisted_brands = ["touch of taste", "dotetorp", "borekulla gård"]
+        
+        if any(b_name in name_lower for b_name in blacklisted_names) or any(b_brand in brand_lower for b_brand in blacklisted_brands):
+            continue
+
+        # 2. Exclude products without nutrition values (both missing or 0)
+        raw_kcal = item.get('calories_per_100g')
+        
+        try:
+            p_val = float(protein_100g) if protein_100g is not None else 0.0
+        except (ValueError, TypeError):
+            p_val = 0.0
+        try:
+            k_val = float(raw_kcal) if raw_kcal is not None else 0.0
+        except (ValueError, TypeError):
+            k_val = 0.0
+
+        if (protein_100g is None and raw_kcal is None) or (p_val == 0.0 and k_val == 0.0):
             continue
 
         full_text = " ".join([name, category, desc or ""]).lower()
@@ -44,7 +69,7 @@ def clean_data_file(filepath):
         else:
             has_egg_sub = str(underkategori).lower() == "ägg"
         
-        is_egg = (category == "mejeri-ost-och-agg" and (has_egg_sub or "ägg" in name.lower()))
+        is_egg = (category == "mejeri-ost-och-agg" and (has_egg_sub or "ägg" in name_lower))
         
         if is_egg:
             egg_count = None
@@ -99,12 +124,12 @@ def clean_data_file(filepath):
         ppk = total_protein / price
 
         # 3. Beräkna Protein per 100 kcal (Strikt matematisk spärr)
-        raw_kcal = item.get('calories_per_100g')
         try:
             kcal = float(raw_kcal) if raw_kcal is not None else 0.0
         except (ValueError, TypeError):
             kcal = 0.0
 
+        parsed_raw_kcal = kcal
         if kcal <= 0:
             kcal = 4.0 * protein_100g # Fallback: proteinet självt sätter minimikalorivärdet
 
@@ -114,7 +139,10 @@ def clean_data_file(filepath):
 
         # Defensiv max-spärr: Inget livsmedel i universum kan överstiga dessa naturlagar
         if p_per_100kcal > 25.0: 
-            p_per_100kcal = 25.0
+            if parsed_raw_kcal <= 0.0 or "syrup" in name_lower or "sirap" in name_lower or "vatten" in name_lower or "dryck" in name_lower:
+                continue # Skip zero-calorie products showing high protein/kcal anomalies
+            else:
+                p_per_100kcal = 0.0 # Rounding anomaly fallback
             
         if ppk > 15.0: # Ingen vanlig matvara ger mer än 15g protein per krona live
             continue # Kassera anomalin
