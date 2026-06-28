@@ -267,11 +267,16 @@ def is_prepared_yield_volume(display_volume: Optional[str], product_text: str = 
 
     product_l = (product_text or "").lower()
     prepared_keywords = (
-        "buljong", "fond", "sås", "sas", "soppa", "potatismos", "pulver", "tärning", "tarning"
+        "buljong", "fond", "sås", "sas", "soppa", "potatismos", "pulver", "tärning", "tarning", "soppor", "såsmix", "sasmix", "dipp", "dressingmix"
     )
 
     if not any(keyword in product_l for keyword in prepared_keywords):
         return False
+
+    # Om display_volume har liter/port etc. och vi har prepared_keywords, räknas det som färdigvolym
+    if any(unit in text for unit in ["l", "liter", "dl", "cl", "ml", "port"]):
+        if not (text.endswith("g") or "gram" in text):
+            return True
 
     return bool(PREPARED_GRAMS_PER_LITER_RE.match(text))
 
@@ -328,8 +333,39 @@ def resolve_package_weight_g(
     """
     product_text = " ".join(filter(None, [name, description]))
 
+    is_dry = False
+    dry_keywords = ["soppa", "soppor", "buljong", "torrsoppa", "såsmix", "sasmix", "pulver", "dipp", "dressingmix", "potatismos"]
+    if any(kw in product_text.lower() for kw in dry_keywords):
+        is_dry = True
+
+    has_liquid_volume = False
+    if display_volume:
+        vol_clean = display_volume.lower().strip()
+        if any(unit in vol_clean for unit in ["l", "liter", "dl", "cl", "ml", "port"]):
+            if not (vol_clean.endswith("g") or "gram" in vol_clean):
+                has_liquid_volume = True
+
+    if is_dry and has_liquid_volume:
+        dry_weight = estimate_dry_package_weight_g(
+            display_volume=display_volume,
+            name=name,
+            description=description,
+            product_detail=product_detail,
+        )
+        if dry_weight:
+            return dry_weight
+
     weight = parse_package_weight_g(display_volume, url, product_text)
     if weight:
+        if is_dry and has_liquid_volume:
+            dry_weight = estimate_dry_package_weight_g(
+                display_volume=display_volume,
+                name=name,
+                description=description,
+                product_detail=product_detail,
+            )
+            if dry_weight:
+                return dry_weight
         return weight
 
     dry_weight = estimate_dry_package_weight_g(
@@ -865,30 +901,53 @@ def scrape_store(
                     if package_weight_g:
                         product_entry["package_weight_g"] = package_weight_g
 
-                    # Särskild hantering för ägg där vikt saknas men kan uppskattas från beskrivning/namn
-                    if not package_weight_g:
-                        egg_weight = estimate_egg_package_weight(
-                            display_volume=display_volume,
-                            name=name,
-                            description=product_entry["description"]
-                        )
-                        if egg_weight:
-                            package_weight_g = egg_weight
+                    # Särskild hantering för ägg
+                    is_egg_product = False
+                    if (
+                        slug == "mejeri-ost-och-agg" 
+                        and ("ägg" in name.lower() or "ägg" in product_entry["description"].lower())
+                    ):
+                        exclusions = ["nudlar", "pastej", "röra", "sallad", "smörgås", "skinka", "bacon", "paj", "glass", "våffla", "kakor", "bröd", "ost"]
+                        if not any(excl in name.lower() for excl in exclusions):
+                            is_egg_product = True
+
+                    egg_count = None
+                    if is_egg_product:
+                        for text in [display_volume, name, product_entry["description"]]:
+                            if not text:
+                                continue
+                            count_match = re.search(r"(\d+)\s*(?:p|st|pack|stycken|packe)\b", text.lower())
+                            if count_match:
+                                egg_count = int(count_match.group(1))
+                                break
+                        
+                        if egg_count and egg_count > 0:
+                            package_weight_g = egg_count * 55.0
                             product_entry["package_weight_g"] = package_weight_g
-                            
-                            # Om jämförpris saknas för äggen, räkna ut det baserat på estimerad vikt
-                            if not compare_price_per_kg and price_sek:
+                            if price_sek and price_sek > 0:
                                 compare_price_per_kg = (price_sek / package_weight_g) * 1000
                                 product_entry["compare_price_per_kg"] = compare_price_per_kg
                                 product_entry["compare_price"] = f"{compare_price_per_kg:.2f} kr/kg (beräknat)"
 
+                    # Särskild hantering för torrsoppa / pulver / buljong
+                    is_dry = False
+                    dry_keywords = ["soppa", "soppor", "buljong", "torrsoppa", "såsmix", "sasmix", "pulver", "dipp", "dressingmix", "potatismos"]
+                    desc_text = product_entry.get("description") or ""
+                    full_text = " ".join([name, slug, desc_text]).lower()
+                    if any(kw in full_text for kw in dry_keywords):
+                        is_dry = True
+
+                    if is_dry and package_weight_g and price_sek:
+                        compare_price_per_kg = (price_sek / package_weight_g) * 1000
+                        product_entry["compare_price_per_kg"] = compare_price_per_kg
+                        product_entry["compare_price"] = f"{compare_price_per_kg:.2f} kr/kg (beräknat)"
+
                     # Omräkna jämförpris om produkten har färdigvolym (t.ex. buljong, fond) där butiken anger jämförpris på färdig utspädd produkt,
                     # eller om jämförpris saknas helt.
-                    if (
+                    elif (
                         package_weight_g and price_sek
                         and is_prepared_yield_volume(display_volume, f"{name} {product_entry['description']}")
                     ):
-                        # Buljong m.m.: felaktigt jämförpris baserat på färdigvolym (kr/l ≈ kr/kg)
                         compare_price_per_kg = (price_sek / package_weight_g) * 1000
                         product_entry["compare_price_per_kg"] = compare_price_per_kg
                         product_entry["compare_price"] = f"{compare_price_per_kg:.2f} kr/kg (beräknat)"
