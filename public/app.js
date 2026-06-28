@@ -1490,3 +1490,43 @@ function updateBasketUI(currentBasketItems, fullDatabase) {
 }
 
 init();
+
+document.addEventListener("DOMContentLoaded", () => {
+    const banner = document.getElementById("cookie-banner");
+    const acceptBtn = document.getElementById("cookie-accept");
+    const declineBtn = document.getElementById("cookie-decline");
+
+    if (!banner) return;
+
+    const consent = localStorage.getItem("cookie_consent_choice");
+
+    // Funktion för att ladda Google AdSense dynamiskt
+    const loadAdSense = () => {
+        if (document.querySelector('script[src*="adsbygoogle"]')) return;
+        const script = document.createElement("script");
+        script.async = true;
+        script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXX";
+        script.crossOrigin = "anonymous";
+        document.head.appendChild(script);
+    };
+
+    // Hantera existerande val
+    if (!consent) {
+        banner.classList.remove("hidden");
+    } else if (consent === "accepted") {
+        loadAdSense();
+    }
+
+    // Event Listeners för knappar
+    acceptBtn.addEventListener("click", () => {
+        localStorage.setItem("cookie_consent_choice", "accepted");
+        banner.classList.add("hidden");
+        loadAdSense();
+    });
+
+    declineBtn.addEventListener("click", () => {
+        localStorage.setItem("cookie_consent_choice", "declined");
+        banner.classList.add("hidden");
+        // Ta inte bort funktionalitet för localStorage shoppinglistan då den är strikt nödvändig (GDPR-undantag)
+    });
+});

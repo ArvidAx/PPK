@@ -103,10 +103,29 @@ def scrape_product(url, brand_name, fallback_price):
                             price = _clean(text_price.group(1))
                             print(f"Hittade pris via CSS/Text match: {price}")
             
-            # 2. Bildsökning
-            img_match = re.search(r'property="og:image"\s+content="([^"]+)"', html)
-            if img_match:
-                image_url = img_match.group(1)
+            # 2. Bildsökning med BeautifulSoup (Mycket mer robust!)
+            soup = BeautifulSoup(html, 'html.parser')
+            meta_img = soup.find("meta", property="og:image") or soup.find("meta", attrs={"name": "og:image"})
+            if meta_img and meta_img.get("content"):
+                image_url = meta_img["content"]
+                
+            # Om Gymgrossisten, kolla efter produktbilden med query params
+            if "gymgrossisten.com" in url:
+                for img in soup.find_all("img"):
+                    src = img.get("src") or ""
+                    if "Star_Nutrition" in src and "Whey80" in src:
+                        image_url = src
+                        break
+                        
+            # Om Tyngre, kolla efter centracdn-bilder
+            elif "tyngre.se" in url:
+                for img in soup.find_all("img"):
+                    src = img.get("src") or ""
+                    if "tyngre.centracdn.net" in src and "original" in src:
+                        image_url = src
+                        break
+            
+            if image_url:
                 print(f"Hittade bild-URL: {image_url}")
         else:
             print(f"[VARNING] Kunde inte hämta sidan, HTTP-kod {r.status_code}. Använder fallback-pris.")
@@ -185,8 +204,6 @@ def main():
         }
     ]
     
-    cards_html = []
-    
     for p in products:
         price, img_url = scrape_product(p["url"], p["brand"], p["fallback_price"])
         
@@ -201,7 +218,12 @@ def main():
         ppk = total_protein / price
         p["ppk"] = round(ppk, 2)
         p["price"] = price
-        
+
+    # Sortera efter PPK i fallande ordning
+    products.sort(key=lambda x: x["ppk"], reverse=True)
+
+    cards_html = []
+    for p in products:
         # Skapa HTML-kort för produkten
         card = f"""
         <article class="recipe-card" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column; transition: transform 0.2s;">
@@ -290,6 +312,17 @@ def main():
     <footer class="app-footer" style="text-align: center; padding: 2rem 0; border-top: 1px solid var(--border-color); margin-top: 4rem; font-size: 0.85rem; color: var(--text-muted);">
         <p>&copy; 2026 proteinpriser.se. Alla rättigheter reserverade. | <a href="integritetspolicy.html" style="color: var(--accent-red); text-decoration: none;">Integritetspolicy</a></p>
     </footer>
+
+    <div id="cookie-banner" class="cookie-banner hidden" role="dialog" aria-labelledby="cookie-title" aria-describedby="cookie-desc">
+        <div class="cookie-content">
+            <h3 id="cookie-title">Vi använder cookies 🍪</h3>
+            <p id="cookie-desc">proteinpriser.se använder cookies för att spara din inköpslista samt för anonym trafikanalys och anpassad annonsering via Google AdSense. Läs mer i vår <a href="integritetspolicy.html">integritetspolicy</a>.</p>
+            <div class="cookie-buttons">
+                <button id="cookie-decline" class="btn-cookie-secondary">Neka</button>
+                <button id="cookie-accept" class="btn-cookie-primary">Godkänn alla</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         // Hamburgarmeny funktionalitet
