@@ -462,15 +462,19 @@ const SYNONYMS = {
     'proteinpulver': ['whey', 'vassle', 'protein-pulver', 'kosttillskott'],
     'vassle': ['whey', 'vassleprotein'],
     'bacon': ['tulip', 'skivad bacon'],
-    'kycklingbröst': ['kycklingbröst', 'kycklingfilé', 'kycklinginnerfilé', 'filé'],
+    'kyckling': ['kyckling', 'chicken', 'kycklingfilé', 'kycklinginnerfilé', 'filé', 'kycklingbröst'],
     'pasta': ['pasta', 'spaghetti', 'makaroner', 'penne', 'fusilli'],
-    'ost': ['ost', 'hårdost', 'riven ost', 'herrgård', 'präst', 'svecia'],
-    'ägg': ['ägg'],
+    'ost': ['ost', 'hårdost', 'riven ost', 'herrgård', 'präst', 'svecia', 'hushållsost'],
+    'ägg': ['ägg', 'agg'],
     'tonfisk': ['tonfisk', 'tuna'],
     'kvarg': ['kvarg', 'kesella', 'lättkvarg'],
     'köttfärs': ['köttfärs', 'kottfars', 'nötfärs', 'blandfärs', 'fläskfärs', 'kycklingfärs', 'färs'],
-    'linser & ärter': ['linser', 'ärter', 'gula ärter', 'röda linser', 'gröna linser', 'linser och ärter', 'linser & ärter'],
-    'linser ärter': ['linser', 'ärter', 'gula ärter', 'röda linser', 'gröna linser', 'linser och ärter', 'linser & ärter']
+    'linser': ['linser', 'röda linser', 'gröna linser'],
+    'ärter': ['ärter', 'gula ärter', 'gröna ärter'],
+    'gula ärter': ['gula ärter', 'gula arter', 'torkade ärter'],
+    'fläskfilé': ['fläskfilé', 'flaskfile', 'fläskytterfilé', 'ytterfilé'],
+    'lövbiff': ['lövbiff', 'lovbiff', 'innanlår'],
+    'proteindryck': ['proteindryck', 'proteinshake', 'shake', 'barebells', 'proffs', 'njie']
 };
 
 const searchIntentMap = {
@@ -492,7 +496,7 @@ function isSmartMatch(text, query) {
     text = String(text).toLowerCase().trim();
     // Strip any characters that aren't letters, digits, spaces or Swedish chars
     // This prevents regex DoS and XSS via crafted search strings
-    query = String(query).toLowerCase().trim().replace(/[^a-zåäöA-ZÅÄÖ0-9\s\-\&]/g, '').replace(/\s+/g, ' ');
+    query = String(query).toLowerCase().trim().replace(/[^a-zåäöA-ZÅÄÖ0-9\s\-]/g, '').replace(/\s+/g, ' ');
     if (query.length === 0) return false;
     
     // Synonym expansion
@@ -500,9 +504,9 @@ function isSmartMatch(text, query) {
         return SYNONYMS[query].some(syn => text.includes(syn)) || text.includes(query);
     }
     
-    // Special case: Kycklingbröst synonym expansion
-    if (query === 'kycklingbröst') {
-        return text.includes('kycklingbröst') || text.includes('kycklingfilé') || text.includes('kycklinginnerfilé') || (text.includes('kyckling') && text.includes('filé'));
+    // Special case: Kyckling synonym expansion
+    if (query === 'kyckling') {
+        return text.includes('kyckling') || text.includes('chicken') || text.includes('kycklingfilé') || text.includes('kycklinginnerfilé') || text.includes('kycklingbröst') || text.includes('filé');
     }
     
     // Sök efter "ost" - undvik ord som "rostade", "frukost", "kosttillskott", "ostronskivling"
@@ -601,6 +605,15 @@ function calculateSearchScore(item, query) {
         }
     }
 
+    if (query === 'ost') {
+        if (name.includes('ost') || brand.includes('ost') || underkategori.some(sub => sub.includes('ost'))) {
+            const excludes = ['rostad', 'rosta', 'rostat', 'frukost', 'kosttillskott', 'ostron', 'frost'];
+            if (!excludes.some(bad => name.includes(bad))) {
+                score += 50;
+            }
+        }
+    }
+
     // 3. Köttfärs Intent
     if (query.includes("färs") || query.includes("fars") || query.includes("köttfärs")) {
         const excludes = ["krydda", "mix", "taco", "sås", "sas", "pajer", "paj", "buljong", "fond", "chips", "bageri"];
@@ -613,13 +626,34 @@ function calculateSearchScore(item, query) {
         }
     }
 
-    // 4. Linser & Ärter Intent
-    if (query.includes("linser") || query.includes("ärter") || query.includes("arter")) {
-        const excludes = ["soppa", "gryta", "färdig", "konserv", "fryst", "chips", "puffar", "snack"];
-        // Om användaren söker brett vill vi prioritera de rena torkade råvarorna (högst PPK)
-        if (excludes.some(bad => name.includes(bad)) && item.ppk < 3.0) {
-            return 0; // Sortera bort färdiga soppor eller dyra snacks som förstör listan
+    if (query.includes("linser")) {
+        if (name.includes("soppa") || name.includes("gryta")) return 0;
+        if (item.category === "skafferi") score += 40;
+    }
+    if (query.includes("ärter") || query.includes("arter")) {
+        if (name.includes("soppa") || name.includes("biffar")) return 0;
+        if (item.category === "skafferi" || item.category === "fryst") score += 40;
+    }
+
+    // 5. Fläskfilé / Lövbiff Intent
+    if (query.includes("filé") || query.includes("biff") || query.includes("fläsk") || query.includes("lövbiff")) {
+        const excludes = ["krydda", "mix", "marinad", "sås", "sas", "chips"];
+        if (excludes.some(bad => name.includes(bad))) return 0;
+    }
+
+    // 6. Proteindryck / Proteinshake Intent
+    if (query.includes("dryck") || query.includes("shake") || query.includes("proteindryck")) {
+        const excludes = ["pulver", "pudding", "bar", "bars", "gröt", "grot"];
+        if (excludes.some(bad => name.includes(bad))) return 0;
+        if (underkategori.some(sub => sub.includes("dryck") || sub.includes("mejeri"))) {
+            score += 40;
         }
+    }
+
+    // 7. Gula ärter Precision
+    if (query === "gula ärter" || query === "gula arter") {
+        if (!name.includes("gula")) return 0; // Sortera bort alla gröna ärter helt vid denna sökning
+        score += 100;
     }
     
     return score;
@@ -632,7 +666,7 @@ function applyFilters(resetPage = false) {
     }
 
     const rawSearch = searchInput ? (searchInput.value || '') : '';
-    const search = rawSearch.toLowerCase().trim().replace(/[^a-zåäöA-ZÅÄÖ0-9\s\-\&]/g, '').replace(/\s+/g, ' ');
+    const search = rawSearch.toLowerCase().trim().replace(/[^a-zåäöA-ZÅÄÖ0-9\s\-\&]/g, ' ').replace(/\s+/g, ' ');
     const store = storeSelect ? storeSelect.value : '';
     const maxPrice = parseFloat(maxPriceInput ? maxPriceInput.value : Infinity) || Infinity;
     const minProtein = parseFloat(minProteinInput ? minProteinInput.value : 0) || 0;
