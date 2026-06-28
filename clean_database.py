@@ -40,7 +40,7 @@ def clean_data_file(filepath):
         
         # 1. Permanent Blocklist for invalid names and brands
         blacklisted_names = ["vanilj syrup sockerfri", "grönt te", "fänkålsfrön hela burk", "shirataki nudlar", "mintblad"]
-        blacklisted_brands = ["touch of taste", "dotetorp", "borekulla gård"]
+        blacklisted_brands = ["touch of taste", "dotetorp", "borekulla gård", "clipper", "lipton"]
         
         if any(b_name in name_lower for b_name in blacklisted_names) or any(b_brand in brand_lower for b_brand in blacklisted_brands):
             continue
