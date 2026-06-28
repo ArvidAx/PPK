@@ -42,14 +42,14 @@ def main():
     run_cmd(f"{sys.executable} -u clean_database.py")
 
     # 4. Kontrollera om data.json faktiskt har ändrats
-    status = subprocess.run("git status --porcelain public/data.json", shell=True, capture_output=True, text=True)
+    status = subprocess.run("git status --porcelain public/data.json public/nutrition_cache.json", shell=True, capture_output=True, text=True)
     if not status.stdout.strip():
-        logging.info("Inga förändringar i data.json sedan igår. Inget att pusha.")
+        logging.info("Inga förändringar i data.json eller cachen sedan igår. Inget att pusha.")
         return
 
     # 5. Lägg till och committa
     logging.info("Sparar nya data och uppdateringstid till Git...")
-    run_cmd("git add public/data.json public/last_updated.json")
+    run_cmd("git add public/data.json public/last_updated.json public/nutrition_cache.json")
     
     date_str = datetime.now().strftime("%Y-%m-%d")
     # Lägg märke till [skip ci] ifall du inte vill att github actions ska bygga, men Cloudflare Pages sköter sig självt.

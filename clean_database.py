@@ -39,8 +39,8 @@ def clean_data_file(filepath):
         brand_lower = (item.get("brand") or "").lower()
         
         # 1. Permanent Blocklist for invalid names and brands
-        blacklisted_names = ["vanilj syrup sockerfri", "grönt te", "fänkålsfrön hela burk", "shirataki nudlar", "mintblad"]
-        blacklisted_brands = ["touch of taste", "dotetorp", "borekulla gård", "clipper", "lipton"]
+        blacklisted_names = ["vanilj syrup sockerfri", "grönt te", "fänkålsfrön hela burk", "shirataki nudlar", "mintblad", "potatismos klassiskt 33 port", "kalvfond"]
+        blacklisted_brands = ["touch of taste", "dotetorp", "borekulla gård", "clipper", "lipton", "podravka"]
         
         if any(b_name in name_lower for b_name in blacklisted_names) or any(b_brand in brand_lower for b_brand in blacklisted_brands):
             continue
@@ -49,15 +49,15 @@ def clean_data_file(filepath):
         raw_kcal = item.get('calories_per_100g')
         
         try:
-            p_val = float(protein_100g) if protein_100g is not None else 0.0
+            protein_100g = float(protein_100g) if protein_100g is not None else 0.0
         except (ValueError, TypeError):
-            p_val = 0.0
+            protein_100g = 0.0
         try:
             k_val = float(raw_kcal) if raw_kcal is not None else 0.0
         except (ValueError, TypeError):
             k_val = 0.0
 
-        if (protein_100g is None and raw_kcal is None) or (p_val == 0.0 and k_val == 0.0):
+        if (protein_100g == 0.0 and k_val == 0.0):
             continue
 
         full_text = " ".join([name, category, desc or ""]).lower()

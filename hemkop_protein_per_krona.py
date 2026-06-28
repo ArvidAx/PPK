@@ -24,11 +24,21 @@ import logging
 import re
 import time
 import random
+import threading
 from typing import Optional
 from urllib.parse import urljoin
 
 import requests
 from bs4 import BeautifulSoup
+
+# Thread safe nutrition cache
+cache_lock = threading.Lock()
+nutrition_cache = {}
+try:
+    with open("public/nutrition_cache.json", "r", encoding="utf-8") as _f:
+        nutrition_cache = json.load(_f)
+except Exception:
+    nutrition_cache = {}
 
 # ── Försök importera pandas (ej obligatoriskt) ──────────────────────────────
 try:
@@ -869,8 +879,17 @@ def scrape_store(
 
                 # ── Hämta näringsvärden (om aktiverat) ──
                 if fetch_nutrition:
-                    _polite_sleep()
-                    detail = fetch_product_details(session, base_url, code)
+                    detail = None
+                    with cache_lock:
+                        if code in nutrition_cache:
+                            detail = nutrition_cache[code]
+                    
+                    if detail is None:
+                        _polite_sleep()
+                        detail = fetch_product_details(session, base_url, code)
+                        if detail:
+                            with cache_lock:
+                                nutrition_cache[code] = detail
                     
                     product_entry["description"] = detail.get("description", "")
 
@@ -1174,6 +1193,15 @@ if __name__ == "__main__":
     with open(args.output_json, "w", encoding="utf-8") as f:
         _json.dump(products, f, ensure_ascii=False, indent=2)
     log.info("Resultat sparade till '%s'.", args.output_json)
+
+    # Spara näringscache
+    try:
+        cache_path = "public/nutrition_cache.json"
+        with open(cache_path, "w", encoding="utf-8") as f:
+            _json.dump(nutrition_cache, f, ensure_ascii=False, indent=2)
+        log.info("Näringscache sparad till '%s'.", cache_path)
+    except Exception as exc:
+        log.error("Kunde inte spara näringscache: %s", exc)
 
     last_updated_json = os.path.join(os.path.dirname(args.output_json) or ".", "last_updated.json")
     with open(last_updated_json, "w", encoding="utf-8") as f:
