@@ -16,6 +16,46 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://proteinpriser.se/kunskap.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://proteinpriser.se/artikel-clean-bulking.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://proteinpriser.se/artikel-hur-mycket.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://proteinpriser.se/artikel-mat-vs-pulver.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://proteinpriser.se/artikel-proteinkvalitet.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://proteinpriser.se/artikel-studentpaketet.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://proteinpriser.se/artikel-varfor-protein.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://proteinpriser.se/integritetspolicy.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
     <loc>https://proteinpriser.se/recept/korean-nuggets.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
