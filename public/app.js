@@ -454,7 +454,16 @@ const SYNONYMS = {
     'pulver': ['whey', 'vassle', 'protein-pulver', 'proteinpulver'],
     'proteinpulver': ['whey', 'vassle', 'protein-pulver', 'kosttillskott'],
     'vassle': ['whey', 'vassleprotein'],
-    'bacon': ['tulip', 'skivad bacon']
+    'bacon': ['tulip', 'skivad bacon'],
+    'kycklingbröst': ['kycklingbröst', 'kycklingfilé', 'kycklinginnerfilé', 'filé'],
+    'pasta': ['pasta', 'spaghetti', 'makaroner', 'penne', 'fusilli'],
+    'ost': ['ost', 'hårdost', 'riven ost', 'herrgård', 'präst', 'svecia'],
+    'ägg': ['ägg'],
+    'tonfisk': ['tonfisk', 'tuna'],
+    'kvarg': ['kvarg', 'kesella', 'lättkvarg'],
+    'köttfärs': ['köttfärs', 'kottfars', 'nötfärs', 'blandfärs', 'fläskfärs', 'kycklingfärs', 'färs'],
+    'linser & ärter': ['linser', 'ärter', 'gula ärter', 'röda linser', 'gröna linser', 'linser och ärter', 'linser & ärter'],
+    'linser ärter': ['linser', 'ärter', 'gula ärter', 'röda linser', 'gröna linser', 'linser och ärter', 'linser & ärter']
 };
 
 function isSmartMatch(text, query) {
