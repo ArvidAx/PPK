@@ -52,7 +52,7 @@ def clean_data_file(filepath):
 
         # Check if dry powder or soup
         is_dry = False
-        dry_keywords = ["soppa", "soppor", "buljong", "torrsoppa", "såsmix", "sasmix", "pulver", "dipp", "dressingmix", "potatismos"]
+        dry_keywords = ["soppa", "soppor", "buljong", "torrsoppa", "såsmix", "sasmix", "pulver", "dipp", "dressingmix", "potatismos", "fond", "fonder", "touch of taste", "buljongkoncentrat"]
         if any(kw in full_text for kw in dry_keywords):
             is_dry = True
 
@@ -84,8 +84,13 @@ def clean_data_file(filepath):
                 item["calculation_method"] = "B (torrvikt/pris)"
             else:
                 # If we can't determine the actual dry weight and PPK is high, exclude it
-                if (item.get("protein_per_krona") or 0) > 15:
+                if (item.get("protein_per_krona") or 0) > 8:
                     continue
+
+        # If it's a dry powder or soup/fond, and its PPK is still unreasonably high (> 8), exclude it
+        if is_dry and (item.get("protein_per_krona") or 0) > 8:
+            # Exclude
+            continue
 
         # Final sanity check: if PPK is still unreasonably high (> 15), exclude it
         if (item.get("protein_per_krona") or 0) > 15:

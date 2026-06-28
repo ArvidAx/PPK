@@ -334,7 +334,7 @@ def resolve_package_weight_g(
     product_text = " ".join(filter(None, [name, description]))
 
     is_dry = False
-    dry_keywords = ["soppa", "soppor", "buljong", "torrsoppa", "såsmix", "sasmix", "pulver", "dipp", "dressingmix", "potatismos"]
+    dry_keywords = ["soppa", "soppor", "buljong", "torrsoppa", "såsmix", "sasmix", "pulver", "dipp", "dressingmix", "potatismos", "fond", "fonder", "touch of taste", "buljongkoncentrat"]
     if any(kw in product_text.lower() for kw in dry_keywords):
         is_dry = True
 
@@ -929,9 +929,9 @@ def scrape_store(
                                 product_entry["compare_price_per_kg"] = compare_price_per_kg
                                 product_entry["compare_price"] = f"{compare_price_per_kg:.2f} kr/kg (beräknat)"
 
-                    # Särskild hantering för torrsoppa / pulver / buljong
+                    # Särskild hantering för torrsoppa / pulver / buljong / fond
                     is_dry = False
-                    dry_keywords = ["soppa", "soppor", "buljong", "torrsoppa", "såsmix", "sasmix", "pulver", "dipp", "dressingmix", "potatismos"]
+                    dry_keywords = ["soppa", "soppor", "buljong", "torrsoppa", "såsmix", "sasmix", "pulver", "dipp", "dressingmix", "potatismos", "fond", "fonder", "touch of taste", "buljongkoncentrat"]
                     desc_text = product_entry.get("description") or ""
                     full_text = " ".join([name, slug, desc_text]).lower()
                     if any(kw in full_text for kw in dry_keywords):
