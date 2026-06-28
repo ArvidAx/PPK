@@ -18,9 +18,22 @@ def extract_weight_in_grams(item):
 
     return None
 
-def clean_data_file(filepath):
-    with open(filepath, encoding='utf-8') as f:
+from datetime import datetime
+
+def clean_data_file(raw_filepath, output_filepath):
+    with open(raw_filepath, encoding='utf-8') as f:
         data = json.load(f)
+
+    # Ladda gammal data för historik
+    old_data_dict = {}
+    try:
+        with open(output_filepath, encoding='utf-8') as f:
+            old_data = json.load(f)
+            for old_item in old_data:
+                if 'code' in old_item:
+                    old_data_dict[old_item['code']] = old_item
+    except FileNotFoundError:
+        pass
 
     cleaned_data = []
 
@@ -155,12 +168,25 @@ def clean_data_file(filepath):
         item['package_weight_g'] = weight_g
         item['kcal_per_100g'] = kcal
 
+        # Historikhantering
+        code = item.get('code')
+        price_history = []
+        if code and code in old_data_dict:
+            price_history = old_data_dict[code].get('price_history', [])
+        
+        new_price = float(price)
+        if not price_history or price_history[-1].get('price') != new_price:
+            date_str = datetime.now().strftime("%Y-%m-%d")
+            price_history.append({"date": date_str, "price": new_price})
+            
+        item['price_history'] = price_history
+
         cleaned_data.append(item)
 
-    with open(filepath, 'w', encoding='utf-8') as f:
+    with open(output_filepath, 'w', encoding='utf-8') as f:
         json.dump(cleaned_data, f, ensure_ascii=False, indent=4)
 
-    print(f"Cleaned database saved to {filepath}. Total items: {len(cleaned_data)} (original: {len(data)})")
+    print(f"Cleaned database saved to {output_filepath}. Total items: {len(cleaned_data)} (original: {len(data)})")
 
 if __name__ == "__main__":
-    clean_data_file('public/data.json')
+    clean_data_file('public/raw_data.json', 'public/data.json')

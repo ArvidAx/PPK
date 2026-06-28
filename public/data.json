@@ -26,7 +26,13 @@
             "Hårdost mild/mellan"
         ],
         "p_per_100kcal": 5.41,
-        "kcal_per_100g": 406.3
+        "kcal_per_100g": 406.3,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 76.9
+            }
+        ]
     },
     {
         "name": "Herrgård Mild 28%",
@@ -55,7 +61,13 @@
             "Hårdost mild/mellan"
         ],
         "p_per_100kcal": 7.5,
-        "kcal_per_100g": 360.0
+        "kcal_per_100g": 360.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 76.9
+            }
+        ]
     },
     {
         "name": "Grevé Mild 28%",
@@ -84,7 +96,13 @@
             "Hårdost mild/mellan"
         ],
         "p_per_100kcal": 7.5,
-        "kcal_per_100g": 360.0
+        "kcal_per_100g": 360.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 76.9
+            }
+        ]
     },
     {
         "name": "Plant Cream Vegetabilisk 31%",
@@ -113,7 +131,13 @@
             "Allergi matlagning "
         ],
         "p_per_100kcal": 0.21,
-        "kcal_per_100g": 292.0
+        "kcal_per_100g": 292.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 10.88
+            }
+        ]
     },
     {
         "name": "Plant Cream Vegetabilisk 15%",
@@ -142,7 +166,13 @@
             "Allergi matlagning "
         ],
         "p_per_100kcal": 0.85,
-        "kcal_per_100g": 153.4
+        "kcal_per_100g": 153.4,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 10.88
+            }
+        ]
     },
     {
         "name": "Vaniljvisp Laktosfri 12%",
@@ -171,7 +201,13 @@
             "Desserter"
         ],
         "p_per_100kcal": 2.25,
-        "kcal_per_100g": 204.3
+        "kcal_per_100g": 204.3,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 10.88
+            }
+        ]
     },
     {
         "name": "Visp Låg Laktos 24%",
@@ -200,7 +236,13 @@
             "Grädde"
         ],
         "p_per_100kcal": 0.92,
-        "kcal_per_100g": 240.0
+        "kcal_per_100g": 240.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 10.88
+            }
+        ]
     },
     {
         "name": "Visp 31%",
@@ -229,7 +271,13 @@
             "Grädde"
         ],
         "p_per_100kcal": 0.79,
-        "kcal_per_100g": 305.4
+        "kcal_per_100g": 305.4,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 10.88
+            }
+        ]
     },
     {
         "name": "Matlagning Laktosfri 4%",
@@ -258,7 +306,13 @@
             "Grädde"
         ],
         "p_per_100kcal": 1.83,
-        "kcal_per_100g": 60.0
+        "kcal_per_100g": 60.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 10.88
+            }
+        ]
     },
     {
         "name": "Ice Tea Peach",
@@ -287,7 +341,13 @@
             "Ej kyld fruktdryck"
         ],
         "p_per_100kcal": 1.94,
-        "kcal_per_100g": 25.8
+        "kcal_per_100g": 25.8,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 20.34
+            }
+        ]
     },
     {
         "name": "Ice Tea Lemon",
@@ -316,7 +376,13 @@
             "Ej kyld fruktdryck"
         ],
         "p_per_100kcal": 1.87,
-        "kcal_per_100g": 26.8
+        "kcal_per_100g": 26.8,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 20.34
+            }
+        ]
     },
     {
         "name": "Ice Tea Skogsbär",
@@ -345,7 +411,13 @@
             "Ej kyld fruktdryck"
         ],
         "p_per_100kcal": 1.89,
-        "kcal_per_100g": 26.5
+        "kcal_per_100g": 26.5,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 20.72
+            }
+        ]
     },
     {
         "name": "Iste Vattenmelon",
@@ -374,7 +446,13 @@
             "Ej kyld fruktdryck"
         ],
         "p_per_100kcal": 1.49,
-        "kcal_per_100g": 33.5
+        "kcal_per_100g": 33.5,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 20.72
+            }
+        ]
     },
     {
         "name": "Is Tea Mango Maracuja",
@@ -403,7 +481,13 @@
             "Ej kyld fruktdryck"
         ],
         "p_per_100kcal": 1.98,
-        "kcal_per_100g": 25.3
+        "kcal_per_100g": 25.3,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 20.72
+            }
+        ]
     },
     {
         "name": "Salladsost 21%",
@@ -432,7 +516,13 @@
             "Matlagningsost"
         ],
         "p_per_100kcal": 3.91,
-        "kcal_per_100g": 230.0
+        "kcal_per_100g": 230.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 17.88
+            }
+        ]
     },
     {
         "name": "Salladsost 10%",
@@ -461,7 +551,13 @@
             "Matlagningsost"
         ],
         "p_per_100kcal": 11.63,
-        "kcal_per_100g": 172.0
+        "kcal_per_100g": 172.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 17.88
+            }
+        ]
     },
     {
         "name": "Salladsost Laktosfri 16%",
@@ -490,7 +586,13 @@
             "Matlagningsost"
         ],
         "p_per_100kcal": 7.48,
-        "kcal_per_100g": 214.0
+        "kcal_per_100g": 214.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 18.83
+            }
+        ]
     },
     {
         "name": "Grillost Block 21%",
@@ -519,7 +621,13 @@
             "Matlagningsost"
         ],
         "p_per_100kcal": 7.55,
-        "kcal_per_100g": 278.0
+        "kcal_per_100g": 278.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 17.9
+            }
+        ]
     },
     {
         "name": "Grillost Burgare 21%",
@@ -548,7 +656,13 @@
             "Matlagningsost"
         ],
         "p_per_100kcal": 7.55,
-        "kcal_per_100g": 278.0
+        "kcal_per_100g": 278.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 18.83
+            }
+        ]
     },
     {
         "name": "Grillost Eko",
@@ -577,7 +691,13 @@
             "Matlagningsost"
         ],
         "p_per_100kcal": 7.55,
-        "kcal_per_100g": 278.0
+        "kcal_per_100g": 278.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 19.9
+            }
+        ]
     },
     {
         "name": "Grillost Chili Block 21%",
@@ -606,7 +726,13 @@
             "Matlagningsost"
         ],
         "p_per_100kcal": 7.55,
-        "kcal_per_100g": 278.0
+        "kcal_per_100g": 278.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 18.83
+            }
+        ]
     },
     {
         "name": "Grillost Chili Burgare 2p 21%",
@@ -635,7 +761,13 @@
             "Matlagningsost"
         ],
         "p_per_100kcal": 7.55,
-        "kcal_per_100g": 278.0
+        "kcal_per_100g": 278.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 18.83
+            }
+        ]
     },
     {
         "name": "Grillost Burgare Oregano 2p 21%",
@@ -664,7 +796,13 @@
             "Matlagningsost"
         ],
         "p_per_100kcal": 7.55,
-        "kcal_per_100g": 278.0
+        "kcal_per_100g": 278.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 18.83
+            }
+        ]
     },
     {
         "name": "Burger Cheese Cheddar Skivor Hamburgerost",
@@ -693,7 +831,13 @@
             "Matlagningsost"
         ],
         "p_per_100kcal": 5.65,
-        "kcal_per_100g": 248.0
+        "kcal_per_100g": 248.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 26.9
+            }
+        ]
     },
     {
         "name": "Pressed Orange With Pulp Juice",
@@ -722,7 +866,13 @@
             "Kyld juice & nektar"
         ],
         "p_per_100kcal": 1.95,
-        "kcal_per_100g": 41.1
+        "kcal_per_100g": 41.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 33.97
+            }
+        ]
     },
     {
         "name": "Pressed Orange Without Pulp",
@@ -751,7 +901,13 @@
             "Kyld juice & nektar"
         ],
         "p_per_100kcal": 1.95,
-        "kcal_per_100g": 41.1
+        "kcal_per_100g": 41.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 33.97
+            }
+        ]
     },
     {
         "name": "Strawberry Raspberry Juice",
@@ -780,7 +936,13 @@
             "Kyld juice & nektar"
         ],
         "p_per_100kcal": 0.0,
-        "kcal_per_100g": 35.9
+        "kcal_per_100g": 35.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 34.92
+            }
+        ]
     },
     {
         "name": "Multi Fruit Multivitamin Fruktdryck",
@@ -809,7 +971,13 @@
             "Kyld juice & nektar"
         ],
         "p_per_100kcal": 0.0,
-        "kcal_per_100g": 48.8
+        "kcal_per_100g": 48.8,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 33.97
+            }
+        ]
     },
     {
         "name": "Apple Fruktdryck",
@@ -838,7 +1006,13 @@
             "Kyld juice & nektar"
         ],
         "p_per_100kcal": 0.42,
-        "kcal_per_100g": 47.3
+        "kcal_per_100g": 47.3,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 33.97
+            }
+        ]
     },
     {
         "name": "Hamburgergurka Långskivade",
@@ -867,7 +1041,13 @@
             "Inlagda grönsaker"
         ],
         "p_per_100kcal": 0.67,
-        "kcal_per_100g": 74.3
+        "kcal_per_100g": 74.3,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 28.29
+            }
+        ]
     },
     {
         "name": "Hummus Karamelliserad Lök",
@@ -896,7 +1076,13 @@
             "Sås, dressing & majonnäs"
         ],
         "p_per_100kcal": 2.24,
-        "kcal_per_100g": 246.0
+        "kcal_per_100g": 246.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 24.51
+            }
+        ]
     },
     {
         "name": "Mayonnaise",
@@ -925,7 +1111,13 @@
             "Sås, dressing & majonnäs"
         ],
         "p_per_100kcal": 0.15,
-        "kcal_per_100g": 682.0
+        "kcal_per_100g": 682.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 27.35
+            }
+        ]
     },
     {
         "name": "Hamburger Dressing",
@@ -954,7 +1146,13 @@
             "Sås, dressing & majonnäs"
         ],
         "p_per_100kcal": 0.42,
-        "kcal_per_100g": 239.0
+        "kcal_per_100g": 239.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 27.35
+            }
+        ]
     },
     {
         "name": "Roasted Garlic Mayonnaise",
@@ -983,7 +1181,13 @@
             "Sås, dressing & majonnäs"
         ],
         "p_per_100kcal": 0.26,
-        "kcal_per_100g": 269.0
+        "kcal_per_100g": 269.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 27.35
+            }
+        ]
     },
     {
         "name": "Majonnäs med Chili",
@@ -1012,7 +1216,13 @@
             "Sås, dressing & majonnäs"
         ],
         "p_per_100kcal": 0.29,
-        "kcal_per_100g": 274.0
+        "kcal_per_100g": 274.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 27.35
+            }
+        ]
     },
     {
         "name": "Plant Based Mayo",
@@ -1041,7 +1251,13 @@
             "Sås, dressing & majonnäs"
         ],
         "p_per_100kcal": 0.11,
-        "kcal_per_100g": 475.0
+        "kcal_per_100g": 475.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 27.35
+            }
+        ]
     },
     {
         "name": "All Bran Original Flakes",
@@ -1070,7 +1286,13 @@
             "Flingor"
         ],
         "p_per_100kcal": 3.05,
-        "kcal_per_100g": 360.7
+        "kcal_per_100g": 360.7,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 54.79
+            }
+        ]
     },
     {
         "name": "Red Berries Special K",
@@ -1099,7 +1321,13 @@
             "Flingor"
         ],
         "p_per_100kcal": 2.03,
-        "kcal_per_100g": 394.8
+        "kcal_per_100g": 394.8,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 56.68
+            }
+        ]
     },
     {
         "name": "Rub Allround",
@@ -1128,7 +1356,13 @@
             "Marinader & Grill"
         ],
         "p_per_100kcal": 3.62,
-        "kcal_per_100g": 276.5
+        "kcal_per_100g": 276.5,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 9.36
+            }
+        ]
     },
     {
         "name": "For Chicken Marinad Påse",
@@ -1157,7 +1391,13 @@
             "Marinader & Grill"
         ],
         "p_per_100kcal": 3.19,
-        "kcal_per_100g": 69.0
+        "kcal_per_100g": 69.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 7.09
+            }
+        ]
     },
     {
         "name": "Allround Marinad Påse",
@@ -1186,7 +1426,13 @@
             "Marinader & Grill"
         ],
         "p_per_100kcal": 4.92,
-        "kcal_per_100g": 81.3
+        "kcal_per_100g": 81.3,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 7.09
+            }
+        ]
     },
     {
         "name": "Smokey Honey Marinad Påse",
@@ -1215,7 +1461,13 @@
             "Marinader & Grill"
         ],
         "p_per_100kcal": 1.12,
-        "kcal_per_100g": 142.7
+        "kcal_per_100g": 142.7,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 7.09
+            }
+        ]
     },
     {
         "name": "Grillkrydda Original Burk",
@@ -1244,7 +1496,13 @@
             "Marinader & Grill"
         ],
         "p_per_100kcal": 4.02,
-        "kcal_per_100g": 176.4
+        "kcal_per_100g": 176.4,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 25.9
+            }
+        ]
     },
     {
         "name": "Grillkrydda Chili & Smokey Burk",
@@ -1273,7 +1531,13 @@
             "Marinader & Grill"
         ],
         "p_per_100kcal": 4.74,
-        "kcal_per_100g": 232.0
+        "kcal_per_100g": 232.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 27.35
+            }
+        ]
     },
     {
         "name": "Allroundkrydda",
@@ -1302,7 +1566,13 @@
             "Kryddor"
         ],
         "p_per_100kcal": 7.52,
-        "kcal_per_100g": 101.1
+        "kcal_per_100g": 101.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 27.35
+            }
+        ]
     },
     {
         "name": "Pepparmix Burk",
@@ -1331,7 +1601,13 @@
             "Kryddor"
         ],
         "p_per_100kcal": 4.38,
-        "kcal_per_100g": 274.0
+        "kcal_per_100g": 274.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 27.35
+            }
+        ]
     },
     {
         "name": "Svartpeppar Grovmalen Burk",
@@ -1360,7 +1636,13 @@
             "Kryddor"
         ],
         "p_per_100kcal": 3.61,
-        "kcal_per_100g": 276.8
+        "kcal_per_100g": 276.8,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 27.35
+            }
+        ]
     },
     {
         "name": "Rapsolja",
@@ -1389,7 +1671,13 @@
             "Rapsolja"
         ],
         "p_per_100kcal": 0.0,
-        "kcal_per_100g": 900.0
+        "kcal_per_100g": 900.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 23.56
+            }
+        ]
     },
     {
         "name": "Bbq Allround Grillolja Barbeque Buddies",
@@ -1418,7 +1706,13 @@
             "Grillolja"
         ],
         "p_per_100kcal": 0.25,
-        "kcal_per_100g": 400.0
+        "kcal_per_100g": 400.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 22.9
+            }
+        ]
     },
     {
         "name": "Carolin Reaper Chili Grillolja Barbeque Buddies",
@@ -1447,7 +1741,13 @@
             "Grillolja"
         ],
         "p_per_100kcal": 0.1,
-        "kcal_per_100g": 390.0
+        "kcal_per_100g": 390.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 22.9
+            }
+        ]
     },
     {
         "name": "Crema Balsamvinäger Original",
@@ -1476,7 +1776,13 @@
             "Vinäger & matlagningsvin"
         ],
         "p_per_100kcal": 0.49,
-        "kcal_per_100g": 288.0
+        "kcal_per_100g": 288.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 28.29
+            }
+        ]
     },
     {
         "name": "Crema Balsamvinäger",
@@ -1505,7 +1811,13 @@
             "Vinäger & matlagningsvin"
         ],
         "p_per_100kcal": 0.44,
-        "kcal_per_100g": 227.1
+        "kcal_per_100g": 227.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 29.9
+            }
+        ]
     },
     {
         "name": "Classico Extra Jungrfruolja Olivolja",
@@ -1534,7 +1846,13 @@
             "Olivolja"
         ],
         "p_per_100kcal": 0.0,
-        "kcal_per_100g": 824.0
+        "kcal_per_100g": 824.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 122.08
+            }
+        ]
     },
     {
         "name": "Mezze Maniche Rigate Pasta",
@@ -1564,7 +1882,13 @@
             "Kort pasta"
         ],
         "p_per_100kcal": 3.93,
-        "kcal_per_100g": 355.9
+        "kcal_per_100g": 355.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 15.99
+            }
+        ]
     },
     {
         "name": "Mafalda Corta Pasta",
@@ -1594,7 +1918,13 @@
             "Kort pasta"
         ],
         "p_per_100kcal": 3.93,
-        "kcal_per_100g": 355.9
+        "kcal_per_100g": 355.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 15.99
+            }
+        ]
     },
     {
         "name": "Radiatori Pasta",
@@ -1624,7 +1954,13 @@
             "Kort pasta"
         ],
         "p_per_100kcal": 3.93,
-        "kcal_per_100g": 355.9
+        "kcal_per_100g": 355.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 15.99
+            }
+        ]
     },
     {
         "name": "Pinklax Vildfångad Fryst",
@@ -1653,7 +1989,13 @@
             "Fryst fisk"
         ],
         "p_per_100kcal": 20.38,
-        "kcal_per_100g": 105.0
+        "kcal_per_100g": 105.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 70.88
+            }
+        ]
     },
     {
         "name": "Angusburgare Frysta/ 4x113,5g",
@@ -1682,7 +2024,13 @@
             "Köttbullar & färsprodukter"
         ],
         "p_per_100kcal": 7.09,
-        "kcal_per_100g": 254.0
+        "kcal_per_100g": 254.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 85.08
+            }
+        ]
     },
     {
         "name": "Pommes Criss Cut Frysta",
@@ -1711,7 +2059,13 @@
             "Pommes frites & strips"
         ],
         "p_per_100kcal": 1.19,
-        "kcal_per_100g": 143.0
+        "kcal_per_100g": 143.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 26.4
+            }
+        ]
     },
     {
         "name": "Pommes Chips Krispiga Dippvänliga Frysta",
@@ -1740,7 +2094,13 @@
             "Pommes frites & strips"
         ],
         "p_per_100kcal": 0.96,
-        "kcal_per_100g": 104.0
+        "kcal_per_100g": 104.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 25.45
+            }
+        ]
     },
     {
         "name": "Pommes Krispiga Frysta",
@@ -1769,7 +2129,13 @@
             "Pommes frites & strips"
         ],
         "p_per_100kcal": 1.47,
-        "kcal_per_100g": 115.4
+        "kcal_per_100g": 115.4,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 26.4
+            }
+        ]
     },
     {
         "name": "Kyckling Burgare",
@@ -1798,7 +2164,13 @@
             "Fryst fågel"
         ],
         "p_per_100kcal": 4.64,
-        "kcal_per_100g": 258.4
+        "kcal_per_100g": 258.4,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 56.68
+            }
+        ]
     },
     {
         "name": "Fish And Crisp Burger",
@@ -1827,7 +2199,13 @@
             "Fryst fisk"
         ],
         "p_per_100kcal": 5.66,
-        "kcal_per_100g": 212.2
+        "kcal_per_100g": 212.2,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 27.35
+            }
+        ]
     },
     {
         "name": "Pasta Alfredo Fryst/1 Port",
@@ -1856,7 +2234,13 @@
             "Färdigmat enportioner"
         ],
         "p_per_100kcal": 3.98,
-        "kcal_per_100g": 153.4
+        "kcal_per_100g": 153.4,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 31.5
+            }
+        ]
     },
     {
         "name": "Ostschnitzel Fryst/1 Port",
@@ -1885,7 +2269,13 @@
             "Färdigmat enportioner"
         ],
         "p_per_100kcal": 2.54,
-        "kcal_per_100g": 177.0
+        "kcal_per_100g": 177.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 31.5
+            }
+        ]
     },
     {
         "name": "Black & White Fryst/1 Port",
@@ -1914,7 +2304,13 @@
             "Färdigmat enportioner"
         ],
         "p_per_100kcal": 3.07,
-        "kcal_per_100g": 153.0
+        "kcal_per_100g": 153.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 31.5
+            }
+        ]
     },
     {
         "name": "Angusbiff Fryst/1 Port",
@@ -1943,7 +2339,13 @@
             "Färdigmat enportioner"
         ],
         "p_per_100kcal": 3.44,
-        "kcal_per_100g": 128.0
+        "kcal_per_100g": 128.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 31.5
+            }
+        ]
     },
     {
         "name": "Fish & Chip Fryst/1p",
@@ -1972,7 +2374,13 @@
             "Färdigmat enportioner"
         ],
         "p_per_100kcal": 2.86,
-        "kcal_per_100g": 189.0
+        "kcal_per_100g": 189.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 31.5
+            }
+        ]
     },
     {
         "name": "Köttbullar med Mos Fryst/1 Port",
@@ -2001,7 +2409,13 @@
             "Färdigmat enportioner"
         ],
         "p_per_100kcal": 3.31,
-        "kcal_per_100g": 154.2
+        "kcal_per_100g": 154.2,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 31.5
+            }
+        ]
     },
     {
         "name": "Pasta Bacon & Parmesansås Fryst/1 Port",
@@ -2030,7 +2444,13 @@
             "Färdigmat enportioner"
         ],
         "p_per_100kcal": 3.99,
-        "kcal_per_100g": 147.9
+        "kcal_per_100g": 147.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 31.5
+            }
+        ]
     },
     {
         "name": "Pasta Fyra Ostar Fryst/ 1 Port",
@@ -2059,7 +2479,13 @@
             "Färdigmat enportioner"
         ],
         "p_per_100kcal": 4.5,
-        "kcal_per_100g": 131.0
+        "kcal_per_100g": 131.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 31.5
+            }
+        ]
     },
     {
         "name": "Kyckling Curry Fryst/1 Port",
@@ -2088,7 +2514,13 @@
             "Färdigmat enportioner"
         ],
         "p_per_100kcal": 5.73,
-        "kcal_per_100g": 92.5
+        "kcal_per_100g": 92.5,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 31.5
+            }
+        ]
     },
     {
         "name": "Tacofärssås med Ris Fryst/1 Port",
@@ -2117,7 +2549,13 @@
             "Färdigmat enportioner"
         ],
         "p_per_100kcal": 4.68,
-        "kcal_per_100g": 111.1
+        "kcal_per_100g": 111.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 31.5
+            }
+        ]
     },
     {
         "name": "Oxjärpar Gräddsås Fryst/1 Port",
@@ -2146,7 +2584,13 @@
             "Färdigmat enportioner"
         ],
         "p_per_100kcal": 3.64,
-        "kcal_per_100g": 137.2
+        "kcal_per_100g": 137.2,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 31.5
+            }
+        ]
     },
     {
         "name": "Lasagnette Fryst/1 Port",
@@ -2175,7 +2619,13 @@
             "Färdigmat enportioner"
         ],
         "p_per_100kcal": 4.48,
-        "kcal_per_100g": 142.7
+        "kcal_per_100g": 142.7,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 31.5
+            }
+        ]
     },
     {
         "name": "Rostad Kyckling Fryst/1 Port",
@@ -2204,7 +2654,13 @@
             "Färdigmat enportioner"
         ],
         "p_per_100kcal": 5.38,
-        "kcal_per_100g": 117.0
+        "kcal_per_100g": 117.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 31.5
+            }
+        ]
     },
     {
         "name": "Färsbiffar med Kryddsmör Fryst/1 Port",
@@ -2233,7 +2689,13 @@
             "Färdigmat enportioner"
         ],
         "p_per_100kcal": 2.67,
-        "kcal_per_100g": 180.0
+        "kcal_per_100g": 180.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 31.5
+            }
+        ]
     },
     {
         "name": "Vanilj Gräddglass",
@@ -2262,7 +2724,13 @@
             "Glasspaket"
         ],
         "p_per_100kcal": 1.81,
-        "kcal_per_100g": 210.0
+        "kcal_per_100g": 210.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 39.65
+            }
+        ]
     },
     {
         "name": "Kladdkaka Glass",
@@ -2291,7 +2759,13 @@
             "Glasspaket"
         ],
         "p_per_100kcal": 1.95,
-        "kcal_per_100g": 220.0
+        "kcal_per_100g": 220.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 39.65
+            }
+        ]
     },
     {
         "name": "Skogsbär Glass",
@@ -2320,7 +2794,13 @@
             "Glasspaket"
         ],
         "p_per_100kcal": 1.67,
-        "kcal_per_100g": 210.0
+        "kcal_per_100g": 210.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 39.65
+            }
+        ]
     },
     {
         "name": "Apelsinchoklad Gräddglass",
@@ -2349,7 +2829,13 @@
             "Glasspaket"
         ],
         "p_per_100kcal": 1.78,
-        "kcal_per_100g": 230.0
+        "kcal_per_100g": 230.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 39.65
+            }
+        ]
     },
     {
         "name": "Gräddkola",
@@ -2378,7 +2864,13 @@
             "Glasspaket"
         ],
         "p_per_100kcal": 1.72,
-        "kcal_per_100g": 215.1
+        "kcal_per_100g": 215.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 39.65
+            }
+        ]
     },
     {
         "name": "Torskfilé Bitar Fryst",
@@ -2407,7 +2899,13 @@
             "Fryst fisk"
         ],
         "p_per_100kcal": 23.17,
-        "kcal_per_100g": 77.7
+        "kcal_per_100g": 77.7,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 69.9
+            }
+        ]
     },
     {
         "name": "Satay Kycklingspett",
@@ -2436,7 +2934,13 @@
             "Fryst fågel"
         ],
         "p_per_100kcal": 12.35,
-        "kcal_per_100g": 153.9
+        "kcal_per_100g": 153.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 254.58
+            }
+        ]
     },
     {
         "name": "Innerfilé av Svensk Kyckling Fryst",
@@ -2465,7 +2969,13 @@
             "Fågel"
         ],
         "p_per_100kcal": 20.43,
-        "kcal_per_100g": 102.8
+        "kcal_per_100g": 102.8,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 54.9
+            }
+        ]
     },
     {
         "name": "Kycklingfilé Svensk Fryst",
@@ -2494,7 +3004,13 @@
             "Fågel"
         ],
         "p_per_100kcal": 20.43,
-        "kcal_per_100g": 102.8
+        "kcal_per_100g": 102.8,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 85.08
+            }
+        ]
     },
     {
         "name": "Pinsa",
@@ -2523,7 +3039,13 @@
             "Pitabröd mm"
         ],
         "p_per_100kcal": 2.9,
-        "kcal_per_100g": 255.3
+        "kcal_per_100g": 255.3,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 26.4
+            }
+        ]
     },
     {
         "name": "Hamburgerbröd Brioche 4-pack",
@@ -2552,7 +3074,13 @@
             "Hamburgerbröd"
         ],
         "p_per_100kcal": 2.98,
-        "kcal_per_100g": 318.8
+        "kcal_per_100g": 318.8,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 21.9
+            }
+        ]
     },
     {
         "name": "Brioche Sesam Hamburgerbröd 4-pack",
@@ -2581,7 +3109,13 @@
             "Hamburgerbröd"
         ],
         "p_per_100kcal": 3.04,
-        "kcal_per_100g": 322.2
+        "kcal_per_100g": 322.2,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 21.9
+            }
+        ]
     },
     {
         "name": "Jubileumsbröd Halmstad Stenugnsbakat",
@@ -2610,7 +3144,13 @@
             "Matbröd"
         ],
         "p_per_100kcal": 2.96,
-        "kcal_per_100g": 253.3
+        "kcal_per_100g": 253.3,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 30.19
+            }
+        ]
     },
     {
         "name": "Bâtard Campagne",
@@ -2639,7 +3179,13 @@
             "Baguetter & lösbröd"
         ],
         "p_per_100kcal": 3.06,
-        "kcal_per_100g": 281.5
+        "kcal_per_100g": 281.5,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 28.9
+            }
+        ]
     },
     {
         "name": "Croissant",
@@ -2668,7 +3214,13 @@
             "Kaffebröd"
         ],
         "p_per_100kcal": 2.0,
-        "kcal_per_100g": 340.8
+        "kcal_per_100g": 340.8,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 11.26
+            }
+        ]
     },
     {
         "name": "Chokladsmak Rån Jätten",
@@ -2697,7 +3249,13 @@
             "Söta kex & kakor"
         ],
         "p_per_100kcal": 0.89,
-        "kcal_per_100g": 539.0
+        "kcal_per_100g": 539.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 20.72
+            }
+        ]
     },
     {
         "name": "Jätten Vanilj Rån",
@@ -2726,7 +3284,13 @@
             "Söta kex & kakor"
         ],
         "p_per_100kcal": 0.65,
-        "kcal_per_100g": 552.0
+        "kcal_per_100g": 552.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 20.72
+            }
+        ]
     },
     {
         "name": "Brago Original",
@@ -2755,7 +3319,13 @@
             "Söta kex & kakor"
         ],
         "p_per_100kcal": 1.55,
-        "kcal_per_100g": 471.1
+        "kcal_per_100g": 471.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 16.9
+            }
+        ]
     },
     {
         "name": "Limpa Mellan",
@@ -2784,7 +3354,13 @@
             "Matbröd"
         ],
         "p_per_100kcal": 3.34,
-        "kcal_per_100g": 260.8
+        "kcal_per_100g": 260.8,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 18.83
+            }
+        ]
     },
     {
         "name": "Lingon Grovt Bröd",
@@ -2813,7 +3389,13 @@
             "Matbröd"
         ],
         "p_per_100kcal": 3.41,
-        "kcal_per_100g": 251.9
+        "kcal_per_100g": 251.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 18.83
+            }
+        ]
     },
     {
         "name": "Vital Grovt Bröd Fyllt av Råg",
@@ -2842,7 +3424,13 @@
             "Matbröd"
         ],
         "p_per_100kcal": 3.86,
-        "kcal_per_100g": 236.0
+        "kcal_per_100g": 236.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 18.83
+            }
+        ]
     },
     {
         "name": "Kanelbullar 10-pack",
@@ -2871,7 +3459,13 @@
             "Kaffebröd"
         ],
         "p_per_100kcal": 1.85,
-        "kcal_per_100g": 346.6
+        "kcal_per_100g": 346.6,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 28.29
+            }
+        ]
     },
     {
         "name": "Original Singoalla",
@@ -2900,7 +3494,13 @@
             "Söta kex & kakor"
         ],
         "p_per_100kcal": 1.05,
-        "kcal_per_100g": 468.2
+        "kcal_per_100g": 468.2,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 18.45
+            }
+        ]
     },
     {
         "name": "Blåbär Singoalla",
@@ -2929,7 +3529,13 @@
             "Söta kex & kakor"
         ],
         "p_per_100kcal": 1.07,
-        "kcal_per_100g": 468.7
+        "kcal_per_100g": 468.7,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 18.45
+            }
+        ]
     },
     {
         "name": "Mjölkchoklad Ballerina",
@@ -2958,7 +3564,13 @@
             "Söta kex & kakor"
         ],
         "p_per_100kcal": 1.23,
-        "kcal_per_100g": 494.7
+        "kcal_per_100g": 494.7,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 18.45
+            }
+        ]
     },
     {
         "name": "Kanel Gifflar",
@@ -2987,7 +3599,13 @@
             "Kaffebröd"
         ],
         "p_per_100kcal": 1.96,
-        "kcal_per_100g": 373.0
+        "kcal_per_100g": 373.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 21.9
+            }
+        ]
     },
     {
         "name": "Blåbär/vanilj Gifflar",
@@ -3016,7 +3634,13 @@
             "Kaffebröd"
         ],
         "p_per_100kcal": 2.18,
-        "kcal_per_100g": 353.5
+        "kcal_per_100g": 353.5,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 21.9
+            }
+        ]
     },
     {
         "name": "Vaniljgifflar Vanilj",
@@ -3045,7 +3669,13 @@
             "Kaffebröd"
         ],
         "p_per_100kcal": 2.16,
-        "kcal_per_100g": 351.6
+        "kcal_per_100g": 351.6,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 21.9
+            }
+        ]
     },
     {
         "name": "Kex Maria",
@@ -3074,7 +3704,13 @@
             "Matkex"
         ],
         "p_per_100kcal": 1.12,
-        "kcal_per_100g": 723.0
+        "kcal_per_100g": 723.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 5.58
+            }
+        ]
     },
     {
         "name": "Limpa Stor",
@@ -3103,7 +3739,13 @@
             "Matbröd"
         ],
         "p_per_100kcal": 3.64,
-        "kcal_per_100g": 269.1
+        "kcal_per_100g": 269.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 28.29
+            }
+        ]
     },
     {
         "name": "Frölimpa Mörk",
@@ -3132,7 +3774,13 @@
             "Matbröd"
         ],
         "p_per_100kcal": 4.7,
-        "kcal_per_100g": 319.0
+        "kcal_per_100g": 319.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 28.29
+            }
+        ]
     },
     {
         "name": "Levain Medelhavs",
@@ -3161,7 +3809,13 @@
             "Matbröd"
         ],
         "p_per_100kcal": 3.72,
-        "kcal_per_100g": 242.1
+        "kcal_per_100g": 242.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 33.02
+            }
+        ]
     },
     {
         "name": "Stenugnsbakad Limpa",
@@ -3190,7 +3844,13 @@
             "Matbröd"
         ],
         "p_per_100kcal": 3.18,
-        "kcal_per_100g": 264.3
+        "kcal_per_100g": 264.3,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 33.02
+            }
+        ]
     },
     {
         "name": "Maple Pecan",
@@ -3219,7 +3879,13 @@
             "Kaffebröd"
         ],
         "p_per_100kcal": 1.27,
-        "kcal_per_100g": 400.0
+        "kcal_per_100g": 400.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 11.26
+            }
+        ]
     },
     {
         "name": "Estellefläta",
@@ -3248,7 +3914,13 @@
             "Kaffebröd"
         ],
         "p_per_100kcal": 1.43,
-        "kcal_per_100g": 501.9
+        "kcal_per_100g": 501.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 11.26
+            }
+        ]
     },
     {
         "name": "Cinelle Vanilj",
@@ -3277,7 +3949,13 @@
             "Kaffebröd"
         ],
         "p_per_100kcal": 1.26,
-        "kcal_per_100g": 388.1
+        "kcal_per_100g": 388.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 11.26
+            }
+        ]
     },
     {
         "name": "Pain Au Chocolat",
@@ -3306,7 +3984,13 @@
             "Kaffebröd"
         ],
         "p_per_100kcal": 1.69,
-        "kcal_per_100g": 379.0
+        "kcal_per_100g": 379.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 11.26
+            }
+        ]
     },
     {
         "name": "Toast Stenugnsbakad",
@@ -3335,7 +4019,13 @@
             "Matbröd"
         ],
         "p_per_100kcal": 4.39,
-        "kcal_per_100g": 228.0
+        "kcal_per_100g": 228.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 33.02
+            }
+        ]
     },
     {
         "name": "Muffin Double Chocolate",
@@ -3364,7 +4054,13 @@
             "Kaffebröd"
         ],
         "p_per_100kcal": 1.35,
-        "kcal_per_100g": 386.2
+        "kcal_per_100g": 386.2,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 11.26
+            }
+        ]
     },
     {
         "name": "Laxburgare Fetaost Och Morot",
@@ -3393,7 +4089,13 @@
             "Rökt & gravat"
         ],
         "p_per_100kcal": 8.33,
-        "kcal_per_100g": 156.1
+        "kcal_per_100g": 156.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 33.97
+            }
+        ]
     },
     {
         "name": "Laxburgare 2-pack",
@@ -3422,7 +4124,13 @@
             "Rökt & gravat"
         ],
         "p_per_100kcal": 8.64,
-        "kcal_per_100g": 219.9
+        "kcal_per_100g": 219.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 33.97
+            }
+        ]
     },
     {
         "name": "Kaviar Original",
@@ -3451,7 +4159,13 @@
             "Kaviar"
         ],
         "p_per_100kcal": 2.21,
-        "kcal_per_100g": 420.0
+        "kcal_per_100g": 420.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 23.5
+            }
+        ]
     },
     {
         "name": "Kaviar Dill",
@@ -3480,7 +4194,13 @@
             "Kaviar"
         ],
         "p_per_100kcal": 2.49,
-        "kcal_per_100g": 386.0
+        "kcal_per_100g": 386.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 23.5
+            }
+        ]
     },
     {
         "name": "Tonfisk Steaks",
@@ -3509,7 +4229,13 @@
             "Kyld fisk"
         ],
         "p_per_100kcal": 21.67,
-        "kcal_per_100g": 92.3
+        "kcal_per_100g": 92.3,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 94.54
+            }
+        ]
     },
     {
         "name": "Varmrökt Lax",
@@ -3538,7 +4264,13 @@
             "Rökt & gravat"
         ],
         "p_per_100kcal": 13.89,
-        "kcal_per_100g": 167.0
+        "kcal_per_100g": 167.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 131.54
+            }
+        ]
     },
     {
         "name": "Ishavsräkor med Skal 70/90 Frysta",
@@ -3567,7 +4299,13 @@
             "Frysta skaldjur & havsdelikatesser"
         ],
         "p_per_100kcal": 22.37,
-        "kcal_per_100g": 107.3
+        "kcal_per_100g": 107.3,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 108.83
+            }
+        ]
     },
     {
         "name": "Ishavsräkor med Skal 90/120 Frysta",
@@ -3596,7 +4334,13 @@
             "Frysta skaldjur & havsdelikatesser"
         ],
         "p_per_100kcal": 22.37,
-        "kcal_per_100g": 107.3
+        "kcal_per_100g": 107.3,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 78.45
+            }
+        ]
     },
     {
         "name": "Laxfilé Fryst",
@@ -3625,7 +4369,13 @@
             "Fryst fisk"
         ],
         "p_per_100kcal": 8.97,
-        "kcal_per_100g": 223.0
+        "kcal_per_100g": 223.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 94.54
+            }
+        ]
     },
     {
         "name": "Laxbitar Fryst",
@@ -3654,7 +4404,13 @@
             "Fisk"
         ],
         "p_per_100kcal": 9.94,
-        "kcal_per_100g": 181.0
+        "kcal_per_100g": 181.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 47.22
+            }
+        ]
     },
     {
         "name": "Pinklax Portionsbitar Fryst",
@@ -3683,7 +4439,13 @@
             "Fisk"
         ],
         "p_per_100kcal": 17.87,
-        "kcal_per_100g": 111.9
+        "kcal_per_100g": 111.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 122.08
+            }
+        ]
     },
     {
         "name": "Matjessill Bitar",
@@ -3712,7 +4474,13 @@
             "Sill"
         ],
         "p_per_100kcal": 5.22,
-        "kcal_per_100g": 230.0
+        "kcal_per_100g": 230.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 16.94
+            }
+        ]
     },
     {
         "name": "Kaviar Mild",
@@ -3741,7 +4509,13 @@
             "Kaviar"
         ],
         "p_per_100kcal": 1.66,
-        "kcal_per_100g": 440.0
+        "kcal_per_100g": 440.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 25.9
+            }
+        ]
     },
     {
         "name": "Kaviar Dill",
@@ -3770,7 +4544,13 @@
             "Kaviar"
         ],
         "p_per_100kcal": 1.65,
-        "kcal_per_100g": 442.2
+        "kcal_per_100g": 442.2,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 25.9
+            }
+        ]
     },
     {
         "name": "Matjesill",
@@ -3799,7 +4579,13 @@
             "Sill"
         ],
         "p_per_100kcal": 5.22,
-        "kcal_per_100g": 230.0
+        "kcal_per_100g": 230.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 18.9
+            }
+        ]
     },
     {
         "name": "Ryggfilé Stillahavstorsk",
@@ -3828,7 +4614,13 @@
             "Fryst fisk"
         ],
         "p_per_100kcal": 22.14,
-        "kcal_per_100g": 81.3
+        "kcal_per_100g": 81.3,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 119.0
+            }
+        ]
     },
     {
         "name": "Strömming Inlagd/stekt",
@@ -3857,7 +4649,13 @@
             "Sill"
         ],
         "p_per_100kcal": 3.95,
-        "kcal_per_100g": 245.7
+        "kcal_per_100g": 245.7,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 33.02
+            }
+        ]
     },
     {
         "name": "Pangasius Frysta",
@@ -3886,7 +4684,13 @@
             "Fisk"
         ],
         "p_per_100kcal": 21.91,
-        "kcal_per_100g": 50.2
+        "kcal_per_100g": 50.2,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 37.9
+            }
+        ]
     },
     {
         "name": "Tångcaviar Röd",
@@ -3915,7 +4719,13 @@
             "Rom"
         ],
         "p_per_100kcal": 7.69,
-        "kcal_per_100g": 13.0
+        "kcal_per_100g": 13.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 18.83
+            }
+        ]
     },
     {
         "name": "Tångcaviar Svart",
@@ -3944,7 +4754,13 @@
             "Rom"
         ],
         "p_per_100kcal": 7.69,
-        "kcal_per_100g": 13.0
+        "kcal_per_100g": 13.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 18.83
+            }
+        ]
     },
     {
         "name": "Flundra Stillahavs Fryst",
@@ -3973,7 +4789,13 @@
             "Fisk"
         ],
         "p_per_100kcal": 18.83,
-        "kcal_per_100g": 95.6
+        "kcal_per_100g": 95.6,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 75.61
+            }
+        ]
     },
     {
         "name": "Laxfärs Premium",
@@ -4002,7 +4824,13 @@
             "Fryst fisk"
         ],
         "p_per_100kcal": 9.52,
-        "kcal_per_100g": 210.0
+        "kcal_per_100g": 210.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 56.68
+            }
+        ]
     },
     {
         "name": "Räkor Skalade Frysta",
@@ -4031,7 +4859,13 @@
             "Räkor"
         ],
         "p_per_100kcal": 21.82,
-        "kcal_per_100g": 110.0
+        "kcal_per_100g": 110.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 66.9
+            }
+        ]
     },
     {
         "name": "Räkor i Lake Stora",
@@ -4059,7 +4893,13 @@
             "Lakeprodukter"
         ],
         "p_per_100kcal": 21.54,
-        "kcal_per_100g": 65.0
+        "kcal_per_100g": 65.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 103.15
+            }
+        ]
     },
     {
         "name": "Räkor Handskalade",
@@ -4087,7 +4927,13 @@
             "Lakeprodukter"
         ],
         "p_per_100kcal": 20.92,
-        "kcal_per_100g": 76.5
+        "kcal_per_100g": 76.5,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 159.94
+            }
+        ]
     },
     {
         "name": "Torskfilé",
@@ -4116,7 +4962,13 @@
             "Fryst fisk"
         ],
         "p_per_100kcal": 22.81,
-        "kcal_per_100g": 78.9
+        "kcal_per_100g": 78.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 93.9
+            }
+        ]
     },
     {
         "name": "Vegofärs Fryst",
@@ -4144,7 +4996,13 @@
             "Vegetariskt"
         ],
         "p_per_100kcal": 11.04,
-        "kcal_per_100g": 163.0
+        "kcal_per_100g": 163.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 62.9
+            }
+        ]
     },
     {
         "name": "Kål Bönbiff med Vaxböna Fryst Vego",
@@ -4172,7 +5030,13 @@
             "Vegetariskt"
         ],
         "p_per_100kcal": 3.46,
-        "kcal_per_100g": 182.1
+        "kcal_per_100g": 182.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 47.22
+            }
+        ]
     },
     {
         "name": "Vegofärs Formbar Fryst",
@@ -4200,7 +5064,13 @@
             "Vegetariskt"
         ],
         "p_per_100kcal": 7.65,
-        "kcal_per_100g": 170.0
+        "kcal_per_100g": 170.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 66.15
+            }
+        ]
     },
     {
         "name": "Vegokorv Ovo-vegetarisk 4-pack",
@@ -4229,7 +5099,13 @@
             "Vegetarisk korv"
         ],
         "p_per_100kcal": 4.17,
-        "kcal_per_100g": 196.5
+        "kcal_per_100g": 196.5,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 28.29
+            }
+        ]
     },
     {
         "name": "Tofu Fast Naturell Ekologisk",
@@ -4257,7 +5133,13 @@
             "Tofu"
         ],
         "p_per_100kcal": 10.45,
-        "kcal_per_100g": 134.0
+        "kcal_per_100g": 134.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 26.4
+            }
+        ]
     },
     {
         "name": "Tofu Rökt",
@@ -4285,7 +5167,13 @@
             "Tofu"
         ],
         "p_per_100kcal": 10.67,
-        "kcal_per_100g": 150.0
+        "kcal_per_100g": 150.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 15.04
+            }
+        ]
     },
     {
         "name": "Vegan Burger Frysta 4x80g",
@@ -4313,7 +5201,13 @@
             "Fryst vegetariskt"
         ],
         "p_per_100kcal": 7.56,
-        "kcal_per_100g": 172.0
+        "kcal_per_100g": 172.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 47.22
+            }
+        ]
     },
     {
         "name": "Falafel Fryst",
@@ -4341,7 +5235,13 @@
             "Vegetariskt"
         ],
         "p_per_100kcal": 2.77,
-        "kcal_per_100g": 235.0
+        "kcal_per_100g": 235.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 47.22
+            }
+        ]
     },
     {
         "name": "Ärtfalafel Fryst",
@@ -4369,7 +5269,13 @@
             "Vegetariskt"
         ],
         "p_per_100kcal": 4.31,
-        "kcal_per_100g": 232.0
+        "kcal_per_100g": 232.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 47.22
+            }
+        ]
     },
     {
         "name": "Grillkorv Plant-based",
@@ -4398,7 +5304,13 @@
             "Vegetarisk korv"
         ],
         "p_per_100kcal": 4.04,
-        "kcal_per_100g": 178.0
+        "kcal_per_100g": 178.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 32.08
+            }
+        ]
     },
     {
         "name": "Chorizo Plant-based",
@@ -4427,7 +5339,13 @@
             "Vegetarisk korv"
         ],
         "p_per_100kcal": 4.07,
-        "kcal_per_100g": 179.3
+        "kcal_per_100g": 179.3,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 33.02
+            }
+        ]
     },
     {
         "name": "Cabanossy Plant-based",
@@ -4456,7 +5374,13 @@
             "Vegetarisk korv"
         ],
         "p_per_100kcal": 3.71,
-        "kcal_per_100g": 210.0
+        "kcal_per_100g": 210.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 33.02
+            }
+        ]
     },
     {
         "name": "Quornfiléer Ovo-vegetariska Frysta",
@@ -4484,7 +5408,13 @@
             "Vegetariskt"
         ],
         "p_per_100kcal": 12.29,
-        "kcal_per_100g": 122.1
+        "kcal_per_100g": 122.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 56.68
+            }
+        ]
     },
     {
         "name": "Quornbitar Ovo-vegetariska Frysta",
@@ -4512,7 +5442,13 @@
             "Vegetariskt"
         ],
         "p_per_100kcal": 14.43,
-        "kcal_per_100g": 97.0
+        "kcal_per_100g": 97.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 56.68
+            }
+        ]
     },
     {
         "name": "Vegoburgare Frysta/4-pack",
@@ -4540,7 +5476,13 @@
             "Vegetariskt"
         ],
         "p_per_100kcal": 9.2,
-        "kcal_per_100g": 152.2
+        "kcal_per_100g": 152.2,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 45.33
+            }
+        ]
     },
     {
         "name": "Schnitzel Plant-based Fryst",
@@ -4568,7 +5510,13 @@
             "Vegetariskt"
         ],
         "p_per_100kcal": 5.12,
-        "kcal_per_100g": 240.0
+        "kcal_per_100g": 240.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 72.9
+            }
+        ]
     },
     {
         "name": "Naturell Tofu",
@@ -4596,7 +5544,13 @@
             "Tofu"
         ],
         "p_per_100kcal": 11.08,
-        "kcal_per_100g": 162.5
+        "kcal_per_100g": 162.5,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 33.02
+            }
+        ]
     },
     {
         "name": "Vegobacon Klippta Skivor Vegansk",
@@ -4624,7 +5578,13 @@
             "Snabblagat"
         ],
         "p_per_100kcal": 12.57,
-        "kcal_per_100g": 167.1
+        "kcal_per_100g": 167.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 21.67
+            }
+        ]
     },
     {
         "name": "Vegobullar Frysta",
@@ -4652,7 +5612,13 @@
             "Vegetariskt"
         ],
         "p_per_100kcal": 7.38,
-        "kcal_per_100g": 149.0
+        "kcal_per_100g": 149.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 66.9
+            }
+        ]
     },
     {
         "name": "Naturell Tofu Fast Vegansk",
@@ -4680,7 +5646,13 @@
             "Tofu"
         ],
         "p_per_100kcal": 10.2,
-        "kcal_per_100g": 147.0
+        "kcal_per_100g": 147.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 11.26
+            }
+        ]
     },
     {
         "name": "Sojamarinerad Tofu",
@@ -4708,7 +5680,13 @@
             "Tofu"
         ],
         "p_per_100kcal": 10.64,
-        "kcal_per_100g": 141.0
+        "kcal_per_100g": 141.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 14.1
+            }
+        ]
     },
     {
         "name": "Färs Mince Quorn Fryst",
@@ -4736,7 +5714,13 @@
             "Fryst vegetariskt"
         ],
         "p_per_100kcal": 15.53,
-        "kcal_per_100g": 103.0
+        "kcal_per_100g": 103.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 53.85
+            }
+        ]
     },
     {
         "name": "Vegoschnitzel Fryst",
@@ -4764,7 +5748,13 @@
             "Vegetariskt"
         ],
         "p_per_100kcal": 8.26,
-        "kcal_per_100g": 205.8
+        "kcal_per_100g": 205.8,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 56.68
+            }
+        ]
     },
     {
         "name": "Crispy Green Nuggets",
@@ -4792,7 +5782,13 @@
             "Vegetariskt"
         ],
         "p_per_100kcal": 4.38,
-        "kcal_per_100g": 297.0
+        "kcal_per_100g": 297.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 50.06
+            }
+        ]
     },
     {
         "name": "Vegetariska Delikatessbullar Fryst",
@@ -4820,7 +5816,13 @@
             "Vegetariskt"
         ],
         "p_per_100kcal": 5.17,
-        "kcal_per_100g": 212.7
+        "kcal_per_100g": 212.7,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 35.86
+            }
+        ]
     },
     {
         "name": "Crispy Supreme Burgare",
@@ -4848,7 +5850,13 @@
             "Vegetariskt"
         ],
         "p_per_100kcal": 4.21,
-        "kcal_per_100g": 285.1
+        "kcal_per_100g": 285.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 50.06
+            }
+        ]
     },
     {
         "name": "Plant Beef Delifresh Frysta/4x90g",
@@ -4876,7 +5884,13 @@
             "Vegetariskt"
         ],
         "p_per_100kcal": 5.5,
-        "kcal_per_100g": 291.0
+        "kcal_per_100g": 291.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 42.1
+            }
+        ]
     },
     {
         "name": "Filet Pieces Fryst",
@@ -4904,7 +5918,13 @@
             "Vegetariskt"
         ],
         "p_per_100kcal": 15.96,
-        "kcal_per_100g": 122.8
+        "kcal_per_100g": 122.8,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 77.9
+            }
+        ]
     },
     {
         "name": "Vegofärs Fryst",
@@ -4932,7 +5952,13 @@
             "Vegetariskt"
         ],
         "p_per_100kcal": 9.94,
-        "kcal_per_100g": 171.0
+        "kcal_per_100g": 171.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 72.5
+            }
+        ]
     },
     {
         "name": "Vegofärs",
@@ -4960,7 +5986,13 @@
             "Fryst vegetariskt"
         ],
         "p_per_100kcal": 9.94,
-        "kcal_per_100g": 171.0
+        "kcal_per_100g": 171.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 45.33
+            }
+        ]
     },
     {
         "name": "Hummus Original",
@@ -4989,7 +6021,13 @@
             "Dressing & övriga smaksättare"
         ],
         "p_per_100kcal": 2.0,
-        "kcal_per_100g": 335.0
+        "kcal_per_100g": 335.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 24.51
+            }
+        ]
     },
     {
         "name": "Hummus Mix Original Chili Soltorkade Tomater",
@@ -5018,7 +6056,13 @@
             "Dressing & övriga smaksättare"
         ],
         "p_per_100kcal": 1.98,
-        "kcal_per_100g": 313.0
+        "kcal_per_100g": 313.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 24.51
+            }
+        ]
     },
     {
         "name": "Hummus Tabbouleh",
@@ -5047,7 +6091,13 @@
             "Dressing & övriga smaksättare"
         ],
         "p_per_100kcal": 1.97,
-        "kcal_per_100g": 290.0
+        "kcal_per_100g": 290.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 24.51
+            }
+        ]
     },
     {
         "name": "Toum Vitlökskräm",
@@ -5076,7 +6126,13 @@
             "Dressing & övriga smaksättare"
         ],
         "p_per_100kcal": 0.18,
-        "kcal_per_100g": 621.0
+        "kcal_per_100g": 621.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 24.51
+            }
+        ]
     },
     {
         "name": "Labneh Vitlök&mynta",
@@ -5105,7 +6161,13 @@
             "Dressing & övriga smaksättare"
         ],
         "p_per_100kcal": 1.86,
-        "kcal_per_100g": 172.0
+        "kcal_per_100g": 172.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 24.51
+            }
+        ]
     },
     {
         "name": "Baba Ganoush",
@@ -5134,7 +6196,13 @@
             "Dressing & övriga smaksättare"
         ],
         "p_per_100kcal": 1.52,
-        "kcal_per_100g": 250.0
+        "kcal_per_100g": 250.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 24.51
+            }
+        ]
     },
     {
         "name": "Hamburgare Irland",
@@ -5163,7 +6231,13 @@
             "Köttbullar & färsprodukter"
         ],
         "p_per_100kcal": 6.49,
-        "kcal_per_100g": 231.0
+        "kcal_per_100g": 231.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 49.9
+            }
+        ]
     },
     {
         "name": "Gyros Örter Citron",
@@ -5192,7 +6266,13 @@
             "Pannfärdigt"
         ],
         "p_per_100kcal": 10.0,
-        "kcal_per_100g": 160.0
+        "kcal_per_100g": 160.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 56.68
+            }
+        ]
     },
     {
         "name": "Spareribs Original",
@@ -5221,7 +6301,13 @@
             "Färdiglagat & pannfärdigt"
         ],
         "p_per_100kcal": 7.73,
-        "kcal_per_100g": 220.0
+        "kcal_per_100g": 220.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 68.99
+            }
+        ]
     },
     {
         "name": "Spareribs Sweet & Smokey",
@@ -5250,7 +6336,13 @@
             "Färdiglagat & pannfärdigt"
         ],
         "p_per_100kcal": 7.73,
-        "kcal_per_100g": 220.0
+        "kcal_per_100g": 220.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 68.99
+            }
+        ]
     },
     {
         "name": "Kycklingkebab Grillad",
@@ -5279,7 +6371,13 @@
             "Färdiglagat & pannfärdigt"
         ],
         "p_per_100kcal": 14.64,
-        "kcal_per_100g": 143.4
+        "kcal_per_100g": 143.4,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 47.22
+            }
+        ]
     },
     {
         "name": "Hamburger Dressing",
@@ -5308,7 +6406,13 @@
             "Dressing & övriga smaksättare"
         ],
         "p_per_100kcal": 0.39,
-        "kcal_per_100g": 360.0
+        "kcal_per_100g": 360.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 22.61
+            }
+        ]
     },
     {
         "name": "Mums Pannkakor",
@@ -5337,7 +6441,13 @@
             "Kylda rätter"
         ],
         "p_per_100kcal": 2.13,
-        "kcal_per_100g": 305.0
+        "kcal_per_100g": 305.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 23.56
+            }
+        ]
     },
     {
         "name": "Pancakes Tjocka Och Luftiga 6-pack",
@@ -5366,7 +6476,13 @@
             "Kylda rätter"
         ],
         "p_per_100kcal": 2.3,
-        "kcal_per_100g": 295.2
+        "kcal_per_100g": 295.2,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 27.35
+            }
+        ]
     },
     {
         "name": "Potatissallad",
@@ -5395,7 +6511,13 @@
             "Gratänger"
         ],
         "p_per_100kcal": 0.32,
-        "kcal_per_100g": 309.0
+        "kcal_per_100g": 309.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 18.83
+            }
+        ]
     },
     {
         "name": "Potatissallad Purjo",
@@ -5424,7 +6546,13 @@
             "Gratänger"
         ],
         "p_per_100kcal": 0.34,
-        "kcal_per_100g": 298.0
+        "kcal_per_100g": 298.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 18.83
+            }
+        ]
     },
     {
         "name": "Kycklingfärs Naturell Sverige",
@@ -5453,7 +6581,13 @@
             "Köttfärs"
         ],
         "p_per_100kcal": 13.25,
-        "kcal_per_100g": 143.4
+        "kcal_per_100g": 143.4,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 47.27
+            }
+        ]
     },
     {
         "name": "Fläskfilé Vakuumförpackad Sverige",
@@ -5482,7 +6616,13 @@
             "Fläskkött"
         ],
         "p_per_100kcal": 19.09,
-        "kcal_per_100g": 110.0
+        "kcal_per_100g": 110.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 188.3
+            }
+        ]
     },
     {
         "name": "Kycklingkebab",
@@ -5511,7 +6651,13 @@
             "Pannfärdigt"
         ],
         "p_per_100kcal": 8.86,
-        "kcal_per_100g": 203.2
+        "kcal_per_100g": 203.2,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 52.95
+            }
+        ]
     },
     {
         "name": "Gyros Kebab Sverige",
@@ -5540,7 +6686,13 @@
             "Pannfärdigt"
         ],
         "p_per_100kcal": 10.0,
-        "kcal_per_100g": 160.0
+        "kcal_per_100g": 160.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 52.95
+            }
+        ]
     },
     {
         "name": "Klassisk Kebab",
@@ -5569,7 +6721,13 @@
             "Pannfärdigt"
         ],
         "p_per_100kcal": 4.9,
-        "kcal_per_100g": 306.4
+        "kcal_per_100g": 306.4,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 52.95
+            }
+        ]
     },
     {
         "name": "Prosciutto Crudo",
@@ -5597,7 +6755,13 @@
             "Medelhavschark"
         ],
         "p_per_100kcal": 17.75,
-        "kcal_per_100g": 169.0
+        "kcal_per_100g": 169.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 41.14
+            }
+        ]
     },
     {
         "name": "Smashburgare",
@@ -5626,7 +6790,13 @@
             "Pannfärdigt"
         ],
         "p_per_100kcal": 5.93,
-        "kcal_per_100g": 286.8
+        "kcal_per_100g": 286.8,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 75.66
+            }
+        ]
     },
     {
         "name": "Angusburgare",
@@ -5655,7 +6825,13 @@
             "Pannfärdigt"
         ],
         "p_per_100kcal": 8.83,
-        "kcal_per_100g": 215.1
+        "kcal_per_100g": 215.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 75.66
+            }
+        ]
     },
     {
         "name": "Flintastek Sverige",
@@ -5684,7 +6860,13 @@
             "Fläskkött"
         ],
         "p_per_100kcal": 9.41,
-        "kcal_per_100g": 170.0
+        "kcal_per_100g": 170.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 69.2
+            }
+        ]
     },
     {
         "name": "Arbogapastej Original Bredbar",
@@ -5713,7 +6895,13 @@
             "Pastej & paté"
         ],
         "p_per_100kcal": 3.17,
-        "kcal_per_100g": 286.8
+        "kcal_per_100g": 286.8,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 14.14
+            }
+        ]
     },
     {
         "name": "Varmkorv",
@@ -5742,7 +6930,13 @@
             "Varm- & wienerkorv"
         ],
         "p_per_100kcal": 3.33,
-        "kcal_per_100g": 240.0
+        "kcal_per_100g": 240.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 33.07
+            }
+        ]
     },
     {
         "name": "Mustig&smakrik Leverpastej Bredbar",
@@ -5771,7 +6965,13 @@
             "Pastej & paté"
         ],
         "p_per_100kcal": 5.91,
-        "kcal_per_100g": 203.2
+        "kcal_per_100g": 203.2,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 14.14
+            }
+        ]
     },
     {
         "name": "Leverpastej med Gurka Bredbar",
@@ -5800,7 +7000,13 @@
             "Pastej & paté"
         ],
         "p_per_100kcal": 2.17,
-        "kcal_per_100g": 300.0
+        "kcal_per_100g": 300.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 14.14
+            }
+        ]
     },
     {
         "name": "Original Leverpastej 2-pack",
@@ -5829,7 +7035,13 @@
             "Pastej & paté"
         ],
         "p_per_100kcal": 3.14,
-        "kcal_per_100g": 286.8
+        "kcal_per_100g": 286.8,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 14.14
+            }
+        ]
     },
     {
         "name": "Leverpastej Bredbar",
@@ -5858,7 +7070,13 @@
             "Pastej & paté"
         ],
         "p_per_100kcal": 3.14,
-        "kcal_per_100g": 286.8
+        "kcal_per_100g": 286.8,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 14.14
+            }
+        ]
     },
     {
         "name": "Kycklingpastej Bredbar",
@@ -5887,7 +7105,13 @@
             "Pastej & paté"
         ],
         "p_per_100kcal": 2.12,
-        "kcal_per_100g": 240.0
+        "kcal_per_100g": 240.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 18.88
+            }
+        ]
     },
     {
         "name": "Mild & Krämig Leverpastej Bredbar",
@@ -5916,7 +7140,13 @@
             "Pastej & paté"
         ],
         "p_per_100kcal": 2.62,
-        "kcal_per_100g": 262.9
+        "kcal_per_100g": 262.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 14.14
+            }
+        ]
     },
     {
         "name": "Kycklingkebab Fryst",
@@ -5945,7 +7175,13 @@
             "Kyckling & övrig fågel"
         ],
         "p_per_100kcal": 12.68,
-        "kcal_per_100g": 134.1
+        "kcal_per_100g": 134.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 66.2
+            }
+        ]
     },
     {
         "name": "Tavuk Dilim Kyckling Mortadella Skivad",
@@ -5974,7 +7210,13 @@
             "Skivat pålägg"
         ],
         "p_per_100kcal": 4.69,
-        "kcal_per_100g": 213.0
+        "kcal_per_100g": 213.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 16.55
+            }
+        ]
     },
     {
         "name": "Sade Dilim Kalkon Mortadella Skivad",
@@ -6003,7 +7245,13 @@
             "Skivat pålägg"
         ],
         "p_per_100kcal": 4.69,
-        "kcal_per_100g": 213.0
+        "kcal_per_100g": 213.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 16.55
+            }
+        ]
     },
     {
         "name": "Baharatli Dili Kalkon Mortadella Skivad",
@@ -6032,7 +7280,13 @@
             "Skivat pålägg"
         ],
         "p_per_100kcal": 4.69,
-        "kcal_per_100g": 213.0
+        "kcal_per_100g": 213.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 16.55
+            }
+        ]
     },
     {
         "name": "Mortadella Kyckling Paprika Skivad",
@@ -6061,7 +7315,13 @@
             "Skivat pålägg"
         ],
         "p_per_100kcal": 4.69,
-        "kcal_per_100g": 213.0
+        "kcal_per_100g": 213.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 16.55
+            }
+        ]
     },
     {
         "name": "Fuet Tradicional Lufttorkad Salami",
@@ -6090,7 +7350,13 @@
             "Korv & salami"
         ],
         "p_per_100kcal": 6.41,
-        "kcal_per_100g": 421.0
+        "kcal_per_100g": 421.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 37.8
+            }
+        ]
     },
     {
         "name": "Köttbullar Kyckling",
@@ -6119,7 +7385,13 @@
             "Köttbullar & färsprodukter"
         ],
         "p_per_100kcal": 4.18,
-        "kcal_per_100g": 262.9
+        "kcal_per_100g": 262.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 29.23
+            }
+        ]
     },
     {
         "name": "Grillkorv Hög Kötthalt",
@@ -6148,7 +7420,13 @@
             "Grill- & kryddkorv"
         ],
         "p_per_100kcal": 4.05,
-        "kcal_per_100g": 271.3
+        "kcal_per_100g": 271.3,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 29.23
+            }
+        ]
     },
     {
         "name": "Falukorv",
@@ -6177,7 +7455,13 @@
             "Falukorv"
         ],
         "p_per_100kcal": 3.54,
-        "kcal_per_100g": 254.0
+        "kcal_per_100g": 254.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 34.97
+            }
+        ]
     },
     {
         "name": "Ribs Hot Spicy",
@@ -6206,7 +7490,13 @@
             "Pannfärdigt"
         ],
         "p_per_100kcal": 7.77,
-        "kcal_per_100g": 206.0
+        "kcal_per_100g": 206.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 66.2
+            }
+        ]
     },
     {
         "name": "Ribs Sweet Smokey",
@@ -6235,7 +7525,13 @@
             "Pannfärdigt"
         ],
         "p_per_100kcal": 8.54,
-        "kcal_per_100g": 199.1
+        "kcal_per_100g": 199.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 66.2
+            }
+        ]
     },
     {
         "name": "Gyros Örter Citron",
@@ -6264,7 +7560,13 @@
             "Pannfärdigt"
         ],
         "p_per_100kcal": 10.0,
-        "kcal_per_100g": 160.0
+        "kcal_per_100g": 160.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 56.73
+            }
+        ]
     },
     {
         "name": "Smoothie Ananas Papaya Mango Fryst",
@@ -6292,7 +7594,13 @@
             "Frukt & bär"
         ],
         "p_per_100kcal": 0.9,
-        "kcal_per_100g": 55.4
+        "kcal_per_100g": 55.4,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 30.23
+            }
+        ]
     },
     {
         "name": "Smoothie Jordgubb Banan Blåbär Fryst",
@@ -6320,7 +7628,13 @@
             "Frukt & bär"
         ],
         "p_per_100kcal": 1.48,
-        "kcal_per_100g": 54.0
+        "kcal_per_100g": 54.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 30.23
+            }
+        ]
     },
     {
         "name": "Blåbär Frysta",
@@ -6349,7 +7663,13 @@
             "Frysta bär"
         ],
         "p_per_100kcal": 0.0,
-        "kcal_per_100g": 46.4
+        "kcal_per_100g": 46.4,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 37.8
+            }
+        ]
     },
     {
         "name": "Banan & Vanilj Yo-ghurt 0,1%",
@@ -6378,7 +7698,13 @@
             "Smaksatt yoghurt"
         ],
         "p_per_100kcal": 5.53,
-        "kcal_per_100g": 66.9
+        "kcal_per_100g": 66.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 21.29
+            }
+        ]
     },
     {
         "name": "Skogsbär Yo-ghurt 0,1%",
@@ -6407,7 +7733,13 @@
             "Smaksatt yoghurt"
         ],
         "p_per_100kcal": 5.53,
-        "kcal_per_100g": 66.9
+        "kcal_per_100g": 66.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 21.29
+            }
+        ]
     },
     {
         "name": "Jordgubb Yo-ghurt 0,1%",
@@ -6436,7 +7768,13 @@
             "Smaksatt yoghurt"
         ],
         "p_per_100kcal": 5.53,
-        "kcal_per_100g": 66.9
+        "kcal_per_100g": 66.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 21.29
+            }
+        ]
     },
     {
         "name": "Vanilj Mild Yoghurt Mindre Socker 1,5%",
@@ -6465,7 +7803,13 @@
             "Smaksatt yoghurt"
         ],
         "p_per_100kcal": 7.09,
-        "kcal_per_100g": 57.8
+        "kcal_per_100g": 57.8,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 22.6
+            }
+        ]
     },
     {
         "name": "Churros Ikaffe 3,2%",
@@ -6494,7 +7838,13 @@
             "Växtbaserad dryck"
         ],
         "p_per_100kcal": 1.57,
-        "kcal_per_100g": 70.0
+        "kcal_per_100g": 70.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 24.55
+            }
+        ]
     },
     {
         "name": "Ikaffe Ekologisk",
@@ -6523,7 +7873,13 @@
             "Växtbaserad dryck"
         ],
         "p_per_100kcal": 1.69,
-        "kcal_per_100g": 59.3
+        "kcal_per_100g": 59.3,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 22.66
+            }
+        ]
     },
     {
         "name": "Ikaffe Barista Edition Havredryck",
@@ -6552,7 +7908,13 @@
             "Växtbaserad dryck"
         ],
         "p_per_100kcal": 1.79,
-        "kcal_per_100g": 61.4
+        "kcal_per_100g": 61.4,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 18.88
+            }
+        ]
     },
     {
         "name": "Coconut Ikaffe 1,6%",
@@ -6581,7 +7943,13 @@
             "Växtbaserad dryck"
         ],
         "p_per_100kcal": 1.32,
-        "kcal_per_100g": 38.0
+        "kcal_per_100g": 38.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 24.55
+            }
+        ]
     },
     {
         "name": "Skogsbär Original Yoghurt 2%",
@@ -6610,7 +7978,13 @@
             "Smaksatt yoghurt"
         ],
         "p_per_100kcal": 4.23,
-        "kcal_per_100g": 80.3
+        "kcal_per_100g": 80.3,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 25.6
+            }
+        ]
     },
     {
         "name": "Blåbär Original Yoghurt 2%",
@@ -6639,7 +8013,13 @@
             "Smaksatt yoghurt"
         ],
         "p_per_100kcal": 4.05,
-        "kcal_per_100g": 81.5
+        "kcal_per_100g": 81.5,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 25.6
+            }
+        ]
     },
     {
         "name": "Jordgubb Smultron Original Yoghurt 2%",
@@ -6668,7 +8048,13 @@
             "Smaksatt yoghurt"
         ],
         "p_per_100kcal": 4.21,
-        "kcal_per_100g": 78.4
+        "kcal_per_100g": 78.4,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 25.6
+            }
+        ]
     },
     {
         "name": "Citron Original Yoghurt 2%",
@@ -6697,7 +8083,13 @@
             "Smaksatt yoghurt"
         ],
         "p_per_100kcal": 4.25,
-        "kcal_per_100g": 77.7
+        "kcal_per_100g": 77.7,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 25.6
+            }
+        ]
     },
     {
         "name": "Cherry-licious Yoghurt 2%",
@@ -6726,7 +8118,13 @@
             "Smaksatt yoghurt"
         ],
         "p_per_100kcal": 4.15,
-        "kcal_per_100g": 79.6
+        "kcal_per_100g": 79.6,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 25.6
+            }
+        ]
     },
     {
         "name": "Samoa Original Yoghurt 2%",
@@ -6755,7 +8153,13 @@
             "Smaksatt yoghurt"
         ],
         "p_per_100kcal": 4.15,
-        "kcal_per_100g": 79.6
+        "kcal_per_100g": 79.6,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 25.6
+            }
+        ]
     },
     {
         "name": "Hairy Berry Yoghurt 2%",
@@ -6784,7 +8188,13 @@
             "Smaksatt yoghurt"
         ],
         "p_per_100kcal": 4.31,
-        "kcal_per_100g": 76.5
+        "kcal_per_100g": 76.5,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 25.6
+            }
+        ]
     },
     {
         "name": "Herrgård Mild 28%",
@@ -6813,7 +8223,13 @@
             "Hårdost mild/mellan"
         ],
         "p_per_100kcal": 7.22,
-        "kcal_per_100g": 360.0
+        "kcal_per_100g": 360.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 116.0
+            }
+        ]
     },
     {
         "name": "Präst Mellanlagrad 31%",
@@ -6842,7 +8258,13 @@
             "Hårdost mild/mellan"
         ],
         "p_per_100kcal": 6.51,
-        "kcal_per_100g": 384.0
+        "kcal_per_100g": 384.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 116.0
+            }
+        ]
     },
     {
         "name": "Grevé Mild 28%",
@@ -6871,7 +8293,13 @@
             "Hårdost mild/mellan"
         ],
         "p_per_100kcal": 7.26,
-        "kcal_per_100g": 358.0
+        "kcal_per_100g": 358.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 116.0
+            }
+        ]
     },
     {
         "name": "Hallon Mild Yoghurt Mindre Socker 1,5%",
@@ -6900,7 +8328,13 @@
             "Smaksatt yoghurt"
         ],
         "p_per_100kcal": 5.85,
-        "kcal_per_100g": 65.0
+        "kcal_per_100g": 65.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 25.5
+            }
+        ]
     },
     {
         "name": "Jordgubb Mild Yoghurt Mindre Socker 1,5%",
@@ -6929,7 +8363,13 @@
             "Smaksatt yoghurt"
         ],
         "p_per_100kcal": 5.93,
-        "kcal_per_100g": 64.1
+        "kcal_per_100g": 64.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 25.5
+            }
+        ]
     },
     {
         "name": "Vanilla Ikaffe Havredryck",
@@ -6958,7 +8398,13 @@
             "Växtbaserad dryck"
         ],
         "p_per_100kcal": 1.53,
-        "kcal_per_100g": 72.0
+        "kcal_per_100g": 72.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 24.55
+            }
+        ]
     },
     {
         "name": "Ikaffe Light Havredryck",
@@ -6987,7 +8433,13 @@
             "Växtbaserad dryck"
         ],
         "p_per_100kcal": 2.09,
-        "kcal_per_100g": 52.6
+        "kcal_per_100g": 52.6,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 19.82
+            }
+        ]
     },
     {
         "name": "Caramel Ikaffe Havredryck",
@@ -7016,7 +8468,13 @@
             "Växtbaserad dryck"
         ],
         "p_per_100kcal": 1.57,
-        "kcal_per_100g": 70.0
+        "kcal_per_100g": 70.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 24.55
+            }
+        ]
     },
     {
         "name": "Madagaskar Vanilj Yoghurt 2%",
@@ -7045,7 +8503,13 @@
             "Smaksatt yoghurt"
         ],
         "p_per_100kcal": 4.47,
-        "kcal_per_100g": 73.9
+        "kcal_per_100g": 73.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 25.6
+            }
+        ]
     },
     {
         "name": "Mini Blåbär Yoghurt 0,1%",
@@ -7074,7 +8538,13 @@
             "Smaksatt yoghurt"
         ],
         "p_per_100kcal": 9.51,
-        "kcal_per_100g": 36.8
+        "kcal_per_100g": 36.8,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 24.6
+            }
+        ]
     },
     {
         "name": "Mini Hallon Yoghurt 0,1%",
@@ -7103,7 +8573,13 @@
             "Smaksatt yoghurt"
         ],
         "p_per_100kcal": 9.56,
-        "kcal_per_100g": 36.6
+        "kcal_per_100g": 36.6,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 24.6
+            }
+        ]
     },
     {
         "name": "Mini Jordgubb Yoghurt 0,1%",
@@ -7132,7 +8608,13 @@
             "Smaksatt yoghurt"
         ],
         "p_per_100kcal": 9.46,
-        "kcal_per_100g": 37.0
+        "kcal_per_100g": 37.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 24.6
+            }
+        ]
     },
     {
         "name": "Mini Samoa Yoghurt 0,1%",
@@ -7161,7 +8643,13 @@
             "Smaksatt yoghurt"
         ],
         "p_per_100kcal": 9.87,
-        "kcal_per_100g": 37.5
+        "kcal_per_100g": 37.5,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 24.6
+            }
+        ]
     },
     {
         "name": "Jordgubb Vanilj Yoghurt 2%",
@@ -7190,7 +8678,13 @@
             "Smaksatt yoghurt"
         ],
         "p_per_100kcal": 4.17,
-        "kcal_per_100g": 79.1
+        "kcal_per_100g": 79.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 25.6
+            }
+        ]
     },
     {
         "name": "Äpple Kanel Vanilj Yoghurt 2%",
@@ -7219,7 +8713,13 @@
             "Smaksatt yoghurt"
         ],
         "p_per_100kcal": 4.15,
-        "kcal_per_100g": 79.6
+        "kcal_per_100g": 79.6,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 25.6
+            }
+        ]
     },
     {
         "name": "Tortilla Original Medium 8-pack",
@@ -7248,7 +8748,13 @@
             "Tacoskal & bröd"
         ],
         "p_per_100kcal": 2.72,
-        "kcal_per_100g": 305.2
+        "kcal_per_100g": 305.2,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 16.98
+            }
+        ]
     },
     {
         "name": "Tortilla Original Small 8-pack",
@@ -7277,7 +8783,13 @@
             "Tacoskal & bröd"
         ],
         "p_per_100kcal": 2.72,
-        "kcal_per_100g": 305.2
+        "kcal_per_100g": 305.2,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 17.5
+            }
+        ]
     },
     {
         "name": "Olivolja Classico Extra Virgin",
@@ -7306,7 +8818,13 @@
             "Olja"
         ],
         "p_per_100kcal": 0.0,
-        "kcal_per_100g": 824.0
+        "kcal_per_100g": 824.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 68.09
+            }
+        ]
     },
     {
         "name": "Vetemjöl Ekologiskt",
@@ -7335,7 +8853,13 @@
             "Mjöl"
         ],
         "p_per_100kcal": 2.89,
-        "kcal_per_100g": 346.0
+        "kcal_per_100g": 346.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 27.39
+            }
+        ]
     },
     {
         "name": "Linser Melerade",
@@ -7364,7 +8888,13 @@
             "Linser"
         ],
         "p_per_100kcal": 6.82,
-        "kcal_per_100g": 307.8
+        "kcal_per_100g": 307.8,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 39.7
+            }
+        ]
     },
     {
         "name": "Linsmix",
@@ -7393,7 +8923,13 @@
             "Linser"
         ],
         "p_per_100kcal": 6.82,
-        "kcal_per_100g": 307.8
+        "kcal_per_100g": 307.8,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 39.7
+            }
+        ]
     },
     {
         "name": "Röda Linser",
@@ -7422,7 +8958,13 @@
             "Linser"
         ],
         "p_per_100kcal": 7.58,
-        "kcal_per_100g": 343.2
+        "kcal_per_100g": 343.2,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 29.29
+            }
+        ]
     },
     {
         "name": "Gröna Linser",
@@ -7451,7 +8993,13 @@
             "Linser"
         ],
         "p_per_100kcal": 7.62,
-        "kcal_per_100g": 315.0
+        "kcal_per_100g": 315.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 33.07
+            }
+        ]
     },
     {
         "name": "Linguine Pasta",
@@ -7480,7 +9028,13 @@
             "Pasta"
         ],
         "p_per_100kcal": 3.93,
-        "kcal_per_100g": 355.9
+        "kcal_per_100g": 355.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 20.77
+            }
+        ]
     },
     {
         "name": "Farfalle Nr 78 Pasta",
@@ -7509,7 +9063,13 @@
             "Pasta"
         ],
         "p_per_100kcal": 3.93,
-        "kcal_per_100g": 355.9
+        "kcal_per_100g": 355.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 20.77
+            }
+        ]
     },
     {
         "name": "Mafalda Corta Pasta",
@@ -7539,7 +9099,13 @@
             "Kort pasta"
         ],
         "p_per_100kcal": 3.93,
-        "kcal_per_100g": 355.9
+        "kcal_per_100g": 355.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 20.77
+            }
+        ]
     },
     {
         "name": "Ziti Corti Pasta",
@@ -7568,7 +9134,13 @@
             "Pasta"
         ],
         "p_per_100kcal": 3.93,
-        "kcal_per_100g": 355.9
+        "kcal_per_100g": 355.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 20.77
+            }
+        ]
     },
     {
         "name": "Conchiglie Pasta",
@@ -7597,7 +9169,13 @@
             "Pasta"
         ],
         "p_per_100kcal": 3.93,
-        "kcal_per_100g": 355.9
+        "kcal_per_100g": 355.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 20.77
+            }
+        ]
     },
     {
         "name": "Radiatori Pasta",
@@ -7627,7 +9205,13 @@
             "Kort pasta"
         ],
         "p_per_100kcal": 3.93,
-        "kcal_per_100g": 355.9
+        "kcal_per_100g": 355.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 20.77
+            }
+        ]
     },
     {
         "name": "Fusilli Nr 63 Pasta",
@@ -7656,7 +9240,13 @@
             "Pasta"
         ],
         "p_per_100kcal": 3.93,
-        "kcal_per_100g": 355.9
+        "kcal_per_100g": 355.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 20.77
+            }
+        ]
     },
     {
         "name": "Mezze Maniche Rigate Pasta",
@@ -7686,7 +9276,13 @@
             "Kort pasta"
         ],
         "p_per_100kcal": 3.93,
-        "kcal_per_100g": 355.9
+        "kcal_per_100g": 355.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 20.77
+            }
+        ]
     },
     {
         "name": "Spaghetti Pasta",
@@ -7715,7 +9311,13 @@
             "Pasta"
         ],
         "p_per_100kcal": 3.93,
-        "kcal_per_100g": 355.9
+        "kcal_per_100g": 355.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 20.77
+            }
+        ]
     },
     {
         "name": "Gordal Oliver med Kärnor",
@@ -7744,7 +9346,13 @@
             "Oliver"
         ],
         "p_per_100kcal": 0.94,
-        "kcal_per_100g": 138.0
+        "kcal_per_100g": 138.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 29.29
+            }
+        ]
     },
     {
         "name": "Chocolate Fudge Brownie Glass",
@@ -7773,7 +9381,13 @@
             "Glasspaket"
         ],
         "p_per_100kcal": 1.69,
-        "kcal_per_100g": 218.5
+        "kcal_per_100g": 218.5,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 63.36
+            }
+        ]
     },
     {
         "name": "Dulce De-lish Sundae Glass",
@@ -7802,7 +9416,13 @@
             "Glasspaket"
         ],
         "p_per_100kcal": 1.25,
-        "kcal_per_100g": 263.4
+        "kcal_per_100g": 263.4,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 63.36
+            }
+        ]
     },
     {
         "name": "Cookie Dough Vegan Glass",
@@ -7831,7 +9451,13 @@
             "Glasspaket"
         ],
         "p_per_100kcal": 0.67,
-        "kcal_per_100g": 255.0
+        "kcal_per_100g": 255.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 63.36
+            }
+        ]
     },
     {
         "name": "Mango Memories Glass",
@@ -7860,7 +9486,13 @@
             "Glasspaket"
         ],
         "p_per_100kcal": 1.41,
-        "kcal_per_100g": 256.0
+        "kcal_per_100g": 256.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 63.36
+            }
+        ]
     },
     {
         "name": "Karamel Sutra Core Glass",
@@ -7889,7 +9521,13 @@
             "Glasspaket"
         ],
         "p_per_100kcal": 1.6,
-        "kcal_per_100g": 256.5
+        "kcal_per_100g": 256.5,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 63.36
+            }
+        ]
     },
     {
         "name": "Cookie Dough Vaniljglass",
@@ -7918,7 +9556,13 @@
             "Glasspaket"
         ],
         "p_per_100kcal": 1.5,
-        "kcal_per_100g": 273.7
+        "kcal_per_100g": 273.7,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 63.36
+            }
+        ]
     },
     {
         "name": "Brookies Cream Glass",
@@ -7947,7 +9591,13 @@
             "Glasspaket"
         ],
         "p_per_100kcal": 1.42,
-        "kcal_per_100g": 289.2
+        "kcal_per_100g": 289.2,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 63.36
+            }
+        ]
     },
     {
         "name": "Vanilla Pecan Blondie Glass",
@@ -7976,7 +9626,13 @@
             "Glasspaket"
         ],
         "p_per_100kcal": 1.54,
-        "kcal_per_100g": 266.5
+        "kcal_per_100g": 266.5,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 63.36
+            }
+        ]
     },
     {
         "name": "Half Baked Brownies Cookie Doug Glass",
@@ -8005,7 +9661,13 @@
             "Glasspaket"
         ],
         "p_per_100kcal": 1.58,
-        "kcal_per_100g": 265.5
+        "kcal_per_100g": 265.5,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 63.36
+            }
+        ]
     },
     {
         "name": "Peanut Butter Cup Glass",
@@ -8034,7 +9696,13 @@
             "Glasspaket"
         ],
         "p_per_100kcal": 2.09,
-        "kcal_per_100g": 310.5
+        "kcal_per_100g": 310.5,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 63.36
+            }
+        ]
     },
     {
         "name": "Caramel Brownie Party Glass",
@@ -8063,7 +9731,13 @@
             "Glasspaket"
         ],
         "p_per_100kcal": 1.53,
-        "kcal_per_100g": 229.0
+        "kcal_per_100g": 229.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 63.36
+            }
+        ]
     },
     {
         "name": "Strawberry Cheesecake Glass",
@@ -8092,7 +9766,13 @@
             "Glasspaket"
         ],
         "p_per_100kcal": 1.35,
-        "kcal_per_100g": 244.0
+        "kcal_per_100g": 244.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 63.36
+            }
+        ]
     },
     {
         "name": "The Original Pirog Frysta/10-pack",
@@ -8121,7 +9801,13 @@
             "Paj & piroger"
         ],
         "p_per_100kcal": 3.22,
-        "kcal_per_100g": 261.0
+        "kcal_per_100g": 261.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 103.1
+            }
+        ]
     },
     {
         "name": "Original Pan Pizza Fryst/9-pack",
@@ -8150,7 +9836,13 @@
             "Pizza"
         ],
         "p_per_100kcal": 4.47,
-        "kcal_per_100g": 246.0
+        "kcal_per_100g": 246.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 103.1
+            }
+        ]
     },
     {
         "name": "Baguetter Vitlök Frysta",
@@ -8179,7 +9871,13 @@
             "Bröd"
         ],
         "p_per_100kcal": 2.28,
-        "kcal_per_100g": 302.1
+        "kcal_per_100g": 302.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 24.55
+            }
+        ]
     },
     {
         "name": "Laxfilé",
@@ -8208,7 +9906,13 @@
             "Fryst fisk"
         ],
         "p_per_100kcal": 8.97,
-        "kcal_per_100g": 223.0
+        "kcal_per_100g": 223.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 112.6
+            }
+        ]
     },
     {
         "name": "88an Glass",
@@ -8237,7 +9941,13 @@
             "Flerpack"
         ],
         "p_per_100kcal": 1.08,
-        "kcal_per_100g": 306.0
+        "kcal_per_100g": 306.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 54.84
+            }
+        ]
     },
     {
         "name": "Jubileumsbröd Halmstad Stenugnsbakat",
@@ -8266,7 +9976,13 @@
             "Matbröd"
         ],
         "p_per_100kcal": 0.0,
-        "kcal_per_100g": 253.3
+        "kcal_per_100g": 253.3,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 34.97
+            }
+        ]
     },
     {
         "name": "Biscoff",
@@ -8295,7 +10011,13 @@
             "Söta kakor"
         ],
         "p_per_100kcal": 1.01,
-        "kcal_per_100g": 485.7
+        "kcal_per_100g": 485.7,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 21.72
+            }
+        ]
     },
     {
         "name": "Biscoff Vanill",
@@ -8324,7 +10046,13 @@
             "Söta kakor"
         ],
         "p_per_100kcal": 0.75,
-        "kcal_per_100g": 522.5
+        "kcal_per_100g": 522.5,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 19.82
+            }
+        ]
     },
     {
         "name": "Biscoff Cream",
@@ -8353,7 +10081,13 @@
             "Söta kakor"
         ],
         "p_per_100kcal": 0.82,
-        "kcal_per_100g": 522.5
+        "kcal_per_100g": 522.5,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 19.82
+            }
+        ]
     },
     {
         "name": "Biscoff Milk Chocolate",
@@ -8382,7 +10116,13 @@
             "Söta kakor"
         ],
         "p_per_100kcal": 1.05,
-        "kcal_per_100g": 504.5
+        "kcal_per_100g": 504.5,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 19.82
+            }
+        ]
     },
     {
         "name": "Digestive Fullkorn",
@@ -8411,7 +10151,13 @@
             "Kex"
         ],
         "p_per_100kcal": 1.53,
-        "kcal_per_100g": 472.0
+        "kcal_per_100g": 472.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 14.55
+            }
+        ]
     },
     {
         "name": "Digestivekex Klassiska",
@@ -8440,7 +10186,13 @@
             "Kex"
         ],
         "p_per_100kcal": 1.35,
-        "kcal_per_100g": 496.4
+        "kcal_per_100g": 496.4,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 14.55
+            }
+        ]
     },
     {
         "name": "Pärlboll 6-pack",
@@ -8469,7 +10221,13 @@
             "Kondisbitar"
         ],
         "p_per_100kcal": 0.99,
-        "kcal_per_100g": 452.4
+        "kcal_per_100g": 452.4,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 16.98
+            }
+        ]
     },
     {
         "name": "Kokosboll 6-pack",
@@ -8498,7 +10256,13 @@
             "Kondisbitar"
         ],
         "p_per_100kcal": 1.06,
-        "kcal_per_100g": 463.9
+        "kcal_per_100g": 463.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 16.98
+            }
+        ]
     },
     {
         "name": "Punschrulle 6-pack",
@@ -8527,7 +10291,13 @@
             "Kondisbitar"
         ],
         "p_per_100kcal": 1.03,
-        "kcal_per_100g": 455.8
+        "kcal_per_100g": 455.8,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 16.98
+            }
+        ]
     },
     {
         "name": "Bananrulle 6-pack",
@@ -8556,7 +10326,13 @@
             "Kondisbitar"
         ],
         "p_per_100kcal": 1.01,
-        "kcal_per_100g": 457.5
+        "kcal_per_100g": 457.5,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 16.98
+            }
+        ]
     },
     {
         "name": "Arraksboll 6-pack",
@@ -8585,7 +10361,13 @@
             "Kondisbitar"
         ],
         "p_per_100kcal": 1.03,
-        "kcal_per_100g": 454.6
+        "kcal_per_100g": 454.6,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 16.98
+            }
+        ]
     },
     {
         "name": "Limpa Stor",
@@ -8614,7 +10396,13 @@
             "Matbröd"
         ],
         "p_per_100kcal": 3.64,
-        "kcal_per_100g": 269.1
+        "kcal_per_100g": 269.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 28.34
+            }
+        ]
     },
     {
         "name": "Bagels Classic",
@@ -8643,7 +10431,13 @@
             "Pita- & orientaliska bröd"
         ],
         "p_per_100kcal": 3.81,
-        "kcal_per_100g": 289.0
+        "kcal_per_100g": 289.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 25.0
+            }
+        ]
     },
     {
         "name": "Sesam Bagel",
@@ -8672,7 +10466,13 @@
             "Pita- & orientaliska bröd"
         ],
         "p_per_100kcal": 3.67,
-        "kcal_per_100g": 299.7
+        "kcal_per_100g": 299.7,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 25.0
+            }
+        ]
     },
     {
         "name": "Falu Rågrut Original",
@@ -8701,7 +10501,13 @@
             "Knäckebröd"
         ],
         "p_per_100kcal": 2.85,
-        "kcal_per_100g": 333.9
+        "kcal_per_100g": 333.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 13.2
+            }
+        ]
     },
     {
         "name": "Bondkakor",
@@ -8730,7 +10536,13 @@
             "Söta kakor"
         ],
         "p_per_100kcal": 1.21,
-        "kcal_per_100g": 495.5
+        "kcal_per_100g": 495.5,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 18.92
+            }
+        ]
     },
     {
         "name": "Chokladsnittar",
@@ -8759,7 +10571,13 @@
             "Söta kakor"
         ],
         "p_per_100kcal": 0.98,
-        "kcal_per_100g": 532.0
+        "kcal_per_100g": 532.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 18.92
+            }
+        ]
     },
     {
         "name": "Drömmar",
@@ -8788,7 +10606,13 @@
             "Söta kakor"
         ],
         "p_per_100kcal": 0.87,
-        "kcal_per_100g": 515.0
+        "kcal_per_100g": 515.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 18.92
+            }
+        ]
     },
     {
         "name": "Kola Snittar Klassiska",
@@ -8817,7 +10641,13 @@
             "Söta kakor"
         ],
         "p_per_100kcal": 1.0,
-        "kcal_per_100g": 501.9
+        "kcal_per_100g": 501.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 18.92
+            }
+        ]
     },
     {
         "name": "Finska Pinnar",
@@ -8846,7 +10676,13 @@
             "Söta kakor"
         ],
         "p_per_100kcal": 1.2,
-        "kcal_per_100g": 569.0
+        "kcal_per_100g": 569.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 18.92
+            }
+        ]
     },
     {
         "name": "Syltkakor",
@@ -8875,7 +10711,13 @@
             "Söta kakor"
         ],
         "p_per_100kcal": 1.06,
-        "kcal_per_100g": 520.0
+        "kcal_per_100g": 520.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 18.92
+            }
+        ]
     },
     {
         "name": "Din Stund Mini Chia Havssalt",
@@ -8904,7 +10746,13 @@
             "Knäckebröd"
         ],
         "p_per_100kcal": 2.84,
-        "kcal_per_100g": 351.8
+        "kcal_per_100g": 351.8,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 27.39
+            }
+        ]
     },
     {
         "name": "Din Harmoni Vallmofrö & Havssalt",
@@ -8933,7 +10781,13 @@
             "Knäckebröd"
         ],
         "p_per_100kcal": 3.1,
-        "kcal_per_100g": 354.7
+        "kcal_per_100g": 354.7,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 27.39
+            }
+        ]
     },
     {
         "name": "Din Stund Chia & Havssalt",
@@ -8962,7 +10816,13 @@
             "Knäckebröd"
         ],
         "p_per_100kcal": 2.84,
-        "kcal_per_100g": 351.8
+        "kcal_per_100g": 351.8,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 27.39
+            }
+        ]
     },
     {
         "name": "Frölimpa Mörk",
@@ -8991,7 +10851,13 @@
             "Matbröd"
         ],
         "p_per_100kcal": 4.7,
-        "kcal_per_100g": 319.0
+        "kcal_per_100g": 319.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 28.34
+            }
+        ]
     },
     {
         "name": "Rågbröd Danskt",
@@ -9020,7 +10886,13 @@
             "Matbröd"
         ],
         "p_per_100kcal": 2.81,
-        "kcal_per_100g": 284.2
+        "kcal_per_100g": 284.2,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 18.88
+            }
+        ]
     },
     {
         "name": "Orientbröd Råg 4-pack",
@@ -9049,7 +10921,13 @@
             "Baguetter & lösbröd"
         ],
         "p_per_100kcal": 3.1,
-        "kcal_per_100g": 258.0
+        "kcal_per_100g": 258.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 9.0
+            }
+        ]
     },
     {
         "name": "Orientbröd Vete 4-pack",
@@ -9078,7 +10956,13 @@
             "Baguetter & lösbröd"
         ],
         "p_per_100kcal": 3.06,
-        "kcal_per_100g": 271.0
+        "kcal_per_100g": 271.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 9.0
+            }
+        ]
     },
     {
         "name": "Laxburgare 2-pack",
@@ -9107,7 +10991,13 @@
             "Rökt & gravat"
         ],
         "p_per_100kcal": 8.64,
-        "kcal_per_100g": 219.9
+        "kcal_per_100g": 219.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 37.8
+            }
+        ]
     },
     {
         "name": "Laxburgare Fetaost Och Morot",
@@ -9136,7 +11026,13 @@
             "Rökt & gravat"
         ],
         "p_per_100kcal": 8.33,
-        "kcal_per_100g": 156.1
+        "kcal_per_100g": 156.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 37.8
+            }
+        ]
     },
     {
         "name": "Matjesill",
@@ -9165,7 +11061,13 @@
             "Sill"
         ],
         "p_per_100kcal": 5.22,
-        "kcal_per_100g": 230.0
+        "kcal_per_100g": 230.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 21.72
+            }
+        ]
     },
     {
         "name": "Brantevikssill",
@@ -9194,7 +11096,13 @@
             "Sill"
         ],
         "p_per_100kcal": 4.43,
-        "kcal_per_100g": 203.2
+        "kcal_per_100g": 203.2,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 34.02
+            }
+        ]
     },
     {
         "name": "Löksill",
@@ -9223,7 +11131,13 @@
             "Sill"
         ],
         "p_per_100kcal": 4.46,
-        "kcal_per_100g": 215.1
+        "kcal_per_100g": 215.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 34.02
+            }
+        ]
     },
     {
         "name": "Sill Inlagd",
@@ -9252,7 +11166,13 @@
             "Sill"
         ],
         "p_per_100kcal": 4.46,
-        "kcal_per_100g": 215.1
+        "kcal_per_100g": 215.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 34.02
+            }
+        ]
     },
     {
         "name": "Senapssill",
@@ -9281,7 +11201,13 @@
             "Sill"
         ],
         "p_per_100kcal": 3.07,
-        "kcal_per_100g": 270.1
+        "kcal_per_100g": 270.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 34.02
+            }
+        ]
     },
     {
         "name": "Sill Anjoviskryddad",
@@ -9310,7 +11236,13 @@
             "Sill"
         ],
         "p_per_100kcal": 5.79,
-        "kcal_per_100g": 143.4
+        "kcal_per_100g": 143.4,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 34.02
+            }
+        ]
     },
     {
         "name": "Vannameiräka Utan Skal 26/30 Fryst",
@@ -9339,7 +11271,13 @@
             "Frysta skaldjur"
         ],
         "p_per_100kcal": 23.1,
-        "kcal_per_100g": 59.3
+        "kcal_per_100g": 59.3,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 89.91
+            }
+        ]
     },
     {
         "name": "Stora Räkor i Lake Handskalade",
@@ -9368,7 +11306,13 @@
             "Lakeprodukter"
         ],
         "p_per_100kcal": 20.92,
-        "kcal_per_100g": 76.5
+        "kcal_per_100g": 76.5,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 95.0
+            }
+        ]
     },
     {
         "name": "Vannameiräka Kokt M. Stjärt 51/60 Fryst",
@@ -9397,7 +11341,13 @@
             "Frysta skaldjur"
         ],
         "p_per_100kcal": 23.83,
-        "kcal_per_100g": 68.4
+        "kcal_per_100g": 68.4,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 89.91
+            }
+        ]
     },
     {
         "name": "Torskfilé Portionbitar Frysta",
@@ -9426,7 +11376,13 @@
             "Fryst fisk"
         ],
         "p_per_100kcal": 21.25,
-        "kcal_per_100g": 80.0
+        "kcal_per_100g": 80.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 98.89
+            }
+        ]
     },
     {
         "name": "Tångcaviar Svart",
@@ -9455,7 +11411,13 @@
             "Rom"
         ],
         "p_per_100kcal": 7.69,
-        "kcal_per_100g": 13.0
+        "kcal_per_100g": 13.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 21.29
+            }
+        ]
     },
     {
         "name": "Tångcaviar Röd",
@@ -9484,7 +11446,13 @@
             "Rom"
         ],
         "p_per_100kcal": 7.69,
-        "kcal_per_100g": 13.0
+        "kcal_per_100g": 13.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 21.29
+            }
+        ]
     },
     {
         "name": "Surimisticks",
@@ -9513,7 +11481,13 @@
             "Frysta skaldjur"
         ],
         "p_per_100kcal": 7.88,
-        "kcal_per_100g": 104.0
+        "kcal_per_100g": 104.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 11.3
+            }
+        ]
     },
     {
         "name": "Matjessill Klassisk",
@@ -9542,7 +11516,13 @@
             "Sill"
         ],
         "p_per_100kcal": 4.86,
-        "kcal_per_100g": 226.3
+        "kcal_per_100g": 226.3,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 21.72
+            }
+        ]
     },
     {
         "name": "Mästarmatjes",
@@ -9571,7 +11551,13 @@
             "Sill"
         ],
         "p_per_100kcal": 4.76,
-        "kcal_per_100g": 231.0
+        "kcal_per_100g": 231.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 21.72
+            }
+        ]
     },
     {
         "name": "Bohusmatjesill",
@@ -9600,7 +11586,13 @@
             "Sill"
         ],
         "p_per_100kcal": 4.85,
-        "kcal_per_100g": 227.0
+        "kcal_per_100g": 227.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 21.72
+            }
+        ]
     },
     {
         "name": "Räkor Paprika Vitlök",
@@ -9629,7 +11621,13 @@
             "Färska skaldjur"
         ],
         "p_per_100kcal": 6.57,
-        "kcal_per_100g": 201.0
+        "kcal_per_100g": 201.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 37.8
+            }
+        ]
     },
     {
         "name": "Vannamei Chili",
@@ -9658,7 +11656,13 @@
             "Färska skaldjur"
         ],
         "p_per_100kcal": 6.82,
-        "kcal_per_100g": 179.0
+        "kcal_per_100g": 179.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 37.8
+            }
+        ]
     },
     {
         "name": "Matjessill Bitar",
@@ -9687,7 +11691,13 @@
             "Sill"
         ],
         "p_per_100kcal": 5.22,
-        "kcal_per_100g": 230.0
+        "kcal_per_100g": 230.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 16.98
+            }
+        ]
     },
     {
         "name": "Röd Rom Finkornig",
@@ -9716,7 +11726,13 @@
             "Fiskrom"
         ],
         "p_per_100kcal": 15.71,
-        "kcal_per_100g": 70.0
+        "kcal_per_100g": 70.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 33.97
+            }
+        ]
     },
     {
         "name": "Stenbitsrom Storkornig Röd",
@@ -9745,7 +11761,13 @@
             "Fiskrom"
         ],
         "p_per_100kcal": 12.22,
-        "kcal_per_100g": 90.0
+        "kcal_per_100g": 90.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 38.7
+            }
+        ]
     },
     {
         "name": "Kaviar Mild",
@@ -9774,7 +11796,13 @@
             "Kaviar"
         ],
         "p_per_100kcal": 1.66,
-        "kcal_per_100g": 440.0
+        "kcal_per_100g": 440.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 28.34
+            }
+        ]
     },
     {
         "name": "Pastej Karljohansvamp Vegansk",
@@ -9802,7 +11830,13 @@
             "Ost & pålägg"
         ],
         "p_per_100kcal": 1.95,
-        "kcal_per_100g": 251.0
+        "kcal_per_100g": 251.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 18.88
+            }
+        ]
     },
     {
         "name": "Havredryck Kalcium Vitaminer",
@@ -9831,7 +11865,13 @@
             "Växtbaserad dryck"
         ],
         "p_per_100kcal": 1.43,
-        "kcal_per_100g": 28.0
+        "kcal_per_100g": 28.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 15.09
+            }
+        ]
     },
     {
         "name": "Choklad Havredryck",
@@ -9860,7 +11900,13 @@
             "Växtbaserad dryck"
         ],
         "p_per_100kcal": 1.42,
-        "kcal_per_100g": 49.2
+        "kcal_per_100g": 49.2,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 15.09
+            }
+        ]
     },
     {
         "name": "Vaniljsmak Havredryck",
@@ -9889,7 +11935,13 @@
             "Växtbaserad dryck"
         ],
         "p_per_100kcal": 1.14,
-        "kcal_per_100g": 44.0
+        "kcal_per_100g": 44.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 15.09
+            }
+        ]
     },
     {
         "name": "Vegofärs Fryst",
@@ -9917,7 +11969,13 @@
             "Vegetariskt"
         ],
         "p_per_100kcal": 11.04,
-        "kcal_per_100g": 163.0
+        "kcal_per_100g": 163.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 66.2
+            }
+        ]
     },
     {
         "name": "Tofu Fast Naturell Ekologisk",
@@ -9945,7 +12003,13 @@
             "Tofu"
         ],
         "p_per_100kcal": 10.45,
-        "kcal_per_100g": 134.0
+        "kcal_per_100g": 134.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 25.5
+            }
+        ]
     },
     {
         "name": "Falafel Fryst",
@@ -9973,7 +12037,13 @@
             "Vegetariskt"
         ],
         "p_per_100kcal": 2.77,
-        "kcal_per_100g": 235.0
+        "kcal_per_100g": 235.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 47.27
+            }
+        ]
     },
     {
         "name": "Vegofärs Formbar Fryst",
@@ -10001,7 +12071,13 @@
             "Vegetariskt"
         ],
         "p_per_100kcal": 7.65,
-        "kcal_per_100g": 170.0
+        "kcal_per_100g": 170.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 66.2
+            }
+        ]
     },
     {
         "name": "Matbas Havre Ekologisk 13%",
@@ -10030,7 +12106,13 @@
             "Växtbaserad matlagningsmejeri"
         ],
         "p_per_100kcal": 0.68,
-        "kcal_per_100g": 147.0
+        "kcal_per_100g": 147.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 12.25
+            }
+        ]
     },
     {
         "name": "Krögarpytt Vegetarisk",
@@ -10058,7 +12140,13 @@
             "Fryst vegetariskt"
         ],
         "p_per_100kcal": 3.42,
-        "kcal_per_100g": 149.1
+        "kcal_per_100g": 149.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 66.2
+            }
+        ]
     },
     {
         "name": "Barista Havredryck 3%",
@@ -10087,7 +12175,13 @@
             "Växtbaserad dryck"
         ],
         "p_per_100kcal": 1.29,
-        "kcal_per_100g": 62.0
+        "kcal_per_100g": 62.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 17.5
+            }
+        ]
     },
     {
         "name": "Havredryck Vegetabilisk 1,5%",
@@ -10116,7 +12210,13 @@
             "Växtbaserad dryck"
         ],
         "p_per_100kcal": 1.52,
-        "kcal_per_100g": 46.0
+        "kcal_per_100g": 46.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 16.04
+            }
+        ]
     },
     {
         "name": "Almond Roasted Mandeldryck",
@@ -10145,7 +12245,13 @@
             "Växtbaserad dryck"
         ],
         "p_per_100kcal": 2.08,
-        "kcal_per_100g": 24.0
+        "kcal_per_100g": 24.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 24.55
+            }
+        ]
     },
     {
         "name": "Almond No Sugars Mandeldryck",
@@ -10174,7 +12280,13 @@
             "Växtbaserad dryck"
         ],
         "p_per_100kcal": 3.33,
-        "kcal_per_100g": 15.0
+        "kcal_per_100g": 15.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 24.55
+            }
+        ]
     },
     {
         "name": "Naturell Tofu Fast Vegansk",
@@ -10202,7 +12314,13 @@
             "Tofu"
         ],
         "p_per_100kcal": 10.2,
-        "kcal_per_100g": 147.0
+        "kcal_per_100g": 147.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 12.25
+            }
+        ]
     },
     {
         "name": "Vegobacon Klippta Skivor Vegansk",
@@ -10230,7 +12348,13 @@
             "Snabblagat"
         ],
         "p_per_100kcal": 12.57,
-        "kcal_per_100g": 167.1
+        "kcal_per_100g": 167.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 23.61
+            }
+        ]
     },
     {
         "name": "Plant Cream Vegetabilisk 31%",
@@ -10259,7 +12383,13 @@
             "Allergi matlagning "
         ],
         "p_per_100kcal": 0.21,
-        "kcal_per_100g": 292.0
+        "kcal_per_100g": 292.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 12.25
+            }
+        ]
     },
     {
         "name": "Plant Cream Vegetabilisk 15%",
@@ -10288,7 +12418,13 @@
             "Allergi matlagning "
         ],
         "p_per_100kcal": 0.85,
-        "kcal_per_100g": 153.4
+        "kcal_per_100g": 153.4,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 12.25
+            }
+        ]
     },
     {
         "name": "Coconut No Sugars Kokosdryck",
@@ -10317,7 +12453,13 @@
             "Växtbaserad dryck"
         ],
         "p_per_100kcal": 0.71,
-        "kcal_per_100g": 14.0
+        "kcal_per_100g": 14.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 25.5
+            }
+        ]
     },
     {
         "name": "Barista Ekologisk Havredryck",
@@ -10346,7 +12488,13 @@
             "Växtbaserad dryck"
         ],
         "p_per_100kcal": 1.48,
-        "kcal_per_100g": 54.0
+        "kcal_per_100g": 54.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 19.82
+            }
+        ]
     },
     {
         "name": "Havredryck Ekologisk 0,5%",
@@ -10375,7 +12523,13 @@
             "Växtbaserad dryck"
         ],
         "p_per_100kcal": 2.77,
-        "kcal_per_100g": 39.7
+        "kcal_per_100g": 39.7,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 17.93
+            }
+        ]
     },
     {
         "name": "Tortelloni Pancetta Ricotta & Bacon",
@@ -10403,7 +12557,13 @@
             "Färsk pasta"
         ],
         "p_per_100kcal": 3.29,
-        "kcal_per_100g": 288.7
+        "kcal_per_100g": 288.7,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 31.18
+            }
+        ]
     },
     {
         "name": "Ricotta Spinaci Tortelloni Färsk Pasta",
@@ -10431,7 +12591,13 @@
             "Färsk pasta"
         ],
         "p_per_100kcal": 3.59,
-        "kcal_per_100g": 276.1
+        "kcal_per_100g": 276.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 31.18
+            }
+        ]
     },
     {
         "name": "Diamanti Ricotta/basilika",
@@ -10459,7 +12625,13 @@
             "Färsk pasta"
         ],
         "p_per_100kcal": 3.54,
-        "kcal_per_100g": 256.9
+        "kcal_per_100g": 256.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 31.18
+            }
+        ]
     },
     {
         "name": "Formaggi Tortelloni Färsk Pasta",
@@ -10487,7 +12659,13 @@
             "Färsk pasta"
         ],
         "p_per_100kcal": 3.82,
-        "kcal_per_100g": 288.0
+        "kcal_per_100g": 288.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 31.18
+            }
+        ]
     },
     {
         "name": "Ravioli Asparagi Ricotta",
@@ -10515,7 +12693,13 @@
             "Färsk pasta"
         ],
         "p_per_100kcal": 3.07,
-        "kcal_per_100g": 244.0
+        "kcal_per_100g": 244.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 31.18
+            }
+        ]
     },
     {
         "name": "Tortelloni Pomodoro & Basilico Vegansk Färsk Pasta",
@@ -10543,7 +12727,13 @@
             "Färsk pasta"
         ],
         "p_per_100kcal": 2.77,
-        "kcal_per_100g": 256.0
+        "kcal_per_100g": 256.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 33.07
+            }
+        ]
     },
     {
         "name": "Ravioli Svamp",
@@ -10571,7 +12761,13 @@
             "Färsk pasta"
         ],
         "p_per_100kcal": 3.52,
-        "kcal_per_100g": 264.3
+        "kcal_per_100g": 264.3,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 31.18
+            }
+        ]
     },
     {
         "name": "Arrabbiata Tortelloni Färsk Pasta",
@@ -10599,7 +12795,13 @@
             "Färsk pasta"
         ],
         "p_per_100kcal": 3.74,
-        "kcal_per_100g": 265.0
+        "kcal_per_100g": 265.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 31.18
+            }
+        ]
     },
     {
         "name": "Ricotta Prosciutto Tortelloni",
@@ -10627,7 +12829,13 @@
             "Färsk pasta"
         ],
         "p_per_100kcal": 4.14,
-        "kcal_per_100g": 265.8
+        "kcal_per_100g": 265.8,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 31.18
+            }
+        ]
     },
     {
         "name": "Pomodoro Mozzarella Tortelloni",
@@ -10655,7 +12863,13 @@
             "Färsk pasta"
         ],
         "p_per_100kcal": 3.89,
-        "kcal_per_100g": 282.7
+        "kcal_per_100g": 282.7,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 31.18
+            }
+        ]
     },
     {
         "name": "Skagenröra",
@@ -10684,7 +12898,13 @@
             "Krämiga sallader"
         ],
         "p_per_100kcal": 0.8,
-        "kcal_per_100g": 450.0
+        "kcal_per_100g": 450.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 41.59
+            }
+        ]
     },
     {
         "name": "Räksallad",
@@ -10713,7 +12933,13 @@
             "Krämiga sallader"
         ],
         "p_per_100kcal": 0.86,
-        "kcal_per_100g": 394.4
+        "kcal_per_100g": 394.4,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 41.59
+            }
+        ]
     },
     {
         "name": "Stroganoff Grillost Vildris",
@@ -10742,7 +12968,13 @@
             "Färdiga rätter"
         ],
         "p_per_100kcal": 3.63,
-        "kcal_per_100g": 179.0
+        "kcal_per_100g": 179.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 66.2
+            }
+        ]
     },
     {
         "name": "Kycklingbröst Basilikasås",
@@ -10771,7 +13003,13 @@
             "Färdiga rätter"
         ],
         "p_per_100kcal": 4.41,
-        "kcal_per_100g": 152.0
+        "kcal_per_100g": 152.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 66.2
+            }
+        ]
     },
     {
         "name": "Köttbullar Potatismos Gräddsås",
@@ -10800,7 +13038,13 @@
             "Färdiga rätter"
         ],
         "p_per_100kcal": 3.54,
-        "kcal_per_100g": 164.0
+        "kcal_per_100g": 164.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 66.2
+            }
+        ]
     },
     {
         "name": "Frikadeller Tomatsås",
@@ -10829,7 +13073,13 @@
             "Färdiga rätter"
         ],
         "p_per_100kcal": 3.62,
-        "kcal_per_100g": 185.0
+        "kcal_per_100g": 185.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 66.2
+            }
+        ]
     },
     {
         "name": "Kycklingcurry Ris",
@@ -10858,7 +13108,13 @@
             "Färdiga rätter"
         ],
         "p_per_100kcal": 4.96,
-        "kcal_per_100g": 123.0
+        "kcal_per_100g": 123.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 66.2
+            }
+        ]
     },
     {
         "name": "Tortelloni Ricotta Spenat",
@@ -10887,7 +13143,13 @@
             "Färdiga rätter"
         ],
         "p_per_100kcal": 2.12,
-        "kcal_per_100g": 179.0
+        "kcal_per_100g": 179.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 66.2
+            }
+        ]
     },
     {
         "name": "Carbonara Rökt Sidfläsk",
@@ -10916,7 +13178,13 @@
             "Färdiga rätter"
         ],
         "p_per_100kcal": 3.35,
-        "kcal_per_100g": 179.0
+        "kcal_per_100g": 179.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 66.2
+            }
+        ]
     },
     {
         "name": "Lasagnette Bolognese Mozzarella",
@@ -10945,7 +13213,13 @@
             "Färdiga rätter"
         ],
         "p_per_100kcal": 4.92,
-        "kcal_per_100g": 179.0
+        "kcal_per_100g": 179.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 66.2
+            }
+        ]
     },
     {
         "name": "Pomodoro Mozzarella",
@@ -10974,7 +13248,13 @@
             "Färdiga rätter"
         ],
         "p_per_100kcal": 4.46,
-        "kcal_per_100g": 138.9
+        "kcal_per_100g": 138.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 61.47
+            }
+        ]
     },
     {
         "name": "Oliver med Chili",
@@ -11002,7 +13282,13 @@
             "Inläggningar"
         ],
         "p_per_100kcal": 0.59,
-        "kcal_per_100g": 153.0
+        "kcal_per_100g": 153.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 23.61
+            }
+        ]
     },
     {
         "name": "Oliver Vitlök",
@@ -11030,7 +13316,13 @@
             "Inläggningar"
         ],
         "p_per_100kcal": 0.7,
-        "kcal_per_100g": 187.0
+        "kcal_per_100g": 187.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 23.61
+            }
+        ]
     },
     {
         "name": "Mammut Oliver",
@@ -11058,7 +13350,13 @@
             "Inläggningar"
         ],
         "p_per_100kcal": 0.67,
-        "kcal_per_100g": 135.0
+        "kcal_per_100g": 135.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 23.61
+            }
+        ]
     },
     {
         "name": "Vit Ost Mix Oliver",
@@ -11086,7 +13384,13 @@
             "Inläggningar"
         ],
         "p_per_100kcal": 1.54,
-        "kcal_per_100g": 240.0
+        "kcal_per_100g": 240.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 23.61
+            }
+        ]
     },
     {
         "name": "Prosciutto Crudo Skivad",
@@ -11114,7 +13418,13 @@
             "Medelhavschark"
         ],
         "p_per_100kcal": 11.95,
-        "kcal_per_100g": 251.0
+        "kcal_per_100g": 251.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 37.8
+            }
+        ]
     },
     {
         "name": "Ranch Matkex",
@@ -11143,7 +13453,13 @@
             "Kex"
         ],
         "p_per_100kcal": 2.01,
-        "kcal_per_100g": 496.7
+        "kcal_per_100g": 496.7,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 14.14
+            }
+        ]
     },
     {
         "name": "Saltade Matkex",
@@ -11172,7 +13488,13 @@
             "Kex"
         ],
         "p_per_100kcal": 2.01,
-        "kcal_per_100g": 496.7
+        "kcal_per_100g": 496.7,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 14.14
+            }
+        ]
     },
     {
         "name": "Sourcream & On Matkex",
@@ -11201,7 +13523,13 @@
             "Kex"
         ],
         "p_per_100kcal": 2.01,
-        "kcal_per_100g": 496.7
+        "kcal_per_100g": 496.7,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 14.14
+            }
+        ]
     },
     {
         "name": "Gröna Oliver med Chili",
@@ -11230,7 +13558,13 @@
             "Oliver"
         ],
         "p_per_100kcal": 0.64,
-        "kcal_per_100g": 141.0
+        "kcal_per_100g": 141.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 23.61
+            }
+        ]
     },
     {
         "name": "Gröna Oliver med Citron",
@@ -11259,7 +13593,13 @@
             "Oliver"
         ],
         "p_per_100kcal": 0.71,
-        "kcal_per_100g": 140.0
+        "kcal_per_100g": 140.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 23.61
+            }
+        ]
     },
     {
         "name": "Gröna Oliver med Pimiento",
@@ -11288,7 +13628,13 @@
             "Oliver"
         ],
         "p_per_100kcal": 0.64,
-        "kcal_per_100g": 141.0
+        "kcal_per_100g": 141.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 23.61
+            }
+        ]
     },
     {
         "name": "Gröna Oliver med Vitlök",
@@ -11317,7 +13663,13 @@
             "Oliver"
         ],
         "p_per_100kcal": 0.77,
-        "kcal_per_100g": 142.0
+        "kcal_per_100g": 142.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 23.61
+            }
+        ]
     },
     {
         "name": "Tuc Salt Pepper",
@@ -11346,7 +13698,13 @@
             "Kex"
         ],
         "p_per_100kcal": 1.52,
-        "kcal_per_100g": 493.3
+        "kcal_per_100g": 493.3,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 13.2
+            }
+        ]
     },
     {
         "name": "Tuc Original",
@@ -11375,7 +13733,13 @@
             "Kex"
         ],
         "p_per_100kcal": 1.72,
-        "kcal_per_100g": 483.0
+        "kcal_per_100g": 483.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 13.2
+            }
+        ]
     },
     {
         "name": "Tuc Paprika",
@@ -11404,7 +13768,13 @@
             "Kex"
         ],
         "p_per_100kcal": 1.62,
-        "kcal_per_100g": 495.0
+        "kcal_per_100g": 495.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 13.2
+            }
+        ]
     },
     {
         "name": "Tuc Sweetchili",
@@ -11433,7 +13803,13 @@
             "Kex"
         ],
         "p_per_100kcal": 1.55,
-        "kcal_per_100g": 495.9
+        "kcal_per_100g": 495.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 13.2
+            }
+        ]
     },
     {
         "name": "Tuc Sour Cream Onion",
@@ -11462,7 +13838,13 @@
             "Kex"
         ],
         "p_per_100kcal": 1.51,
-        "kcal_per_100g": 498.3
+        "kcal_per_100g": 498.3,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 13.2
+            }
+        ]
     },
     {
         "name": "Halkidiki Grekiska Urkärnade Ekologiska",
@@ -11491,7 +13873,13 @@
             "Oliver"
         ],
         "p_per_100kcal": 1.03,
-        "kcal_per_100g": 155.1
+        "kcal_per_100g": 155.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 37.8
+            }
+        ]
     },
     {
         "name": "Halkidiki Oliver Utan Kärnor",
@@ -11520,7 +13908,13 @@
             "Oliver"
         ],
         "p_per_100kcal": 1.03,
-        "kcal_per_100g": 155.1
+        "kcal_per_100g": 155.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 39.7
+            }
+        ]
     },
     {
         "name": "Kalamata Oliver Urkärnade Ekologiska",
@@ -11549,7 +13943,13 @@
             "Oliver"
         ],
         "p_per_100kcal": 0.8,
-        "kcal_per_100g": 201.0
+        "kcal_per_100g": 201.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 37.8
+            }
+        ]
     },
     {
         "name": "Halkidiki Oliver med Kärnor",
@@ -11578,7 +13978,13 @@
             "Oliver"
         ],
         "p_per_100kcal": 0.83,
-        "kcal_per_100g": 144.0
+        "kcal_per_100g": 144.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 29.4
+            }
+        ]
     },
     {
         "name": "Kalamata Oliver",
@@ -11607,7 +14013,13 @@
             "Oliver"
         ],
         "p_per_100kcal": 0.6,
-        "kcal_per_100g": 249.0
+        "kcal_per_100g": 249.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 30.4
+            }
+        ]
     },
     {
         "name": "Halkidiki Oliver Utan Kärnor",
@@ -11636,7 +14048,13 @@
             "Oliver"
         ],
         "p_per_100kcal": 0.83,
-        "kcal_per_100g": 144.0
+        "kcal_per_100g": 144.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 30.23
+            }
+        ]
     },
     {
         "name": "Olivmix Kalamata & Halkidiki",
@@ -11665,7 +14083,13 @@
             "Oliver"
         ],
         "p_per_100kcal": 0.71,
-        "kcal_per_100g": 197.0
+        "kcal_per_100g": 197.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 30.85
+            }
+        ]
     },
     {
         "name": "Prosciutto Di Parma Skivad",
@@ -11693,7 +14117,13 @@
             "Medelhavschark"
         ],
         "p_per_100kcal": 11.15,
-        "kcal_per_100g": 260.0
+        "kcal_per_100g": 260.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 47.27
+            }
+        ]
     },
     {
         "name": "Prosciutto Crudo Skivad",
@@ -11721,7 +14151,13 @@
             "Medelhavschark"
         ],
         "p_per_100kcal": 11.95,
-        "kcal_per_100g": 251.0
+        "kcal_per_100g": 251.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 108.8
+            }
+        ]
     },
     {
         "name": "Salame Milano Skivad",
@@ -11749,7 +14185,13 @@
             "Medelhavschark"
         ],
         "p_per_100kcal": 6.58,
-        "kcal_per_100g": 380.0
+        "kcal_per_100g": 380.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 30.23
+            }
+        ]
     },
     {
         "name": "Antipasti Skivad",
@@ -11777,7 +14219,13 @@
             "Medelhavschark"
         ],
         "p_per_100kcal": 11.95,
-        "kcal_per_100g": 251.0
+        "kcal_per_100g": 251.0,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 47.27
+            }
+        ]
     },
     {
         "name": "Supersur Gott & Blandat",
@@ -11806,7 +14254,13 @@
             "Godispåsar"
         ],
         "p_per_100kcal": 0.88,
-        "kcal_per_100g": 364.2
+        "kcal_per_100g": 364.2,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 21.72
+            }
+        ]
     },
     {
         "name": "Salt Gott & Blandat",
@@ -11835,7 +14289,13 @@
             "Godispåsar"
         ],
         "p_per_100kcal": 0.23,
-        "kcal_per_100g": 348.5
+        "kcal_per_100g": 348.5,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 21.72
+            }
+        ]
     },
     {
         "name": "Fizzypop&co Gott & Blandat",
@@ -11864,7 +14324,13 @@
             "Godispåsar"
         ],
         "p_per_100kcal": 1.28,
-        "kcal_per_100g": 350.9
+        "kcal_per_100g": 350.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 21.72
+            }
+        ]
     },
     {
         "name": "Favoritmix Gott & Blandat",
@@ -11893,7 +14359,13 @@
             "Godispåsar"
         ],
         "p_per_100kcal": 0.78,
-        "kcal_per_100g": 357.1
+        "kcal_per_100g": 357.1,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 21.72
+            }
+        ]
     },
     {
         "name": "Original Gott & Blandat",
@@ -11922,6 +14394,12 @@
             "Godispåsar"
         ],
         "p_per_100kcal": 0.14,
-        "kcal_per_100g": 355.9
+        "kcal_per_100g": 355.9,
+        "price_history": [
+            {
+                "date": "2026-06-28",
+                "price": 21.72
+            }
+        ]
     }
 ]

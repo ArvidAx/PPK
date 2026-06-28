@@ -35,7 +35,7 @@ def main():
     # 3. Kör skrapan. Skicka vidare eventuella argument (t.ex. för snabbtestning).
     args_str = " ".join(sys.argv[1:])
     logging.info(f"Startar Hemköp-skrapan med argument: {args_str if args_str else 'inga (full skrapning)'}...")
-    run_cmd(f"{sys.executable} -u hemkop_protein_per_krona.py {args_str}")
+    run_cmd(f"{sys.executable} -u hemkop_protein_per_krona.py --output-json public/raw_data.json {args_str}")
 
     # 3.5 Kör tvättskriptet för att sanera eventuella anomalier (matematiska gränsvärden etc.)
     logging.info("Kör datatvätt för att filtrera bort anomalier (clean_database.py)...")
