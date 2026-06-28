@@ -492,7 +492,7 @@ function isSmartMatch(text, query) {
     text = String(text).toLowerCase().trim();
     // Strip any characters that aren't letters, digits, spaces or Swedish chars
     // This prevents regex DoS and XSS via crafted search strings
-    query = String(query).toLowerCase().trim().replace(/[^a-zåäöA-ZÅÄÖ0-9\s\-]/g, '');
+    query = String(query).toLowerCase().trim().replace(/[^a-zåäöA-ZÅÄÖ0-9\s\-\&]/g, '').replace(/\s+/g, ' ');
     if (query.length === 0) return false;
     
     // Synonym expansion
@@ -600,6 +600,27 @@ function calculateSearchScore(item, query) {
             return 0;
         }
     }
+
+    // 3. Köttfärs Intent
+    if (query.includes("färs") || query.includes("fars") || query.includes("köttfärs")) {
+        const excludes = ["krydda", "mix", "taco", "sås", "sas", "pajer", "paj", "buljong", "fond", "chips", "bageri"];
+        if (excludes.some(bad => name.includes(bad) || brand.includes(bad))) {
+            return 0; // Sortera bort kryddmixer och färdigrätter
+        }
+        // Prioritera produkter som faktiskt ligger i kött/fryst/vegetariskt-kategorierna
+        if (item.category === "kott-fagel-och-chark" || item.category === "fryst" || item.category === "vegetariskt") {
+            score += 60;
+        }
+    }
+
+    // 4. Linser & Ärter Intent
+    if (query.includes("linser") || query.includes("ärter") || query.includes("arter")) {
+        const excludes = ["soppa", "gryta", "färdig", "konserv", "fryst", "chips", "puffar", "snack"];
+        // Om användaren söker brett vill vi prioritera de rena torkade råvarorna (högst PPK)
+        if (excludes.some(bad => name.includes(bad)) && item.ppk < 3.0) {
+            return 0; // Sortera bort färdiga soppor eller dyra snacks som förstör listan
+        }
+    }
     
     return score;
 }
@@ -611,7 +632,7 @@ function applyFilters(resetPage = false) {
     }
 
     const rawSearch = searchInput ? (searchInput.value || '') : '';
-    const search = rawSearch.toLowerCase().trim().replace(/[^a-zåäöA-ZÅÄÖ0-9\s\-]/g, '');
+    const search = rawSearch.toLowerCase().trim().replace(/[^a-zåäöA-ZÅÄÖ0-9\s\-\&]/g, '').replace(/\s+/g, ' ');
     const store = storeSelect ? storeSelect.value : '';
     const maxPrice = parseFloat(maxPriceInput ? maxPriceInput.value : Infinity) || Infinity;
     const minProtein = parseFloat(minProteinInput ? minProteinInput.value : 0) || 0;
