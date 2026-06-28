@@ -614,6 +614,12 @@ function applyFilters(resetPage = false) {
             if (b._searchScore !== a._searchScore) {
                 return b._searchScore - a._searchScore;
             }
+            const numericCols = ['ppk', 'ppkcal', 'price_sek', 'protein_per_100g'];
+            if (numericCols.includes(sortCol)) {
+                const valA = parseFloat(a[sortCol]) || 0;
+                const valB = parseFloat(b[sortCol]) || 0;
+                return sortDesc ? valB - valA : valA - valB;
+            }
             let valA = a[sortCol];
             let valB = b[sortCol];
             if (valA == null) return 1;
@@ -644,6 +650,12 @@ function applyFilters(resetPage = false) {
         });
 
         filteredData.sort((a, b) => {
+            const numericCols = ['ppk', 'ppkcal', 'price_sek', 'protein_per_100g'];
+            if (numericCols.includes(sortCol)) {
+                const valA = parseFloat(a[sortCol]) || 0;
+                const valB = parseFloat(b[sortCol]) || 0;
+                return sortDesc ? valB - valA : valA - valB;
+            }
             let valA = a[sortCol];
             let valB = b[sortCol];
             if (valA == null) return 1;
