@@ -596,22 +596,32 @@ function calculateSearchScore(item, query) {
         }
     }
     
-    // 2. Ägg
-    if (query === "ägg") {
-        const isEggCategory = underkategori.includes("ägg") || underkategori.some(sub => sub.includes("ägg"));
-        const hasStandaloneEggInTitle = words.includes("ägg");
-        if (!isEggCategory && !hasStandaloneEggInTitle) {
-            return 0;
+    // 2. Ägg Precision Intent (Isolera från ost/mejeri)
+    if (query === "ägg" || query === "agg") {
+        const isRealEgg = underkategori.includes("ägg") || name.startsWith("ägg") || words.includes("ägg");
+        const isExcluded = name.includes("ost") || name.includes("paj") || name.includes("nudlar");
+        if (isRealEgg && !isExcluded) {
+            score += 150; // Ge extremt hög prioritet till rena äggpaket
+            return score;
+        } else {
+            return 0; // Blockera allt som inte är ägg
         }
     }
 
-    if (query === 'ost') {
-        if (name.includes('ost') || brand.includes('ost') || underkategori.some(sub => sub.includes('ost'))) {
-            const excludes = ['rostad', 'rosta', 'rostat', 'frukost', 'kosttillskott', 'ostron', 'frost'];
+    // 3. Ost Precision Intent (Isolera från ägg/mejeri)
+    if (query === "ost") {
+        // Kontrollera att ordet 'ost' finns som ett fristående ord eller i produktens titel/märke, INTE bara mejerikategorin
+        const hasOstInTitle = words.includes("ost") || name.includes("ost") || brand.includes("ost");
+        const hasOstInSub = underkategori.some(sub => sub.toLowerCase() === "ost" || sub.toLowerCase().includes("hårdost") || sub.toLowerCase().includes("skivad ost") || sub.toLowerCase() === "mjukost");
+        
+        if (hasOstInTitle || hasOstInSub) {
+            const excludes = ['rostad', 'rosta', 'rostat', 'frukost', 'kosttillskott', 'ostron', 'frost', 'ägg', 'agg'];
             if (!excludes.some(bad => name.includes(bad))) {
-                score += 50;
+                score += 100;
+                return score;
             }
         }
+        return 0; // Blockera om det bara råkade matcha mejerikategorins sträng utan att vara ost
     }
 
     // 3. Köttfärs Intent
