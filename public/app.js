@@ -498,58 +498,163 @@ function isSmartMatch(text, query) {
     return text.includes(query);
 }
 
+function calculateSearchScore(item, query) {
+    if (!query) return 0;
+    const name = (item.name || '').toLowerCase().trim();
+    const brand = (item.brand || '').toLowerCase().trim();
+    const desc = (item.description || '').toLowerCase().trim();
+    const underkategori = (item.underkategori || []).map(s => String(s).toLowerCase().trim());
+    
+    // Split name into words using Swedish-friendly characters
+    const words = name.split(/[^a-zåäöA-ZÅÄÖ0-9\-]+/);
+    
+    // Split query into terms
+    const queryTerms = query.toLowerCase().split(/[^a-zåäöA-ZÅÄÖ0-9\-]+/).filter(Boolean);
+    if (queryTerms.length === 0) return 0;
+    
+    // Every query term must match as a standalone word or prefix of a word in product name, brand or underkategori
+    let matchesAllTerms = true;
+    for (const term of queryTerms) {
+        const matchesInName = words.some(w => w === term || w.startsWith(term));
+        const brandWords = brand.split(/[^a-zåäöA-ZÅÄÖ0-9\-]+/);
+        const matchesInBrand = brandWords.some(w => w === term || w.startsWith(term));
+        const matchesInUnder = underkategori.some(sub => {
+            const subWords = sub.split(/[^a-zåäöA-ZÅÄÖ0-9\-]+/);
+            return subWords.some(w => w === term || w.startsWith(term));
+        });
+        
+        if (!matchesInName && !matchesInBrand && !matchesInUnder) {
+            matchesAllTerms = false;
+            break;
+        }
+    }
+    
+    if (!matchesAllTerms) return 0;
+    
+    let score = 0;
+    
+    // Poäng +100: Sökordet matchar produktens titel exakt eller titeln börjar med ordet.
+    if (name === query || name.startsWith(query)) {
+        score += 100;
+    }
+    
+    // Poäng +50: Sökordet finns som ett fristående ord inuti produktens titel
+    const hasStandaloneWord = queryTerms.every(term => words.includes(term));
+    if (hasStandaloneWord) {
+        score += 50;
+    }
+    
+    // Poäng +20: Sökordet matchar exakt produktens underkategori
+    const hasUnderMatch = underkategori.some(sub => {
+        if (sub === query) return true;
+        const subWords = sub.split(/[^a-zåäöA-ZÅÄÖ0-9\-]+/);
+        return queryTerms.every(term => subWords.includes(term));
+    });
+    if (hasUnderMatch) {
+        score += 20;
+    }
+    
+    // Smart exkludering (Kategoritvätt)
+    // 1. Pizza
+    if (query.includes("pizza") || query.includes("fryspizza")) {
+        const excludes = ["mjöl", "sås", "krydda", "kit", "deg", "mjol", "sas", "kryddor", "pizzakit", "pizzadeg", "pizzasås", "pizzasas", "pizzakrydda"];
+        if (excludes.some(bad => name.includes(bad) || brand.includes(bad) || desc.includes(bad))) {
+            return 0;
+        }
+    }
+    
+    // 2. Ägg
+    if (query === "ägg") {
+        const isEggCategory = underkategori.includes("ägg") || underkategori.some(sub => sub.includes("ägg"));
+        const hasStandaloneEggInTitle = words.includes("ägg");
+        if (!isEggCategory && !hasStandaloneEggInTitle) {
+            return 0;
+        }
+    }
+    
+    return score;
+}
+
 function applyFilters(resetPage = false) {
     if (resetPage) {
         currentLimit = 20;
         clickCount = 0;
     }
 
-    // Sanitize: strip non-alphanumeric/Swedish chars to prevent XSS and regex DoS
     const rawSearch = searchInput ? (searchInput.value || '') : '';
     const search = rawSearch.toLowerCase().trim().replace(/[^a-zåäöA-ZÅÄÖ0-9\s\-]/g, '');
     const store = storeSelect ? storeSelect.value : '';
     const maxPrice = parseFloat(maxPriceInput ? maxPriceInput.value : Infinity) || Infinity;
     const minProtein = parseFloat(minProteinInput ? minProteinInput.value : 0) || 0;
 
-    filteredData = allData.filter(item => {
-        if (activeBasket && BASKETS[activeBasket]) {
-            const criteria = BASKETS[activeBasket].filter_criteria;
-            
-            // Filter keywords
-            if (criteria.keywords && criteria.keywords.length > 0) {
-                const nameAndBrand = ((item.name || '') + ' ' + (item.brand || '')).toLowerCase();
-                const matchesKeyword = criteria.keywords.some(kw => nameAndBrand.includes(kw.toLowerCase()));
-                if (!matchesKeyword) return false;
+    if (search) {
+        filteredData = allData.filter(item => {
+            if (activeBasket && BASKETS[activeBasket]) {
+                const criteria = BASKETS[activeBasket].filter_criteria;
+                if (criteria.keywords && criteria.keywords.length > 0) {
+                    const nameAndBrand = ((item.name || '') + ' ' + (item.brand || '')).toLowerCase();
+                    const matchesKeyword = criteria.keywords.some(kw => nameAndBrand.includes(kw.toLowerCase()));
+                    if (!matchesKeyword) return false;
+                }
+                if (criteria.min_ppk != null && (item.ppk || 0) < criteria.min_ppk) return false;
             }
-            
-            // Filter min ppk
-            if (criteria.min_ppk != null && (item.ppk || 0) < criteria.min_ppk) return false;
-        }
 
-        if (selectedCategories.length > 0 && !selectedCategories.includes(item.category)) return false;
-        if (store && item.store !== store) return false;
-        if (item.price_sek > maxPrice) return false;
-        if ((item.protein_per_100g || 0) < minProtein) return false;
-        if (search) {
-            const nameMatch = item.name && isSmartMatch(item.name, search);
-            const brandMatch = item.brand && isSmartMatch(item.brand, search);
-            const categoryMatch = item.underkategori && item.underkategori.some(sub => isSmartMatch(sub, search));
-            if (!nameMatch && !brandMatch && !categoryMatch) return false;
-        }
-        return true;
-    });
+            if (selectedCategories.length > 0 && !selectedCategories.includes(item.category)) return false;
+            if (store && item.store !== store) return false;
+            if (item.price_sek > maxPrice) return false;
+            if ((item.protein_per_100g || 0) < minProtein) return false;
 
-    filteredData.sort((a, b) => {
-        let valA = a[sortCol];
-        let valB = b[sortCol];
-        if (valA == null) return 1;
-        if (valB == null) return -1;
-        if (typeof valA === 'string') valA = valA.toLowerCase();
-        if (typeof valB === 'string') valB = valB.toLowerCase();
-        if (valA < valB) return sortDesc ? 1 : -1;
-        if (valA > valB) return sortDesc ? -1 : 1;
-        return 0;
-    });
+            const score = calculateSearchScore(item, search);
+            item._searchScore = score;
+            return score > 0;
+        });
+
+        // Sort: primary by score desc, secondary by sortCol
+        filteredData.sort((a, b) => {
+            if (b._searchScore !== a._searchScore) {
+                return b._searchScore - a._searchScore;
+            }
+            let valA = a[sortCol];
+            let valB = b[sortCol];
+            if (valA == null) return 1;
+            if (valB == null) return -1;
+            if (typeof valA === 'string') valA = valA.toLowerCase();
+            if (typeof valB === 'string') valB = valB.toLowerCase();
+            if (valA < valB) return sortDesc ? 1 : -1;
+            if (valA > valB) return sortDesc ? -1 : 1;
+            return 0;
+        });
+    } else {
+        filteredData = allData.filter(item => {
+            if (activeBasket && BASKETS[activeBasket]) {
+                const criteria = BASKETS[activeBasket].filter_criteria;
+                if (criteria.keywords && criteria.keywords.length > 0) {
+                    const nameAndBrand = ((item.name || '') + ' ' + (item.brand || '')).toLowerCase();
+                    const matchesKeyword = criteria.keywords.some(kw => nameAndBrand.includes(kw.toLowerCase()));
+                    if (!matchesKeyword) return false;
+                }
+                if (criteria.min_ppk != null && (item.ppk || 0) < criteria.min_ppk) return false;
+            }
+
+            if (selectedCategories.length > 0 && !selectedCategories.includes(item.category)) return false;
+            if (store && item.store !== store) return false;
+            if (item.price_sek > maxPrice) return false;
+            if ((item.protein_per_100g || 0) < minProtein) return false;
+            return true;
+        });
+
+        filteredData.sort((a, b) => {
+            let valA = a[sortCol];
+            let valB = b[sortCol];
+            if (valA == null) return 1;
+            if (valB == null) return -1;
+            if (typeof valA === 'string') valA = valA.toLowerCase();
+            if (typeof valB === 'string') valB = valB.toLowerCase();
+            if (valA < valB) return sortDesc ? 1 : -1;
+            if (valA > valB) return sortDesc ? -1 : 1;
+            return 0;
+        });
+    }
 
     updateKPIs();
     renderTable();
