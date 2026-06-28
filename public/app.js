@@ -199,7 +199,9 @@ async function init() {
             return {
                 ...item,
                 ppk: parseFloat(item.protein_per_krona) || 0,
-                ppkcal: item.p_per_100kcal !== undefined ? parseFloat(item.p_per_100kcal) : Math.min(rawPpkcal, 25)
+                ppkcal: item.p_per_100kcal !== undefined ? parseFloat(item.p_per_100kcal) : Math.min(rawPpkcal, 25),
+                p_per_100kcal: item.p_per_100kcal !== undefined ? parseFloat(item.p_per_100kcal) : Math.min(rawPpkcal, 25),
+                price: parseFloat(item.price_sek) || 0
             };
         }).filter(item => item.price_sek != null && item.protein_per_100g != null);
 
@@ -408,13 +410,15 @@ function setupEventListeners() {
     }
 
     // Sort select listener
-    const sortSelect = document.getElementById('sortSelect');
+    const sortSelect = document.getElementById('sort-select');
     if (sortSelect) {
-        sortSelect.value = sortCol;
+        sortSelect.value = sortCol === 'ppkcal' ? 'protein_kcal' : (sortCol === 'price_sek' ? 'price' : 'ppk');
         sortSelect.addEventListener('change', (e) => {
             const col = e.target.value;
-            sortCol = col;
-            sortDesc = (col === 'ppk' || col === 'ppkcal' || col === 'protein_per_100g');
+            if (col === 'ppk') sortCol = 'ppk';
+            else if (col === 'protein_kcal') sortCol = 'ppkcal';
+            else if (col === 'price') sortCol = 'price_sek';
+            sortDesc = (col === 'ppk' || col === 'protein_kcal');
             updateSortHeaders();
             applyFilters(false);
         });
@@ -434,9 +438,9 @@ function updateSortHeaders() {
             if (sortDesc) th.classList.add('desc');
         }
     });
-    const sortSelect = document.getElementById('sortSelect');
+    const sortSelect = document.getElementById('sort-select');
     if (sortSelect) {
-        sortSelect.value = sortCol;
+        sortSelect.value = sortCol === 'ppkcal' ? 'protein_kcal' : (sortCol === 'price_sek' ? 'price' : 'ppk');
     }
 }
 
@@ -467,6 +471,19 @@ const SYNONYMS = {
     'köttfärs': ['köttfärs', 'kottfars', 'nötfärs', 'blandfärs', 'fläskfärs', 'kycklingfärs', 'färs'],
     'linser & ärter': ['linser', 'ärter', 'gula ärter', 'röda linser', 'gröna linser', 'linser och ärter', 'linser & ärter'],
     'linser ärter': ['linser', 'ärter', 'gula ärter', 'röda linser', 'gröna linser', 'linser och ärter', 'linser & ärter']
+};
+
+const searchIntentMap = {
+    'fryspizza': {
+        excludes: ["mjöl", "sås", "krydda", "kit", "deg", "mjol", "sas", "kryddor", "pizzakit", "pizzadeg", "pizzasås", "pizzasas", "pizzakrydda"],
+        allowedCategories: ["färdigmat", "fryst", "pizza"]
+    },
+    'pasta': {
+        excludes: ["sås", "mjöl", "sas", "mjol", "pastasås", "pastasas", "pesto", "lasagneplattor", "nudlar"]
+    },
+    'ägg': {
+        requireStandaloneEgg: true
+    }
 };
 
 function isSmartMatch(text, query) {
@@ -599,98 +616,113 @@ function applyFilters(resetPage = false) {
     const maxPrice = parseFloat(maxPriceInput ? maxPriceInput.value : Infinity) || Infinity;
     const minProtein = parseFloat(minProteinInput ? minProteinInput.value : 0) || 0;
 
+    // STEG 1: FILTRERING (Sök & Kategori)
+    let filteredProducts = [...allData];
+
+    filteredProducts = filteredProducts.filter(item => {
+        if (activeBasket && BASKETS[activeBasket]) {
+            const criteria = BASKETS[activeBasket].filter_criteria;
+            if (criteria.keywords && criteria.keywords.length > 0) {
+                const nameAndBrand = ((item.name || '') + ' ' + (item.brand || '')).toLowerCase();
+                const matchesKeyword = criteria.keywords.some(kw => nameAndBrand.includes(kw.toLowerCase()));
+                if (!matchesKeyword) return false;
+            }
+            if (criteria.min_ppk != null && (item.ppk || 0) < criteria.min_ppk) return false;
+        }
+
+        if (selectedCategories.length > 0 && !selectedCategories.includes(item.category)) return false;
+        if (store && item.store !== store) return false;
+        if (item.price_sek > maxPrice) return false;
+        if ((item.protein_per_100g || 0) < minProtein) return false;
+        return true;
+    });
+
     if (search) {
-        filteredData = allData.filter(item => {
-            if (activeBasket && BASKETS[activeBasket]) {
-                const criteria = BASKETS[activeBasket].filter_criteria;
-                if (criteria.keywords && criteria.keywords.length > 0) {
-                    const nameAndBrand = ((item.name || '') + ' ' + (item.brand || '')).toLowerCase();
-                    const matchesKeyword = criteria.keywords.some(kw => nameAndBrand.includes(kw.toLowerCase()));
-                    if (!matchesKeyword) return false;
+        if (searchIntentMap[search]) {
+            const intent = searchIntentMap[search];
+            filteredProducts = filteredProducts.filter(item => {
+                const name = (item.name || '').toLowerCase();
+                const brand = (item.brand || '').toLowerCase();
+                const desc = (item.description || '').toLowerCase();
+                const fullText = name + ' ' + brand + ' ' + desc;
+                const underkategori = (item.underkategori || []).map(s => String(s).toLowerCase());
+
+                if (intent.excludes && intent.excludes.some(ex => fullText.includes(ex))) {
+                    return false;
                 }
-                if (criteria.min_ppk != null && (item.ppk || 0) < criteria.min_ppk) return false;
-            }
 
-            if (selectedCategories.length > 0 && !selectedCategories.includes(item.category)) return false;
-            if (store && item.store !== store) return false;
-            if (item.price_sek > maxPrice) return false;
-            if ((item.protein_per_100g || 0) < minProtein) return false;
-
-            const score = calculateSearchScore(item, search);
-            item._searchScore = score;
-            return score > 0;
-        });
-
-        // Sort: primary by score desc, secondary by sortCol
-        filteredData.sort((a, b) => {
-            if (b._searchScore !== a._searchScore) {
-                return b._searchScore - a._searchScore;
-            }
-            const numericCols = ['ppk', 'ppkcal', 'price_sek', 'protein_per_100g'];
-            if (numericCols.includes(sortCol)) {
-                const valA = parseFloat(a[sortCol]) || 0;
-                const valB = parseFloat(b[sortCol]) || 0;
-                return sortDesc ? valB - valA : valA - valB;
-            }
-            let valA = a[sortCol];
-            let valB = b[sortCol];
-            if (valA == null) return 1;
-            if (valB == null) return -1;
-            if (typeof valA === 'string') valA = valA.toLowerCase();
-            if (typeof valB === 'string') valB = valB.toLowerCase();
-            if (valA < valB) return sortDesc ? 1 : -1;
-            if (valA > valB) return sortDesc ? -1 : 1;
-            return 0;
-        });
-    } else {
-        filteredData = allData.filter(item => {
-            if (activeBasket && BASKETS[activeBasket]) {
-                const criteria = BASKETS[activeBasket].filter_criteria;
-                if (criteria.keywords && criteria.keywords.length > 0) {
-                    const nameAndBrand = ((item.name || '') + ' ' + (item.brand || '')).toLowerCase();
-                    const matchesKeyword = criteria.keywords.some(kw => nameAndBrand.includes(kw.toLowerCase()));
-                    if (!matchesKeyword) return false;
+                if (intent.allowedCategories && intent.allowedCategories.length > 0) {
+                    const itemCat = (item.category || '').toLowerCase();
+                    const matchesCategory = intent.allowedCategories.some(c => 
+                        itemCat.includes(c) || underkategori.some(u => u.includes(c))
+                    );
+                    if (!matchesCategory) return false;
                 }
-                if (criteria.min_ppk != null && (item.ppk || 0) < criteria.min_ppk) return false;
-            }
 
-            if (selectedCategories.length > 0 && !selectedCategories.includes(item.category)) return false;
-            if (store && item.store !== store) return false;
-            if (item.price_sek > maxPrice) return false;
-            if ((item.protein_per_100g || 0) < minProtein) return false;
-            return true;
-        });
+                if (intent.requireStandaloneEgg) {
+                    const words = name.split(/[^a-zåäöA-ZÅÄÖ0-9\-]+/);
+                    const isEggCategory = underkategori.includes("ägg") || underkategori.some(sub => sub.includes("ägg"));
+                    const hasStandaloneEggInTitle = words.includes("ägg");
+                    if (!isEggCategory && !hasStandaloneEggInTitle) {
+                        return false;
+                    }
+                }
 
-        filteredData.sort((a, b) => {
-            const numericCols = ['ppk', 'ppkcal', 'price_sek', 'protein_per_100g'];
-            if (numericCols.includes(sortCol)) {
-                const valA = parseFloat(a[sortCol]) || 0;
-                const valB = parseFloat(b[sortCol]) || 0;
-                return sortDesc ? valB - valA : valA - valB;
-            }
-            let valA = a[sortCol];
-            let valB = b[sortCol];
-            if (valA == null) return 1;
-            if (valB == null) return -1;
-            if (typeof valA === 'string') valA = valA.toLowerCase();
-            if (typeof valB === 'string') valB = valB.toLowerCase();
-            if (valA < valB) return sortDesc ? 1 : -1;
-            if (valA > valB) return sortDesc ? -1 : 1;
-            return 0;
-        });
+                let possibleQueries = [search];
+                if (SYNONYMS[search]) {
+                    possibleQueries = [search, ...SYNONYMS[search]];
+                }
+                const words = name.split(/[^a-zåäöA-ZÅÄÖ0-9\-]+/);
+                return possibleQueries.some(q => {
+                    const qTerms = q.split(/[^a-zåäöA-ZÅÄÖ0-9\-]+/).filter(Boolean);
+                    return qTerms.every(term => words.some(w => w === term || w.startsWith(term)));
+                });
+            });
+        } else {
+            filteredProducts = filteredProducts.filter(item => {
+                const name = (item.name || '').toLowerCase();
+                let possibleQueries = [search];
+                if (SYNONYMS[search]) {
+                    possibleQueries = [search, ...SYNONYMS[search]];
+                }
+                return possibleQueries.some(q => name.includes(q));
+            });
+        }
     }
 
+    // STEG 2: STRIKT NUMERISK SORTERING (Får inte skrivas över!)
+    const selectedSort = document.getElementById('sort-select').value; // Sorterings-dropdownen
+    if (selectedSort === 'ppk') {
+        filteredProducts.sort((a, b) => parseFloat(b.ppk) - parseFloat(a.ppk));
+    } else if (selectedSort === 'protein_kcal') {
+        filteredProducts.sort((a, b) => parseFloat(b.p_per_100kcal) - parseFloat(a.p_per_100kcal));
+    } else if (selectedSort === 'price') {
+        filteredProducts.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+    }
+
+    // 4. DIAGNOSTIK
+    console.log("Antal godkända sök-träffar:", filteredProducts.length);
+
+    filteredData = filteredProducts;
+
+    // STEG 3: PAGINERING OCH RENDERING (Slutskedet)
+    const slicedProducts = filteredProducts.slice(0, currentLimit);
+
     updateKPIs();
-    renderTable();
+    renderTable(slicedProducts);
     updateLoadMoreButton();
 }
 
-function renderTable() {
+function renderTable(passedData) {
     const isDesktop = window.innerWidth > 768;
     const isGridView = currentView === "grid" && isDesktop;
 
     const resultsTable = document.getElementById('resultsTable');
     const resultsGrid = document.getElementById('resultsGrid');
+
+    // Töm alltid produktbehållaren helt innan de nya korten ritas upp
+    if (resultsGrid) resultsGrid.innerHTML = '';
+    if (tableBody) tableBody.innerHTML = '';
 
     if (resultsTable && resultsGrid) {
         if (isGridView) {
@@ -703,7 +735,6 @@ function renderTable() {
     }
 
     if (isGridView && resultsGrid) {
-        resultsGrid.innerHTML = '';
         if (filteredData.length === 0) {
             resultsGrid.innerHTML = `<div style="grid-column: 1 / -1; text-align:center; padding: 3rem; color: #64748b;">
                 Inga produkter matchar dina filter.
@@ -712,7 +743,7 @@ function renderTable() {
             return;
         }
 
-        const displayData = filteredData.slice(0, currentLimit);
+        const displayData = passedData || filteredData.slice(0, currentLimit);
         if (resultCountEl) {
             resultCountEl.textContent = filteredData.length > currentLimit
                 ? `(visar ${currentLimit} av ${filteredData.length})`
@@ -800,7 +831,7 @@ function renderTable() {
             return;
         }
 
-        const displayData = filteredData.slice(0, currentLimit);
+        const displayData = passedData || filteredData.slice(0, currentLimit);
         if (resultCountEl) {
             resultCountEl.textContent = filteredData.length > currentLimit
                 ? `(visar ${currentLimit} av ${filteredData.length})`
