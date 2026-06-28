@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
 
     try {
-        const response = await fetch("../data.json");
+        const response = await fetch("/data.json");
         if (!response.ok) throw new Error(`HTTP ${response.status}: Kunde inte h\u00e4mta data.json`);
         const allProducts = await response.json();
         if (!Array.isArray(allProducts) || allProducts.length === 0) throw new Error("Tom produktlista");

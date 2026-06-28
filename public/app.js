@@ -186,7 +186,7 @@ async function init() {
             });
 
         // Fetch and load products database in the background without blocking main UI thread
-        const response = await fetch('data.json');
+        const response = await fetch('/data.json');
         if (!response.ok) throw new Error('Kunde inte hämta data.json');
         const rawData = await response.json();
 
