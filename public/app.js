@@ -191,12 +191,15 @@ async function init() {
         const rawData = await response.json();
 
         allData = rawData.map(item => {
-            const protein = item.protein_per_100g || 0;
-            const calories = item.calories_per_100g || 0;
+            const protein = parseFloat(item.protein_per_100g) || 0;
+            const calories = parseFloat(item.calories_per_100g) || 0;
+            const fallbackCalories = calories > 0 ? calories : (protein * 4);
+            const rawPpkcal = fallbackCalories > 0 ? (protein / fallbackCalories) * 100 : 0;
+            
             return {
                 ...item,
-                ppk: item.protein_per_krona || 0,
-                ppkcal: calories > 0 ? (protein / calories) * 100 : 0
+                ppk: parseFloat(item.protein_per_krona) || 0,
+                ppkcal: item.p_per_100kcal !== undefined ? parseFloat(item.p_per_100kcal) : Math.min(rawPpkcal, 25)
             };
         }).filter(item => item.price_sek != null && item.protein_per_100g != null);
 

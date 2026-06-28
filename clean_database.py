@@ -1,35 +1,47 @@
 import json
 import re
 
+def extract_weight_in_grams(item):
+    weight = item.get("package_weight_g")
+    if weight and float(weight) > 0:
+        return float(weight)
+    
+    display_volume = item.get("display_volume", "")
+    if display_volume:
+        g_match = re.search(r"(\d+[\.,]?\d*)\s*g\b", display_volume.lower())
+        if g_match:
+            return float(g_match.group(1).replace(",", "."))
+        
+        kg_match = re.search(r"(\d+[\.,]?\d*)\s*kg\b", display_volume.lower())
+        if kg_match:
+            return float(kg_match.group(1).replace(",", ".")) * 1000.0
+
+    return None
+
 def clean_data_file(filepath):
     with open(filepath, encoding='utf-8') as f:
         data = json.load(f)
 
     cleaned_data = []
     
-    # Exclude keywords for egg validation
     exclusions = ["nudlar", "pastej", "röra", "sallad", "smörgås", "skinka", "bacon", "paj", "glass", "våffla", "kakor", "bröd", "ost"]
 
     for item in data:
         name = item.get("name", "")
-        brand = item.get("brand", "")
         category = item.get("category", "")
         desc = item.get("description", "")
         price = item.get("price_sek")
         display_volume = item.get("display_volume", "")
         protein_100g = item.get("protein_per_100g")
         
-        if price is None or price <= 0:
+        if price is None or price <= 0 or protein_100g is None:
             continue
 
-        # Check if egg
-        is_egg = False
         full_text = " ".join([name, category, desc or ""]).lower()
-        if "ägg" in full_text and not any(excl in name.lower() for excl in exclusions):
-            is_egg = True
-
+        
+        # Check if egg
+        is_egg = "ägg" in full_text and not any(excl in name.lower() for excl in exclusions)
         if is_egg:
-            # 1. Hitta antal ägg (t.ex. "15p", "6p", "10-pack", "15 stycken", "12-pack")
             egg_count = None
             for text in [display_volume, name, desc]:
                 if not text:
@@ -40,66 +52,72 @@ def clean_data_file(filepath):
                     break
             
             if egg_count and egg_count > 0:
-                total_protein_g = egg_count * 6.875
-                ppk = total_protein_g / price
-                item["protein_per_krona"] = round(ppk, 4)
-                item["protein_per_100g"] = 12.5
                 item["package_weight_g"] = egg_count * 55.0
-                item["calculation_method"] = "C (ägg-specifik)"
+                item["protein_per_100g"] = 12.5
+                protein_100g = 12.5
             else:
-                # If egg count not found but it's eggs, let's estimate or skip to avoid anomalies
-                continue
+                continue # Unknown egg count, skip
 
         # Check if dry powder or soup
-        is_dry = False
         dry_keywords = ["soppa", "soppor", "buljong", "torrsoppa", "såsmix", "sasmix", "pulver", "dipp", "dressingmix", "potatismos", "fond", "fonder", "touch of taste", "buljongkoncentrat"]
-        if any(kw in full_text for kw in dry_keywords):
-            is_dry = True
+        is_dry = any(kw in full_text for kw in dry_keywords)
 
         if is_dry:
-            # Parse dry weight in grams from display_volume or description
             dry_weight = None
-            # e.g. "62g/1l" -> 62
             for source in [display_volume, name, desc]:
                 if not source:
                     continue
-                # Try pattern Xg/Yl or X g / Y l
                 g_match = re.search(r"(\d+[\.,]?\d*)\s*g\b", source.lower())
                 if g_match:
                     dry_weight = float(g_match.group(1).replace(",", "."))
                     break
             
-            if not dry_weight:
-                # Try to parse standard numbers in display volume if it ends with "g"
-                if display_volume and (display_volume.lower().endswith("g") or "gram" in display_volume.lower()):
-                    num_match = re.search(r"(\d+[\.,]?\d*)", display_volume)
-                    if num_match:
-                        dry_weight = float(num_match.group(1).replace(",", "."))
+            if not dry_weight and display_volume and (display_volume.lower().endswith("g") or "gram" in display_volume.lower()):
+                num_match = re.search(r"(\d+[\.,]?\d*)", display_volume)
+                if num_match:
+                    dry_weight = float(num_match.group(1).replace(",", "."))
 
-            if dry_weight and protein_100g is not None:
-                total_protein = (protein_100g / 100.0) * dry_weight
-                ppk = total_protein / price
-                item["protein_per_krona"] = round(ppk, 4)
+            if dry_weight:
                 item["package_weight_g"] = dry_weight
-                item["calculation_method"] = "B (torrvikt/pris)"
             else:
-                # If we can't determine the actual dry weight and PPK is high, exclude it
+                # If we can't determine dry weight, and it's a dry powder, we check if PPK is too high
                 if (item.get("protein_per_krona") or 0) > 8:
                     continue
 
-        # If it's a dry powder or soup/fond, and its PPK is still unreasonably high (> 8), exclude it
-        if is_dry and (item.get("protein_per_krona") or 0) > 8:
-            # Exclude
+        # 1. Strikt viktextraktion och fallback
+        weight_g = extract_weight_in_grams(item)
+        if not weight_g or weight_g <= 0:
+            continue # Om vikten är okänd, exkludera produkten helt
+
+        # 2. Beräkna PPK (Protein Per Krona)
+        total_protein = (protein_100g / 100.0) * weight_g
+        ppk = total_protein / price
+
+        # 3. Beräkna Protein per 100 kcal (Strikt matematisk spärr)
+        kcal = item.get('calories_per_100g')
+        if not kcal or kcal <= 0:
+            kcal = 4.0 * protein_100g # Fallback: proteinet självt sätter minimikalorivärdet
+
+        p_per_100kcal = 0.0
+        if kcal > 0:
+            p_per_100kcal = (protein_100g / kcal) * 100.0
+
+        # Defensiv max-spärr: Inget livsmedel i universum kan överstiga dessa naturlagar
+        if p_per_100kcal > 25.0: 
+            p_per_100kcal = 25.0
+            
+        if ppk > 15.0: # Ingen vanlig matvara ger mer än 15g protein per krona live
+            continue # Kassera anomalin
+            
+        if is_dry and ppk > 8.0:
             continue
 
-        # Final sanity check: if PPK is still unreasonably high (> 15), exclude it
-        if (item.get("protein_per_krona") or 0) > 15:
-            # Exclude
-            continue
+        item['protein_per_krona'] = round(ppk, 4)
+        item['p_per_100kcal'] = round(p_per_100kcal, 2)
+        item['package_weight_g'] = weight_g
 
         cleaned_data.append(item)
 
-    # Save cleaned data
     with open(filepath, 'w', encoding='utf-8') as f:
         json.dump(cleaned_data, f, ensure_ascii=False, indent=4)
 

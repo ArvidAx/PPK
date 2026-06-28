@@ -37,6 +37,10 @@ def main():
     logging.info(f"Startar Hemköp-skrapan med argument: {args_str if args_str else 'inga (full skrapning)'}...")
     run_cmd(f"{sys.executable} -u hemkop_protein_per_krona.py {args_str}")
 
+    # 3.5 Kör tvättskriptet för att sanera eventuella anomalier (matematiska gränsvärden etc.)
+    logging.info("Kör datatvätt för att filtrera bort anomalier (clean_database.py)...")
+    run_cmd(f"{sys.executable} -u clean_database.py")
+
     # 4. Kontrollera om data.json faktiskt har ändrats
     status = subprocess.run("git status --porcelain public/data.json", shell=True, capture_output=True, text=True)
     if not status.stdout.strip():
