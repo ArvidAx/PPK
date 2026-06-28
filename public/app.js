@@ -84,6 +84,15 @@ function fmt(val, decimals = 1, suffix = '') {
     return Number(val).toFixed(decimals) + suffix;
 }
 
+// Generate matching product page slug
+function getSlug(item) {
+    if (item.seo_slug) return item.seo_slug;
+    const brand = item.brand || 'Okänt märke';
+    const name = item.name || 'Okänd produkt';
+    const raw = `${brand}-${name}`.toLowerCase().replace(/\s+/g, '-');
+    return raw.replace(/[^\p{L}\p{N}\-]/gu, '');
+}
+
 function setFiltersEnabled(enabled) {
     const inputs = [searchInput, storeSelect, maxPriceInput, minProteinInput];
     inputs.forEach(input => {
@@ -816,7 +825,7 @@ function renderTable(passedData) {
                 </div>
                 <div class="card-content">
                     <span class="card-brand">${esc(item.brand) || '–'}</span>
-                    <h3 class="card-title">${esc(item.name)}</h3>
+                    <h3 class="card-title"><a href="produkter/${getSlug(item)}.html" class="card-title-link" style="color: inherit; text-decoration: none;">${esc(item.name)}</a></h3>
                     <div class="card-meta-details" style="display: flex; gap: 8px; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 4px; margin-top: -4px;">
                         <span>📦 ${esc(item.display_volume) || '–'}</span>
                         <span>•</span>
@@ -843,7 +852,7 @@ function renderTable(passedData) {
             `;
 
             card.addEventListener('click', (e) => {
-                if (e.target.closest('.add-to-list-btn') || e.target.closest('.card-store-link')) {
+                if (e.target.closest('.add-to-list-btn') || e.target.closest('.card-store-link') || e.target.closest('.card-title-link')) {
                     return;
                 }
                 openModal(item);
@@ -909,7 +918,7 @@ function renderTable(passedData) {
                 <td data-label="Produkt">
                     <div style="display: flex; align-items: center; gap: 8px; text-align: left;">
                         ${imgHtml}
-                        <strong>${esc(item.name)}</strong>
+                        <a href="produkter/${getSlug(item)}.html" class="table-product-link" style="color: var(--text-main); font-weight: 700; text-decoration: none;">${esc(item.name)}</a>
                     </div>
                 </td>
                 <td data-label="Märke">${esc(item.brand) || '–'}</td>
@@ -935,6 +944,9 @@ function renderTable(passedData) {
             });
 
             tr.addEventListener('click', (e) => {
+                if (e.target.closest('.table-product-link')) {
+                    return;
+                }
                 const cell = e.target.closest('td');
                 if (!cell) return;
                 const cells = Array.from(cell.parentNode.children);
@@ -1216,6 +1228,7 @@ function openModal(item) {
 
         <div class="modal-footer">
             <button class="btn btn-secondary" id="closeModalFooterBtn">Stäng</button>
+            <a class="btn btn-secondary" href="produkter/${getSlug(item)}.html" style="border: 1px solid var(--accent-red); color: var(--accent-red) !important; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 4px;">Visa historik & detaljer 📊</a>
             <a class="btn btn-primary" href="${esc(validUrl)}" target="_blank" rel="noopener noreferrer sponsored">Visa på ${esc(item.store) || 'butiken'} →</a>
         </div>
     `;

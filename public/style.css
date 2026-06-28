@@ -3356,3 +3356,10 @@ tbody tr {
 .btn-cookie-secondary:hover {
     background-color: var(--bg-main, #f7fafc);
 }
+
+/* Product detail page links styling */
+.card-title-link:hover,
+.table-product-link:hover {
+    text-decoration: underline !important;
+    color: var(--accent-red) !important;
+}
