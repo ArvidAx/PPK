@@ -3269,3 +3269,20 @@ tbody tr {
 .article .article-cta a:hover {
     color: #ffffff !important;
 }
+
+/* Göm inköpslistan och dess knappar permanent från gränssnittet */
+.shopping-list-section {
+    display: none !important;
+}
+
+.add-to-list-btn, 
+.card-add-btn,
+#addBasketToCartBtn {
+    display: none !important;
+}
+
+#resultsTable th:nth-child(1),
+#resultsTable td:nth-child(1),
+#tableBody td:nth-child(1) {
+    display: none !important;
+}

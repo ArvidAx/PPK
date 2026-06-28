@@ -386,6 +386,17 @@ function setupEventListeners() {
         loadMoreBtn.addEventListener('click', handleLoadMore);
     }
 
+    // Scroll to results listener
+    const scrollToResultsBtn = document.getElementById('scrollToResultsBtn');
+    if (scrollToResultsBtn) {
+        scrollToResultsBtn.addEventListener('click', () => {
+            const tableSection = document.querySelector('.table-section');
+            if (tableSection) {
+                tableSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    }
+
     // Quick-search choice buttons
     document.querySelectorAll('.quick-search-btn').forEach(btn => {
         btn.addEventListener('click', () => {
