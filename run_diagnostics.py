@@ -7,7 +7,7 @@ def run_tests():
     print("=== STARTAR SYSTEMDIAGNOSTIK ===\n")
 
     # 1. Kontrollera Cachen (Steg 1)
-    cache_path = "public/nutrition_cache.json"
+    cache_path = "nutrition_cache.json"
     if not os.path.exists(cache_path):
         print(f"[FEL] Näringscachen saknas: {cache_path}")
         errors += 1

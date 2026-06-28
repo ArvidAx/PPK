@@ -35,7 +35,7 @@ from bs4 import BeautifulSoup
 cache_lock = threading.Lock()
 nutrition_cache = {}
 try:
-    with open("public/nutrition_cache.json", "r", encoding="utf-8") as _f:
+    with open("nutrition_cache.json", "r", encoding="utf-8") as _f:
         nutrition_cache = json.load(_f)
 except Exception:
     nutrition_cache = {}
@@ -1196,7 +1196,7 @@ if __name__ == "__main__":
 
     # Spara näringscache
     try:
-        cache_path = "public/nutrition_cache.json"
+        cache_path = "nutrition_cache.json"
         with open(cache_path, "w", encoding="utf-8") as f:
             _json.dump(nutrition_cache, f, ensure_ascii=False, indent=2)
         log.info("Näringscache sparad till '%s'.", cache_path)
