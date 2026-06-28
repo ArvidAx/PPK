@@ -2453,4 +2453,31 @@ tbody tr {
     }
 }
 
+/* Table product thumbnail images (Desktop & Mobile) */
+.table-product-image, .table-product-placeholder {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    flex-shrink: 0;
+    background: #ffffff;
+    padding: 2px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+.table-product-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-color);
+    font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+    .table-product-image, .table-product-placeholder {
+        width: 60px;
+        height: 60px;
+    }
+}
+
 

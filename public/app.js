@@ -613,6 +613,11 @@ function renderTable() {
                 <div class="card-content">
                     <span class="card-brand">${esc(item.brand) || '–'}</span>
                     <h3 class="card-title">${esc(item.name)}</h3>
+                    <div class="card-meta-details" style="display: flex; gap: 8px; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 4px; margin-top: -4px;">
+                        <span>📦 ${esc(item.display_volume) || '–'}</span>
+                        <span>•</span>
+                        <span>💪 ${fmt(item.protein_per_100g, 1)}g protein/100g</span>
+                    </div>
                     <div class="card-stats">
                         <div class="card-stat-item">
                             <span class="stat-label">PPK (g/kr)</span>
@@ -688,11 +693,21 @@ function renderTable() {
             const validUrl = safeUrl(item.url, fallbackUrl);
             const storeClass = (item.store || '').toLowerCase() === 'willys' ? 'willys' : 'hemkop';
 
+            const imgUrl = item.image_url || '';
+            const imgHtml = imgUrl 
+                ? `<img src="${esc(imgUrl)}" alt="${esc(item.name)}" class="table-product-image">` 
+                : `<div class="table-product-placeholder">💪</div>`;
+
             tr.innerHTML = `
                 <td>
                     <button class="add-to-list-btn" aria-label="Lägg till ${esc(item.name)} i shoppinglistan" title="Lägg till i shoppinglistan">+</button>
                 </td>
-                <td data-label="Produkt"><strong>${esc(item.name)}</strong></td>
+                <td data-label="Produkt">
+                    <div style="display: flex; align-items: center; gap: 8px; text-align: left;">
+                        ${imgHtml}
+                        <strong>${esc(item.name)}</strong>
+                    </div>
+                </td>
                 <td data-label="Märke">${esc(item.brand) || '–'}</td>
                 <td data-label="Butik"><span class="store-badge ${storeClass}">${esc(item.store) || 'Hemköp'}</span></td>
                 <td data-label="Pris">${fmt(item.price_sek, 2)} kr</td>
