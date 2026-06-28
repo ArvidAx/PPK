@@ -23,8 +23,6 @@ def clean_data_file(filepath):
         data = json.load(f)
 
     cleaned_data = []
-    
-    exclusions = ["nudlar", "pastej", "röra", "sallad", "smörgås", "skinka", "bacon", "paj", "glass", "våffla", "kakor", "bröd", "ost"]
 
     for item in data:
         name = item.get("name", "")
@@ -40,7 +38,14 @@ def clean_data_file(filepath):
         full_text = " ".join([name, category, desc or ""]).lower()
         
         # Check if egg
-        is_egg = "ägg" in full_text and not any(excl in name.lower() for excl in exclusions)
+        underkategori = item.get("underkategori", [])
+        if isinstance(underkategori, list):
+            has_egg_sub = any(str(sub).lower() == "ägg" for sub in underkategori)
+        else:
+            has_egg_sub = str(underkategori).lower() == "ägg"
+        
+        is_egg = (category == "mejeri-ost-och-agg" and (has_egg_sub or "ägg" in name.lower()))
+        
         if is_egg:
             egg_count = None
             for text in [display_volume, name, desc]:
@@ -94,8 +99,13 @@ def clean_data_file(filepath):
         ppk = total_protein / price
 
         # 3. Beräkna Protein per 100 kcal (Strikt matematisk spärr)
-        kcal = item.get('calories_per_100g')
-        if not kcal or kcal <= 0:
+        raw_kcal = item.get('calories_per_100g')
+        try:
+            kcal = float(raw_kcal) if raw_kcal is not None else 0.0
+        except (ValueError, TypeError):
+            kcal = 0.0
+
+        if kcal <= 0:
             kcal = 4.0 * protein_100g # Fallback: proteinet självt sätter minimikalorivärdet
 
         p_per_100kcal = 0.0
@@ -115,6 +125,7 @@ def clean_data_file(filepath):
         item['protein_per_krona'] = round(ppk, 4)
         item['p_per_100kcal'] = round(p_per_100kcal, 2)
         item['package_weight_g'] = weight_g
+        item['kcal_per_100g'] = kcal
 
         cleaned_data.append(item)
 

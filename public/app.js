@@ -192,7 +192,7 @@ async function init() {
 
         allData = rawData.map(item => {
             const protein = parseFloat(item.protein_per_100g) || 0;
-            const calories = parseFloat(item.calories_per_100g) || 0;
+            const calories = parseFloat(item.kcal_per_100g) || 0;
             const fallbackCalories = calories > 0 ? calories : (protein * 4);
             const rawPpkcal = fallbackCalories > 0 ? (protein / fallbackCalories) * 100 : 0;
             
@@ -729,8 +729,8 @@ function applyFilters(resetPage = false) {
         // Skapa säkra flyttal i realtid
         const ppkA = parseFloat(a.ppk) || 0;
         const ppkB = parseFloat(b.ppk) || 0;
-        const ppkcalA = parseFloat(a.ppkcal) || 0;
-        const ppkcalB = parseFloat(b.ppkcal) || 0;
+        const ppkcalA = parseFloat(a.kcal_per_100g) > 0 ? ((parseFloat(a.protein_per_100g) / parseFloat(a.kcal_per_100g)) * 100) : 0;
+        const ppkcalB = parseFloat(b.kcal_per_100g) > 0 ? ((parseFloat(b.protein_per_100g) / parseFloat(b.kcal_per_100g)) * 100) : 0;
         const priceA = parseFloat(a.price_sek) || 0;
         const priceB = parseFloat(b.price_sek) || 0;
         const protA = parseFloat(a.protein_per_100g) || 0;
@@ -739,7 +739,7 @@ function applyFilters(resetPage = false) {
         // Sortera strikt matematiskt baserat på den kolumn användaren har valt
         if (sortCol === 'ppk') {
             return sortDesc ? ppkB - ppkA : ppkA - ppkB;
-        } else if (sortCol === 'ppkcal') {
+        } else if (sortCol === 'ppkcal' || sortCol === 'protein_kcal') {
             return sortDesc ? ppkcalB - ppkcalA : ppkcalA - ppkcalB;
         } else if (sortCol === 'price_sek' || sortCol === 'price') {
             return sortDesc ? priceB - priceA : priceA - priceB;
@@ -1116,7 +1116,7 @@ function openModal(item) {
     const fat = item.fat_per_100g || 0;
     const carbs = item.carbohydrates_per_100g || 0;
     const salt = item.salt_per_100g || 0;
-    const calories = item.calories_per_100g || 0;
+    const calories = item.kcal_per_100g || 0;
 
     // Calculate bar widths as % of 50g max (sensible max for visualization)
     const protPct = Math.min((protein / 50) * 100, 100);
