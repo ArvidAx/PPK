@@ -41,15 +41,19 @@ def main():
     logging.info("Kör datatvätt för att filtrera bort anomalier (clean_database.py)...")
     run_cmd(f"{sys.executable} -u clean_database.py")
 
-    # 4. Kontrollera om data.json faktiskt har ändrats
-    status = subprocess.run("git status --porcelain public/data.json public/nutrition_cache.json", shell=True, capture_output=True, text=True)
+    # 3.6 Generera statiska SEO-sidor för alla produkter med SSG-delta-generering
+    logging.info("Genererar statiska SEO-sidor (generate_seo_pages.py)...")
+    run_cmd(f"{sys.executable} -u generate_seo_pages.py")
+
+    # 4. Kontrollera om data.json eller produkter faktiskt har ändrats
+    status = subprocess.run("git status --porcelain public/data.json public/nutrition_cache.json public/produkter", shell=True, capture_output=True, text=True)
     if not status.stdout.strip():
-        logging.info("Inga förändringar i data.json eller cachen sedan igår. Inget att pusha.")
+        logging.info("Inga förändringar i data.json, cachen eller produktsidorna sedan igår. Inget att pusha.")
         return
 
     # 5. Lägg till och committa
     logging.info("Sparar nya data och uppdateringstid till Git...")
-    run_cmd("git add public/data.json public/last_updated.json public/nutrition_cache.json")
+    run_cmd("git add public/data.json public/last_updated.json public/nutrition_cache.json public/produkter")
     
     date_str = datetime.now().strftime("%Y-%m-%d")
     # Lägg märke till [skip ci] ifall du inte vill att github actions ska bygga, men Cloudflare Pages sköter sig självt.
