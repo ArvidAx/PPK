@@ -3255,3 +3255,17 @@ tbody tr {
     color: var(--text-main) !important;
     text-decoration: none !important;
 }
+
+/* Överskriv den röda länktexten inuti CTA-boxar och artikelknappar */
+.article-cta a.btn-primary,
+.article .article-cta a,
+.seo-article .article-cta a {
+    color: #ffffff !important;
+    text-decoration: none !important;
+}
+
+/* Säkerställ att hover också behåller vit text */
+.article-cta a.btn-primary:hover,
+.article .article-cta a:hover {
+    color: #ffffff !important;
+}
