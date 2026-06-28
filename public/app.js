@@ -596,16 +596,20 @@ function calculateSearchScore(item, query) {
         }
     }
     
-    // 2. Ägg Precision Intent (Isolera från ost/mejeri)
+    // 2. Ägg Strikt Underkategori-filtrering
     if (query === "ägg" || query === "agg") {
-        const isRealEgg = underkategori.includes("ägg") || name.startsWith("ägg") || words.includes("ägg");
-        const isExcluded = name.includes("ost") || name.includes("paj") || name.includes("nudlar");
-        if (isRealEgg && !isExcluded) {
-            score += 150; // Ge extremt hög prioritet till rena äggpaket
-            return score;
-        } else {
-            return 0; // Blockera allt som inte är ägg
+        const hasEggSubcategory = item.underkategori && item.underkategori.some(sub => sub.toLowerCase() === "ägg");
+        const hasEggInName = words.includes("ägg") || words.includes("egg");
+        
+        if (hasEggSubcategory || hasEggInName) {
+            // Säkerställ att det inte är en blandprodukt (t.ex. ostpaj eller äggnudlar)
+            const isNotEggPure = name.includes("nudlar") || name.includes("paj") || name.includes("sås") || name.includes("ost");
+            if (!isNotEggPure) {
+                score += 150;
+                return score;
+            }
         }
+        return 0; // Totalt förbud för produkter som inte är rena äggprodukter
     }
 
     // 3. Ost Precision Intent (Isolera från ägg/mejeri)
