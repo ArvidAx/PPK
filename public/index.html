@@ -48,14 +48,14 @@
 
 <body>
     <nav class="navbar" aria-label="Huvudnavigation">
-        <a href="index.html" class="logo" aria-label="PPK proteinpriser.se startsida">
+        <a href="/" class="logo" aria-label="PPK proteinpriser.se startsida">
             <span class="logo-main">PPK</span>
             <span class="logo-domain">proteinpriser.se<span class="logo-dot">.</span></span>
         </a>
         <button class="hamburger-menu" aria-label="Öppna meny">☰</button>
         <nav class="nav-links">
             <ul role="list">
-                <li><a href="index.html" class="active" aria-current="page">Kalkylator</a></li>
+                <li><a href="/" class="active" aria-current="page">Kalkylator</a></li>
                 <li><a href="recept.html">Recept</a></li>
                 <li><a href="kunskap.html">Kunskapsbank</a></li>
                 <li><a href="pulver.html">Proteinpulver</a></li>
@@ -86,9 +86,12 @@
                         <h2>Bästa PPK just nu</h2>
                         <p id="bestPPK">– <span class="unit">g/kr</span></p>
                     </div>
-                    <a href="pulver.html" class="kpi-card compact powder-cta-card" style="text-decoration: none; color: inherit; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                    <a href="pulver.html" class="kpi-card compact powder-cta-card"
+                        style="text-decoration: none; color: inherit; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;">
                         <h2>PROTEINPULVER</h2>
-                        <p class="stat-value-sub" style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); line-height: 1.35; margin-top: 0.25rem;">Hitta billigaste proteinpulvret just nu →</p>
+                        <p class="stat-value-sub"
+                            style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); line-height: 1.35; margin-top: 0.25rem;">
+                            Hitta billigaste proteinpulvret just nu →</p>
                     </a>
                 </div>
 
@@ -113,9 +116,10 @@
                         <button class="quick-search-btn tag-btn" data-search="Ägg">🥚 Ägg</button>
                     </div>
                 </div>
-                
+
                 <div style="display: flex; justify-content: center; margin-top: 1.5rem; margin-bottom: 0.5rem;">
-                    <button id="scrollToResultsBtn" class="btn-primary" style="background-color: var(--accent-red); border: none; font-weight: 700; padding: 0.75rem 2rem; border-radius: 9999px; cursor: pointer; transition: all 0.2s;">
+                    <button id="scrollToResultsBtn" class="btn-primary"
+                        style="background-color: var(--accent-red); border: none; font-weight: 700; padding: 0.75rem 2rem; border-radius: 9999px; cursor: pointer; transition: all 0.2s;">
                         Ta mig till listan direkt
                     </button>
                 </div>
@@ -369,7 +373,7 @@
                     <span class="info-icon" aria-hidden="true">📖</span>
                     <div>
                         <strong>Vill du lära dig mer?</strong>
-                        <p>Läs vår <a href="kunskap.html">Kunskapsbank</a> om protein.</p>
+                        <p>Läs mer om näringslära i vår <a href="kunskap.html">kunskapsbank om protein</a>.</p>
                     </div>
                 </div>
             </section>
@@ -393,10 +397,13 @@
         </div>
     </div>
 
-    <div id="cookie-banner" class="cookie-banner hidden" role="dialog" aria-labelledby="cookie-title" aria-describedby="cookie-desc">
+    <div id="cookie-banner" class="cookie-banner hidden" role="dialog" aria-labelledby="cookie-title"
+        aria-describedby="cookie-desc">
         <div class="cookie-content">
             <h3 id="cookie-title">Vi använder cookies 🍪</h3>
-            <p id="cookie-desc">proteinpriser.se använder cookies för att spara din inköpslista samt för anonym trafikanalys och anpassad annonsering via Google AdSense. Läs mer i vår <a href="integritetspolicy.html">integritetspolicy</a>.</p>
+            <p id="cookie-desc">proteinpriser.se använder cookies för att spara din inköpslista samt för anonym
+                trafikanalys och anpassad annonsering via Google AdSense. Läs mer i vår <a
+                    href="integritetspolicy.html">integritetspolicy</a>.</p>
             <div class="cookie-buttons">
                 <button id="cookie-decline" class="btn-cookie-secondary">Neka</button>
                 <button id="cookie-accept" class="btn-cookie-primary">Godkänn alla</button>
