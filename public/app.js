@@ -40,6 +40,7 @@ const maxPriceInput = document.getElementById('maxPrice');
 const maxPriceLabel = document.getElementById('maxPriceLabel');
 const minProteinInput = document.getElementById('minProtein');
 const minProteinLabel = document.getElementById('minProteinLabel');
+const onlyCampaignsInput = document.getElementById('onlyCampaigns');
 const totalProductsEl = document.getElementById('totalProducts');
 const bestPPKEl = document.getElementById('bestPPK');
 const resultCountEl = document.getElementById('resultCount');
@@ -403,6 +404,12 @@ function setupEventListeners() {
         minProteinLabel.textContent = e.target.value + ' g';
         applyFilters(true);
     });
+
+    if (onlyCampaignsInput) {
+        onlyCampaignsInput.addEventListener('change', () => {
+            applyFilters(true);
+        });
+    }
 
     tableHeaders.forEach(th => {
         th.addEventListener('click', () => {
@@ -815,6 +822,7 @@ function applyFilters(resetPage = false) {
     const search = rawSearch.toLowerCase().trim().replace(/[^a-zåäöA-ZÅÄÖ0-9\s\-\&]/g, ' ').replace(/\s+/g, ' ');
     const maxPrice = parseFloat(maxPriceInput ? maxPriceInput.value : Infinity) || Infinity;
     const minProtein = parseFloat(minProteinInput ? minProteinInput.value : 0) || 0;
+    const onlyCampaigns = onlyCampaignsInput ? onlyCampaignsInput.checked : false;
 
     // STEG 1: STRIKT FILTRERING (Sök & Kategorier & Butiker)
     filteredData = allData.filter(item => {
@@ -832,6 +840,7 @@ function applyFilters(resetPage = false) {
         if (selectedStores.length > 0 && !selectedStores.includes(item.store)) return false;
         if (item.price_sek > maxPrice) return false;
         if ((item.protein_per_100g || 0) < minProtein) return false;
+        if (onlyCampaigns && !(item.is_campaign === true || item.is_campaign === "True")) return false;
 
         // Om det finns en söksträng, kör relevanskontroll
         if (search) {
