@@ -56,6 +56,16 @@
     <priority>0.3</priority>
   </url>
   <url>
+    <loc>https://proteinpriser.se/anvandarvillkor.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://proteinpriser.se/om-oss.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://proteinpriser.se/recept/korean-nuggets.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
