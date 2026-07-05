@@ -207,7 +207,7 @@ async function init() {
             const calories = parseFloat(item.kcal_per_100g) || 0;
             const fallbackCalories = calories > 0 ? calories : (protein * 4);
             const rawPpkcal = fallbackCalories > 0 ? (protein / fallbackCalories) * 100 : 0;
-            
+
             return {
                 ...item,
                 ppk: parseFloat(item.protein_per_krona) || 0,
@@ -222,7 +222,7 @@ async function init() {
         populateStores();
         renderShoppingList();
         setFiltersEnabled(true);
-        
+
         // Check for url param to pre-select basket
         const urlParams = new URLSearchParams(window.location.search);
         const basketParam = urlParams.get('basket');
@@ -491,21 +491,21 @@ function setupEventListeners() {
                 // Fisk & Skaldjur
                 "Tonfisk", "Lax", "Torsk", "Sill", "Makrill", "Sej", "Räkor", "Musslor", "Sardiner",
                 // Mejeriprodukter & Ägg
-                "Kvarg", "Keso", "Ägg", "Kvarggurt", "Grekisk yoghurt", "Ost 17%", "Mjölk", "Lättmjölk", "Keso Mini", "Lättkvarg", "Mozzarella", "Fetaost", "Parmesan",
+                "Kvarg", "Keso", "Ägg", "Kvarggurt", "Grekisk yoghurt", "Ost 17%", "Mjölk", "Lättmjölk", "Keso Mini", "Mozzarella", "Fetaost", "Parmesan",
                 // Veganskt & Vegetariskt
-                "Tofu", "Sojafärs", "Vegofärs", "Tempeh", "Seitan", "Ärtprotein",
+                "Tofu", "Vegofärs", "Tempeh",
                 // Baljväxter & Frön & Nötter
-                "Linser", "Ärter", "Bönor", "Jordnötssmör", "Jordnötter", "Mandlar", "Pumpakärnor", "Chiafrön", "Kikärter", "Solroskärnor", "Hampafrön", "Valnötter", "Cashewnötter",
+                "Linser", "Ärter", "Bönor", "Jordnötssmör", "Jordnötter", "Mandel", "Pumpakärnor", "Chiafrön", "Kikärter", "Solroskärnor", "Hampafrön", "Valnötter", "Cashewnötter",
                 // Spannmål & Kolhydrater
                 "Havregryn", "Pasta", "Fullkornspasta", "Bönpasta", "Råris", "Bulgur", "Quinoa", "Bovete", "Knäckebröd",
                 // Konserver & Övrigt
                 "Ärtsoppa", "Linssoppa"
             ];
-            
+
             const currentTerm = searchInput ? searchInput.value.trim().toLowerCase() : "";
             const filteredTerms = surpriseTerms.filter(t => t.toLowerCase() !== currentTerm);
             const randomTerm = filteredTerms[Math.floor(Math.random() * filteredTerms.length)];
-            
+
             if (searchInput) {
                 searchInput.value = randomTerm;
                 searchInput.dispatchEvent(new Event('input'));
@@ -518,7 +518,7 @@ function setupEventListeners() {
         button.addEventListener('click', () => {
             const faqAnswer = button.nextElementSibling;
             const isOpen = button.getAttribute('aria-expanded') === 'true';
-            
+
             button.setAttribute('aria-expanded', !isOpen);
             if (faqAnswer) {
                 faqAnswer.classList.toggle('show');
@@ -543,13 +543,14 @@ function setupEventListeners() {
     // Sort select listener
     const sortSelect = document.getElementById('sort-select');
     if (sortSelect) {
-        sortSelect.value = sortCol === 'ppkcal' ? 'protein_kcal' : (sortCol === 'price_sek' ? 'price' : 'ppk');
+        sortSelect.value = sortCol === 'ppkcal' ? 'protein_kcal' : (sortCol === 'price_sek' ? 'price' : (sortCol === 'campaign' ? 'campaign' : 'ppk'));
         sortSelect.addEventListener('change', (e) => {
             const col = e.target.value;
             if (col === 'ppk') sortCol = 'ppk';
             else if (col === 'protein_kcal') sortCol = 'ppkcal';
             else if (col === 'price') sortCol = 'price_sek';
-            sortDesc = (col === 'ppk' || col === 'protein_kcal');
+            else if (col === 'campaign') sortCol = 'campaign';
+            sortDesc = (col === 'ppk' || col === 'protein_kcal' || col === 'campaign');
             updateSortHeaders();
             applyFilters(false);
         });
@@ -571,7 +572,7 @@ function updateSortHeaders() {
     });
     const sortSelect = document.getElementById('sort-select');
     if (sortSelect) {
-        sortSelect.value = sortCol === 'ppkcal' ? 'protein_kcal' : (sortCol === 'price_sek' ? 'price' : 'ppk');
+        sortSelect.value = sortCol === 'ppkcal' ? 'protein_kcal' : (sortCol === 'price_sek' ? 'price' : (sortCol === 'campaign' ? 'campaign' : 'ppk'));
     }
 }
 
@@ -629,36 +630,36 @@ function isSmartMatch(text, query) {
     // This prevents regex DoS and XSS via crafted search strings
     query = String(query).toLowerCase().trim().replace(/[^a-zåäöA-ZÅÄÖ0-9\s\-]/g, '').replace(/\s+/g, ' ');
     if (query.length === 0) return false;
-    
+
     // Synonym expansion
     if (SYNONYMS[query]) {
         return SYNONYMS[query].some(syn => text.includes(syn)) || text.includes(query);
     }
-    
+
     // Special case: Kyckling synonym expansion
     if (query === 'kyckling') {
         return text.includes('kyckling') || text.includes('chicken') || text.includes('kycklingfilé') || text.includes('kycklinginnerfilé') || text.includes('kycklingbröst') || text.includes('filé');
     }
-    
+
     // Sök efter "ost" - undvik ord som "rostade", "frukost", "kosttillskott", "ostronskivling"
     if (query === 'ost') {
         if (!text.includes('ost')) return false;
         const words = text.split(/[\s,.\-()]+/);
         return words.some(word => {
             if (word.includes('ost')) {
-                const isExcluded = word.includes('rostad') || 
-                                   word.includes('rosta') || 
-                                   word.includes('rostat') || 
-                                   word.includes('frukost') || 
-                                   word.includes('kosttillskott') || 
-                                   word.includes('ostron') ||
-                                   word.includes('frost');
+                const isExcluded = word.includes('rostad') ||
+                    word.includes('rosta') ||
+                    word.includes('rostat') ||
+                    word.includes('frukost') ||
+                    word.includes('kosttillskott') ||
+                    word.includes('ostron') ||
+                    word.includes('frost');
                 return !isExcluded;
             }
             return false;
         });
     }
-    
+
     return text.includes(query);
 }
 
@@ -668,14 +669,14 @@ function calculateSearchScore(item, query) {
     const brand = (item.brand || '').toLowerCase().trim();
     const desc = (item.description || '').toLowerCase().trim();
     const underkategori = (item.underkategori || []).map(s => String(s).toLowerCase().trim());
-    
+
     // Split name into words using Swedish-friendly characters
     const words = name.split(/[^a-zåäöA-ZÅÄÖ0-9\-]+/);
-    
+
     // Split query into terms
     const queryTerms = query.toLowerCase().split(/[^a-zåäöA-ZÅÄÖ0-9\-]+/).filter(Boolean);
     if (queryTerms.length === 0) return 0;
-    
+
     // Every query term must match as a standalone word or prefix of a word in product name, brand or underkategori
     let matchesAllTerms = true;
     for (const term of queryTerms) {
@@ -686,28 +687,28 @@ function calculateSearchScore(item, query) {
             const subWords = sub.split(/[^a-zåäöA-ZÅÄÖ0-9\-]+/);
             return subWords.some(w => w === term || w.startsWith(term));
         });
-        
+
         if (!matchesInName && !matchesInBrand && !matchesInUnder) {
             matchesAllTerms = false;
             break;
         }
     }
-    
+
     if (!matchesAllTerms) return 0;
-    
+
     let score = 0;
-    
+
     // Poäng +100: Sökordet matchar produktens titel exakt eller titeln börjar med ordet.
     if (name === query || name.startsWith(query)) {
         score += 100;
     }
-    
+
     // Poäng +50: Sökordet finns som ett fristående ord inuti produktens titel
     const hasStandaloneWord = queryTerms.every(term => words.includes(term));
     if (hasStandaloneWord) {
         score += 50;
     }
-    
+
     // Poäng +20: Sökordet matchar exakt produktens underkategori
     const hasUnderMatch = underkategori.some(sub => {
         if (sub === query) return true;
@@ -717,7 +718,7 @@ function calculateSearchScore(item, query) {
     if (hasUnderMatch) {
         score += 20;
     }
-    
+
     // Smart exkludering (Kategoritvätt)
     // 1. Pizza
     if (query.includes("pizza") || query.includes("fryspizza")) {
@@ -726,12 +727,12 @@ function calculateSearchScore(item, query) {
             return 0;
         }
     }
-    
+
     // 2. Ägg Strikt Underkategori-filtrering
     if (query === "ägg" || query === "agg") {
         const hasEggSubcategory = item.underkategori && item.underkategori.some(sub => sub.toLowerCase() === "ägg");
         const hasEggInName = words.includes("ägg") || words.includes("egg");
-        
+
         if (hasEggSubcategory || hasEggInName) {
             // Säkerställ att det inte är en blandprodukt (t.ex. ostpaj eller äggnudlar)
             const isNotEggPure = name.includes("nudlar") || name.includes("paj") || name.includes("sås") || name.includes("ost");
@@ -748,7 +749,7 @@ function calculateSearchScore(item, query) {
         // Kontrollera att ordet 'ost' finns som ett fristående ord eller i produktens titel/märke, INTE bara mejerikategorin
         const hasOstInTitle = words.includes("ost") || name.includes("ost") || brand.includes("ost");
         const hasOstInSub = underkategori.some(sub => sub.toLowerCase() === "ost" || sub.toLowerCase().includes("hårdost") || sub.toLowerCase().includes("skivad ost") || sub.toLowerCase() === "mjukost");
-        
+
         if (hasOstInTitle || hasOstInSub) {
             const excludes = ['rostad', 'rosta', 'rostat', 'frukost', 'kosttillskott', 'ostron', 'frost', 'ägg', 'agg'];
             if (!excludes.some(bad => name.includes(bad))) {
@@ -800,7 +801,7 @@ function calculateSearchScore(item, query) {
         if (!name.includes("gula")) return 0; // Sortera bort alla gröna ärter helt vid denna sökning
         score += 100;
     }
-    
+
     return score;
 }
 
@@ -838,7 +839,7 @@ function applyFilters(resetPage = false) {
             item._searchScore = score;
             return score > 0; // Spara bara produkter som faktiskt matchar intentionen
         }
-        
+
         return true;
     });
 
@@ -858,6 +859,13 @@ function applyFilters(resetPage = false) {
         // Sortera strikt matematiskt baserat på den kolumn användaren har valt
         if (sortCol === 'ppk') {
             return sortDesc ? ppkB - ppkA : ppkA - ppkB;
+        } else if (sortCol === 'campaign') {
+            const aCamp = a.is_campaign === true || a.is_campaign === "True";
+            const bCamp = b.is_campaign === true || b.is_campaign === "True";
+            if (aCamp !== bCamp) {
+                return aCamp ? -1 : 1;
+            }
+            return ppkB - ppkA;
         } else if (sortCol === 'ppkcal' || sortCol === 'protein_kcal') {
             return sortDesc ? ppkcalB - ppkcalA : ppkcalA - ppkcalB;
         } else if (sortCol === 'price_sek' || sortCol === 'price') {
@@ -865,7 +873,7 @@ function applyFilters(resetPage = false) {
         } else if (sortCol === 'protein_per_100g') {
             return sortDesc ? protB - protA : protA - protB;
         }
-        
+
         // Fallback om ingen matchning hittas
         return 0;
     });
@@ -916,7 +924,7 @@ function renderTable(passedData) {
         displayData.forEach(item => {
             const card = document.createElement('div');
             card.className = 'product-card';
-            
+
             let ppkClass = '';
             if (item.ppk >= 2) ppkClass = 'ppk-high';
             else if (item.ppk >= 1) ppkClass = 'ppk-mid';
@@ -928,18 +936,40 @@ function renderTable(passedData) {
             const storeClass = (item.store || '').toLowerCase() === 'willys' ? 'willys' : 'hemkop';
             const imgUrl = item.image_url || '';
 
+            const isCampaign = item.is_campaign === true || item.is_campaign === "True";
+            const regPrice = parseFloat(item.regular_price) || 0;
+            const curPrice = parseFloat(item.price_sek) || 0;
+
+            let priceHtml = `<span class="card-price">${fmt(curPrice, 2)} kr</span>`;
+            let badgeHtml = '';
+
+            if (isCampaign) {
+                badgeHtml = `<div class="promo-badge" style="position: absolute; top: 0.5rem; left: 0.5rem; background-color: var(--accent-red); color: white; padding: 0.2rem 0.5rem; border-radius: var(--radius-sm); font-size: 0.72rem; font-weight: bold; box-shadow: var(--shadow-sm); z-index: 5;">🔥 REA</div>`;
+                if (regPrice > 0 && regPrice > curPrice) {
+                    priceHtml = `
+                        <div style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1;">
+                            <span class="regular-price" style="text-decoration: line-through; color: var(--text-muted); font-size: 0.78rem; font-weight: 500;">${fmt(regPrice, 2)} kr</span>
+                            <span class="card-price" style="color: var(--accent-red); font-weight: 800; font-size: 1.15rem; margin-top: 1px;">${fmt(curPrice, 2)} kr</span>
+                        </div>
+                    `;
+                } else {
+                    priceHtml = `<span class="card-price" style="color: var(--accent-red); font-weight: 800;">${fmt(curPrice, 2)} kr</span>`;
+                }
+            }
+
             card.innerHTML = `
                 <button class="add-to-list-btn card-add-btn" aria-label="Lägg till ${esc(item.name)} i shoppinglistan" title="Lägg till i shoppinglistan">+</button>
                 <div class="card-image-box">
+                    ${badgeHtml}
                     ${imgUrl ? `<img src="${esc(imgUrl)}" alt="${esc(item.name)}" loading="lazy">` : `<div class="card-img-placeholder">💪</div>`}
                 </div>
                 <div class="card-content">
                     <span class="card-brand">${esc(item.brand) || '–'}</span>
                     <h3 class="card-title"><a href="produkter/${getSlug(item)}.html" class="card-title-link" style="color: inherit; text-decoration: none;">${esc(item.name)}</a></h3>
                     <div class="card-meta-details" style="display: flex; gap: 8px; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 4px; margin-top: -4px;">
-                        <span>📦 ${esc(item.display_volume) || '–'}</span>
-                        <span>•</span>
-                        <span>💪 ${fmt(item.protein_per_100g, 1)}g protein/100g</span>
+                         <span>📦 ${esc(item.display_volume) || '–'}</span>
+                         <span>•</span>
+                         <span>💪 ${fmt(item.protein_per_100g, 1)}g protein/100g</span>
                     </div>
                     <div class="card-stats">
                         <div class="card-stat-item">
@@ -952,7 +982,7 @@ function renderTable(passedData) {
                         </div>
                     </div>
                     <div class="card-footer">
-                        <span class="card-price">${fmt(item.price_sek, 2)} kr</span>
+                        ${priceHtml}
                         <div style="display: flex; gap: 0.5rem; align-items: center;">
                             <span class="store-badge ${storeClass}">${esc(item.store) || 'Hemköp'}</span>
                             <a href="${esc(validUrl)}" target="_blank" rel="noopener noreferrer sponsored" class="card-store-link" title="Gå till butik">🔗</a>
@@ -1017,9 +1047,31 @@ function renderTable(passedData) {
             const storeClass = (item.store || '').toLowerCase() === 'willys' ? 'willys' : 'hemkop';
 
             const imgUrl = item.image_url || '';
-            const imgHtml = imgUrl 
-                ? `<img src="${esc(imgUrl)}" alt="${esc(item.name)}" class="table-product-image">` 
+            const imgHtml = imgUrl
+                ? `<img src="${esc(imgUrl)}" alt="${esc(item.name)}" class="table-product-image">`
                 : `<div class="table-product-placeholder">💪</div>`;
+
+            const isCampaign = item.is_campaign === true || item.is_campaign === "True";
+            const regPrice = parseFloat(item.regular_price) || 0;
+            const curPrice = parseFloat(item.price_sek) || 0;
+
+            let priceHtml = `${fmt(curPrice, 2)} kr`;
+            if (isCampaign) {
+                if (regPrice > 0 && regPrice > curPrice) {
+                    priceHtml = `
+                        <div style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1;">
+                            <span class="regular-price" style="text-decoration: line-through; color: var(--text-muted); font-size: 0.72rem; font-weight: 500;">${fmt(regPrice, 2)} kr</span>
+                            <span style="color: var(--accent-red); font-weight: 800; font-size: 0.95rem; margin-top: 1px;">${fmt(curPrice, 2)} kr</span>
+                        </div>
+                    `;
+                } else {
+                    priceHtml = `<span style="color: var(--accent-red); font-weight: 800;">${fmt(curPrice, 2)} kr</span>`;
+                }
+            }
+
+            const badgeHtml = isCampaign
+                ? `<span class="table-promo-badge" style="background-color: var(--accent-red); color: white; padding: 0.15rem 0.35rem; border-radius: var(--radius-sm); font-size: 0.65rem; font-weight: bold; margin-left: 0.35rem; vertical-align: middle; display: inline-block;">REA</span>`
+                : '';
 
             tr.innerHTML = `
                 <td>
@@ -1028,12 +1080,15 @@ function renderTable(passedData) {
                 <td data-label="Produkt">
                     <div style="display: flex; align-items: center; gap: 8px; text-align: left;">
                         ${imgHtml}
-                        <a href="produkter/${getSlug(item)}.html" class="table-product-link" style="color: var(--text-main); font-weight: 700; text-decoration: none;">${esc(item.name)}</a>
+                        <div style="display: inline-block;">
+                            <a href="produkter/${getSlug(item)}.html" class="table-product-link" style="color: var(--text-main); font-weight: 700; text-decoration: none;">${esc(item.name)}</a>
+                            ${badgeHtml}
+                        </div>
                     </div>
                 </td>
                 <td data-label="Märke">${esc(item.brand) || '–'}</td>
                 <td data-label="Butik"><span class="store-badge ${storeClass}">${esc(item.store) || 'Hemköp'}</span></td>
-                <td data-label="Pris">${fmt(item.price_sek, 2)} kr</td>
+                <td data-label="Pris">${priceHtml}</td>
                 <td data-label="Storlek">${esc(item.display_volume) || '–'}</td>
                 <td data-label="Protein/100g">${fmt(item.protein_per_100g, 1)} g</td>
                 <td data-label="Prot/100 kcal" class="${ppkcalClass}">${fmt(item.ppkcal, 1)} g</td>
@@ -1486,7 +1541,7 @@ function addActiveBasketToCart() {
 
 function updateDynamicPPK() {
     const ppk = 3.0;
-    
+
     const elements = document.querySelectorAll('.dynamic-ppk');
     elements.forEach(el => {
         el.textContent = `~${ppk.toFixed(1)} g/kr`;
@@ -1496,7 +1551,7 @@ function updateDynamicPPK() {
 function updateLoadMoreButton() {
     const loadMoreBtn = document.getElementById('loadMoreBtn');
     if (!loadMoreBtn) return;
-    
+
     if (filteredData.length === 0 || filteredData.length <= currentLimit) {
         loadMoreBtn.style.display = 'none';
     } else {
@@ -1545,13 +1600,13 @@ const BasketOptimizer = {
             const qty = item.qty || 1;
             const price = parseFloat(item.price_sek) || 0;
 
-            const willysMatch = allProductsDatabase.find(p => 
-                p.name === item.name && 
+            const willysMatch = allProductsDatabase.find(p =>
+                p.name === item.name &&
                 p.brand === item.brand &&
                 p.store.toLowerCase() === 'willys'
             );
-            const hemkopMatch = allProductsDatabase.find(p => 
-                p.name === item.name && 
+            const hemkopMatch = allProductsDatabase.find(p =>
+                p.name === item.name &&
                 p.brand === item.brand &&
                 p.store.toLowerCase() === 'hemköp'
             );
@@ -1588,10 +1643,10 @@ function updateBasketUI(currentBasketItems, fullDatabase) {
     if (totalBasketPpkEl) {
         totalBasketPpkEl.innerText = `${totalPPK} g/kr`;
     }
-    
+
     const summaryElement = document.getElementById('basket-store-comparison');
     if (!summaryElement) return;
-    
+
     if (currentBasketItems.length > 0) {
         summaryElement.innerHTML = `
             <div style="padding: 12px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: var(--radius-md); margin-top: 10px; font-size: 0.85rem;">

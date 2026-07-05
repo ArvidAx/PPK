@@ -743,6 +743,401 @@ def calculate_protein_per_krona(
 
 # ── Huvudlogik ───────────────────────────────────────────────────────────────
 
+def extract_active_promotion(raw_item: dict) -> Optional[dict]:
+    """
+    Extraherar en aktiv prissänkning (kampanj) från potentialPromotions.
+    Ignorerar multi-buy-erbjudanden (t.ex. 2 för 30 kr).
+    """
+    promos = raw_item.get("potentialPromotions", [])
+    if not promos or not isinstance(promos, list):
+        return None
+
+    best_promo = None
+    best_promo_price = None
+
+    for promo in promos:
+        if not isinstance(promo, dict):
+            continue
+
+        price_obj = promo.get("price")
+        if not price_obj or not isinstance(price_obj, dict):
+            continue
+
+        promo_price = price_obj.get("value")
+        if promo_price is None:
+            continue
+
+        # Kontrollera att det inte är ett flerköp-erbjudande (t.ex. Köp 2, 2 för 30)
+        qualifying_count = promo.get("qualifyingCount")
+        if qualifying_count is not None:
+            try:
+                if int(qualifying_count) > 1:
+                    continue
+            except (ValueError, TypeError):
+                pass
+
+        if promo.get("realMixAndMatch") is True:
+            continue
+
+        cond_label = (promo.get("conditionLabel") or "").lower()
+        reward_label = (promo.get("rewardLabel") or "").lower()
+        
+        # Säkerhetskontroll för svenska texter gällande flerköp
+        if any(term in cond_label or term in reward_label for term in ["2 för", "3 för", "4 för", "köp 2", "köp 3"]):
+            continue
+
+        promo_val = float(promo_price)
+        if best_promo_price is None or promo_val < best_promo_price:
+            best_promo_price = promo_val
+            best_promo = promo
+
+    return best_promo
+
+
+def fetch_active_store_id(session: requests.Session, base_url: str, store_key: str) -> str:
+    """
+    Hämtar aktiv butiks-ID dynamiskt från Axfood API.
+    """
+    path = "/axfood/rest/store/active" if store_key == "hemkop" else "/axfood/rest/v1/store/active"
+    url = urljoin(base_url, path)
+    try:
+        resp = session.get(url, timeout=10)
+        if resp.status_code == 200:
+            store_id = resp.json().get("storeId")
+            if store_id:
+                return str(store_id)
+    except Exception as e:
+        log.error("Kunde inte hämta aktiv butiks-ID för %s: %s", store_key, e)
+
+    # Fallback till kända butiks-IDn om anropet misslyckas
+    return "4003" if store_key == "hemkop" else "2110"
+
+
+def fetch_campaign_products(session: requests.Session, base_url: str, store_id: str) -> list:
+    """
+    Hämtar samtliga kampanjprodukter från kampanj-sökmotorn.
+    """
+    url = urljoin(base_url, "/axfood/rest/v1/search/campaigns/online")
+    page = 0
+    size = 100
+    campaign_products = []
+    total_pages = None
+
+    while True:
+        params = {
+            "q": store_id,
+            "type": "PERSONAL_GENERAL",
+            "page": page,
+            "size": size
+        }
+        log.info("Hämtar kampanjsida %d från %s...", page, base_url)
+        resp = safe_get(session, url, params=params)
+        if not resp:
+            break
+
+        try:
+            data = resp.json()
+        except Exception as e:
+            log.error("Kunde inte parsa JSON för kampanjer: %s", e)
+            break
+
+        results = data.get("results", [])
+        if not results:
+            break
+
+        campaign_products.extend(results)
+
+        pagination = data.get("pagination", {})
+        total_pages = pagination.get("numberOfPages", 1)
+
+        page += 1
+        if page >= total_pages:
+            break
+
+        _polite_sleep()
+
+    return campaign_products
+
+
+def map_breadcrumbs_to_category(breadcrumbs: list) -> Optional[str]:
+    """
+    Mappar svenska breadcrumbs till våra interna kategori-slugs.
+    """
+    if not breadcrumbs:
+        return None
+        
+    mapping = {
+        "kött": "kott-fagel-och-chark",
+        "fågel": "kott-fagel-och-chark",
+        "chark": "kott-fagel-och-chark",
+        "frukt": "frukt-och-gront",
+        "grönsaker": "frukt-och-gront",
+        "mejeri": "mejeri-ost-och-agg",
+        "ost": "mejeri-ost-och-agg",
+        "ägg": "mejeri-ost-och-agg",
+        "skafferi": "skafferi",
+        "fryst": "fryst",
+        "bröd": "brod-och-kakor",
+        "kakor": "brod-och-kakor",
+        "fisk": "fisk-och-skaldjur",
+        "skaldjur": "fisk-och-skaldjur",
+        "vego": "vegetariskt",
+        "vegetariskt": "vegetariskt",
+        "färdigmat": "fardigmat",
+        "delikatess": "delikatessen",
+        "godis": "godis-snacks-och-glass",
+        "snacks": "godis-snacks-och-glass",
+        "glass": "godis-snacks-och-glass"
+    }
+    
+    for crumb in breadcrumbs:
+        crumb_lower = crumb.lower()
+        for key, val in mapping.items():
+            if key in crumb_lower:
+                return val
+    return None
+
+
+def process_raw_product(
+    raw: dict,
+    store_name: str,
+    base_url: str,
+    slug: str,
+    session: requests.Session,
+    fetch_nutrition: bool
+) -> Optional[dict]:
+    """
+    Bearbetar en rå produkt och beräknar dess fullständiga data inkl näringsvärden och kampanjpriser.
+    """
+    code = raw.get("code", "")
+    if not code:
+        return None
+
+    name = raw.get("name", "Okänd produkt")
+    brand = raw.get("manufacturer", "Okänt märke")
+
+    # Prisberäkningar & Kampanjanalys
+    regular_price = None
+    if raw.get("priceValue") is not None:
+        regular_price = float(raw["priceValue"])
+    else:
+        regular_price = parse_price(raw.get("price"))
+
+    # Extrahera kampanjinfo
+    promo = extract_active_promotion(raw)
+    is_campaign = False
+    price_sek = regular_price
+    condition_label = ""
+
+    if promo:
+        promo_price = promo["price"].get("value")
+        if promo_price is not None:
+            promo_price = float(promo_price)
+            if regular_price is None or promo_price < regular_price:
+                price_sek = promo_price
+                is_campaign = True
+                condition_label = promo.get("conditionLabel", "")
+                if regular_price is None:
+                    regular_price = promo_price
+
+    # Jämförpris
+    compare_price_str = raw.get("comparePrice", "")
+    compare_price_sek = parse_price(compare_price_str)
+    compare_price_unit = (raw.get("comparePriceUnit") or "").lower()
+
+    # Jämförpris per KG (normalisera om enheten är "liter", "100ml" etc.)
+    compare_price_per_kg = None
+    if compare_price_sek is not None:
+        compare_unit_clean = compare_price_unit.replace(" ", "").strip()
+        if compare_unit_clean in ("kg", "kilo", "l", "lit", "liter"):
+            compare_price_per_kg = compare_price_sek
+        elif compare_unit_clean in ("100g", "100ml", "100 g", "100 ml", "dl", "deciliter"):
+            compare_price_per_kg = compare_price_sek * 10
+        elif compare_unit_clean in ("g", "gram", "ml", "milliliter"):
+            compare_price_per_kg = compare_price_sek * 1000
+        elif compare_unit_clean in ("cl", "centiliter"):
+            compare_price_per_kg = compare_price_sek * 100
+
+    # Om vi är i kampanj och har compare_price_per_kg baserat på ordinarie pris, 
+    # räknar vi om jämförpriset baserat på kampanjpriset
+    if is_campaign and compare_price_per_kg and regular_price and regular_price > 0:
+        compare_price_per_kg = compare_price_per_kg * (price_sek / regular_price)
+        compare_price_str = f"{compare_price_per_kg:.2f} kr/kg (beräknat kampanjpris)"
+
+    # Förpackningsvikt (preliminärt från listningen; uppdateras efter produktdetaljer)
+    display_volume = raw.get("displayVolume", "")
+    package_weight_g = resolve_package_weight_g(
+        display_volume=display_volume,
+        name=name,
+        url=code,
+    )
+
+    # Länk
+    url_path = raw.get("url")
+    if url_path:
+        product_url = base_url + url_path
+    else:
+        product_url = f"{base_url}/produkt/{code}"
+
+    # Extrahera bild-URL
+    image_url = None
+    raw_image = raw.get("image") or raw.get("thumbnail")
+    if raw_image and isinstance(raw_image, dict) and raw_image.get("url"):
+        image_url = raw_image.get("url")
+
+    product_entry = {
+        "name": name,
+        "brand": brand,
+        "code": code,
+        "store": store_name,
+        "category": slug,
+        "price_sek": price_sek,
+        "regular_price": regular_price,
+        "is_campaign": is_campaign,
+        "condition_label": condition_label,
+        "display_volume": display_volume,
+        "package_weight_g": package_weight_g,
+        "compare_price": compare_price_str,
+        "compare_price_per_kg": compare_price_per_kg,
+        "description": "",
+        "protein_per_100g": None,
+        "calories_per_100g": None,
+        "fat_per_100g": None,
+        "carbohydrates_per_100g": None,
+        "salt_per_100g": None,
+        "protein_per_krona": None,
+        "calculation_method": None,
+        "url": product_url,
+        "image_url": image_url,
+        "underkategori": [],
+    }
+
+    # ── Hämta näringsvärden (om aktiverat) ──
+    if fetch_nutrition:
+        detail = None
+        with cache_lock:
+            if code in nutrition_cache:
+                detail = nutrition_cache[code]
+
+        if detail is None:
+            _polite_sleep()
+            detail = fetch_product_details(session, base_url, code)
+            if detail:
+                with cache_lock:
+                    nutrition_cache[code] = detail
+
+        if detail:
+            product_entry["description"] = detail.get("description", "")
+
+            # Hämta underkategorier/breadcrumbs från detaljerna
+            breadcrumbs_list = detail.get("breadcrumbs") or detail.get("breadCrumbs") or []
+            underkategori = []
+            if breadcrumbs_list:
+                for item in breadcrumbs_list[1:-1]:
+                    crumb_name = item.get("name")
+                    if crumb_name:
+                        underkategori.append(crumb_name)
+            product_entry["underkategori"] = underkategori
+
+            if not product_entry["image_url"]:
+                detail_image = detail.get("image")
+                if detail_image and isinstance(detail_image, dict) and detail_image.get("url"):
+                    product_entry["image_url"] = detail_image.get("url")
+
+            # Uppdatera vikt med full produktkontext (buljong, fond m.m.)
+            package_weight_g = resolve_package_weight_g(
+                display_volume=display_volume,
+                name=name,
+                description=product_entry["description"],
+                url=code,
+                product_detail=detail,
+            )
+            if package_weight_g:
+                product_entry["package_weight_g"] = package_weight_g
+
+            # Särskild hantering för ägg
+            is_egg_product = False
+            if (
+                slug == "mejeri-ost-och-agg"
+                and ("ägg" in name.lower() or "ägg" in product_entry["description"].lower())
+            ):
+                exclusions = ["nudlar", "pastej", "röra", "sallad", "smörgås", "skinka", "bacon", "paj", "glass", "våffla", "kakor", "bröd", "ost"]
+                if not any(excl in name.lower() for excl in exclusions):
+                    is_egg_product = True
+
+            egg_count = None
+            if is_egg_product:
+                for text in [display_volume, name, product_entry["description"]]:
+                    if not text:
+                        continue
+                    count_match = re.search(r"(\d+)\s*(?:p|st|pack|stycken|packe)\b", text.lower())
+                    if count_match:
+                        egg_count = int(count_match.group(1))
+                        break
+
+                if egg_count and egg_count > 0:
+                    package_weight_g = egg_count * 55.0
+                    product_entry["package_weight_g"] = package_weight_g
+                    if price_sek and price_sek > 0:
+                        compare_price_per_kg = (price_sek / package_weight_g) * 1000
+                        product_entry["compare_price_per_kg"] = compare_price_per_kg
+                        product_entry["compare_price"] = f"{compare_price_per_kg:.2f} kr/kg (beräknat)"
+
+            # Särskild hantering för torrsoppa / pulver / buljong / fond
+            is_dry = False
+            dry_keywords = ["soppa", "soppor", "buljong", "torrsoppa", "såsmix", "sasmix", "pulver", "dipp", "dressingmix", "potatismos", "fond", "fonder", "touch of taste", "buljongkoncentrat"]
+            desc_text = product_entry.get("description") or ""
+            full_text = " ".join([name, slug, desc_text]).lower()
+            if any(kw in full_text for kw in dry_keywords):
+                is_dry = True
+
+            if is_dry and package_weight_g and price_sek:
+                compare_price_per_kg = (price_sek / package_weight_g) * 1000
+                product_entry["compare_price_per_kg"] = compare_price_per_kg
+                product_entry["compare_price"] = f"{compare_price_per_kg:.2f} kr/kg (beräknat)"
+
+            # Omräkna jämförpris om produkten har färdigvolym
+            elif (
+                package_weight_g and price_sek
+                and is_prepared_yield_volume(display_volume, f"{name} {product_entry['description']}")
+            ):
+                compare_price_per_kg = (price_sek / package_weight_g) * 1000
+                product_entry["compare_price_per_kg"] = compare_price_per_kg
+                product_entry["compare_price"] = f"{compare_price_per_kg:.2f} kr/kg (beräknat)"
+            elif package_weight_g and price_sek and not raw.get("comparePrice"):
+                compare_price_per_kg = (price_sek / package_weight_g) * 1000
+                product_entry["compare_price_per_kg"] = compare_price_per_kg
+                product_entry["compare_price"] = f"{compare_price_per_kg:.2f} kr/kg (beräknat)"
+
+            nutrition = extract_nutrition_per_100g(
+                detail,
+                display_volume=display_volume,
+                product_name=name,
+            )
+            protein = nutrition["protein"]
+
+            product_entry["protein_per_100g"] = protein
+            product_entry["calories_per_100g"] = nutrition["calories"]
+            product_entry["fat_per_100g"] = nutrition["fat"]
+            product_entry["carbohydrates_per_100g"] = nutrition["carbohydrates"]
+            product_entry["salt_per_100g"] = nutrition["salt"]
+
+            if protein is not None:
+                ppk = calculate_protein_per_krona(
+                    protein_per_100g=protein,
+                    price_sek=price_sek or 0,
+                    compare_price_per_kg=compare_price_per_kg,
+                    package_weight_g=package_weight_g,
+                )
+                product_entry["protein_per_krona"] = ppk
+                if compare_price_per_kg:
+                    product_entry["calculation_method"] = "A (jämförpris/kg)"
+                elif package_weight_g and price_sek:
+                    product_entry["calculation_method"] = "B (totalvikt/pris)"
+
+    return product_entry
+
+
 def scrape_store(
     store_key: str,
     category_slugs: list,
@@ -767,6 +1162,7 @@ def scrape_store(
         log.info("Session initierad för %s.", store_name)
     _polite_sleep()
 
+    # 1. Skrapa vanliga kategorier
     for slug in category_slugs:
         log.info("── Startar kategori: %s på %s ──", slug, store_name)
         page = 0
@@ -778,7 +1174,6 @@ def scrape_store(
                 log.warning("Inga data för kategori '%s' på %s, sida %d. Hoppar.", slug, store_name, page)
                 break
 
-            # Extrahera pagineringsinformation
             pagination = data.get("pagination", {})
             if total_pages is None:
                 total_pages = pagination.get("numberOfPages", 1)
@@ -803,210 +1198,20 @@ def scrape_store(
                     continue
                 seen_keys.add(seen_key)
 
-                # ── Extrakt grunddata från kategorilistan ──
-                name = raw.get("name", "Okänd produkt")
-                brand = raw.get("manufacturer", "Okänt märke")
-
-                # Pris: "priceValue" är numeriskt (float), "price" är sträng som "47,27 kr"
-                price_sek = None
-                if raw.get("priceValue") is not None:
-                    price_sek = float(raw["priceValue"])
-                else:
-                    price_sek = parse_price(raw.get("price"))
-
-                # Jämförpris
-                compare_price_str = raw.get("comparePrice", "")
-                compare_price_sek = parse_price(compare_price_str)
-                compare_price_unit = (raw.get("comparePriceUnit") or "").lower()
-
-                # Jämförpris per KG (normalisera om enheten är "liter", "100ml" etc.)
-                compare_price_per_kg = None
-                if compare_price_sek is not None:
-                    compare_unit_clean = compare_price_unit.replace(" ", "").strip()
-                    if compare_unit_clean in ("kg", "kilo", "l", "lit", "liter"):
-                        compare_price_per_kg = compare_price_sek
-                    elif compare_unit_clean in ("100g", "100ml", "100 g", "100 ml", "dl", "deciliter"):
-                        compare_price_per_kg = compare_price_sek * 10
-                    elif compare_unit_clean in ("g", "gram", "ml", "milliliter"):
-                        compare_price_per_kg = compare_price_sek * 1000
-                    elif compare_unit_clean in ("cl", "centiliter"):
-                        compare_price_per_kg = compare_price_sek * 100
-
-                # Förpackningsvikt (preliminärt från listningen; uppdateras efter produktdetaljer)
-                display_volume = raw.get("displayVolume", "")
-                package_weight_g = resolve_package_weight_g(
-                    display_volume=display_volume,
-                    name=name,
-                    url=code,
+                product_entry = process_raw_product(
+                    raw=raw,
+                    store_name=store_name,
+                    base_url=base_url,
+                    slug=slug,
+                    session=session,
+                    fetch_nutrition=fetch_nutrition
                 )
-
-                # Länk
-                url_path = raw.get("url")
-                if url_path:
-                    product_url = base_url + url_path
-                else:
-                    product_url = f"{base_url}/produkt/{code}"
-
-                # Extrahera bild-URL
-                image_url = None
-                raw_image = raw.get("image") or raw.get("thumbnail")
-                if raw_image and isinstance(raw_image, dict) and raw_image.get("url"):
-                    image_url = raw_image.get("url")
-
-                product_entry = {
-                    "name": name,
-                    "brand": brand,
-                    "code": code,
-                    "store": store_name,
-                    "category": slug,
-                    "price_sek": price_sek,
-                    "display_volume": display_volume,
-                    "package_weight_g": package_weight_g,
-                    "compare_price": compare_price_str,
-                    "compare_price_per_kg": compare_price_per_kg,
-                    "description": "",
-                    "protein_per_100g": None,
-                    "calories_per_100g": None,
-                    "fat_per_100g": None,
-                    "carbohydrates_per_100g": None,
-                    "salt_per_100g": None,
-                    "protein_per_krona": None,
-                    "calculation_method": None,
-                    "url": product_url,
-                    "image_url": image_url,
-                    "underkategori": [],
-                }
-
-                # ── Hämta näringsvärden (om aktiverat) ──
-                if fetch_nutrition:
-                    detail = None
-                    with cache_lock:
-                        if code in nutrition_cache:
-                            detail = nutrition_cache[code]
-                    
-                    if detail is None:
-                        _polite_sleep()
-                        detail = fetch_product_details(session, base_url, code)
-                        if detail:
-                            with cache_lock:
-                                nutrition_cache[code] = detail
-                    
-                    product_entry["description"] = detail.get("description", "")
-
-                    # Hämta underkategorier/breadcrumbs från detaljerna
-                    breadcrumbs_list = detail.get("breadcrumbs") or detail.get("breadCrumbs") or []
-                    underkategori = []
-                    if breadcrumbs_list:
-                        # Hoppa över "Alla varor" i början och produkten själv i slutet
-                        for item in breadcrumbs_list[1:-1]:
-                            crumb_name = item.get("name")
-                            if crumb_name:
-                                underkategori.append(crumb_name)
-                    product_entry["underkategori"] = underkategori
-
-                    if not product_entry["image_url"]:
-                        detail_image = detail.get("image")
-                        if detail_image and isinstance(detail_image, dict) and detail_image.get("url"):
-                            product_entry["image_url"] = detail_image.get("url")
-
-                    # Uppdatera vikt med full produktkontext (buljong, fond m.m.)
-                    package_weight_g = resolve_package_weight_g(
-                        display_volume=display_volume,
-                        name=name,
-                        description=product_entry["description"],
-                        url=code,
-                        product_detail=detail,
-                    )
-                    if package_weight_g:
-                        product_entry["package_weight_g"] = package_weight_g
-
-                    # Särskild hantering för ägg
-                    is_egg_product = False
-                    if (
-                        slug == "mejeri-ost-och-agg" 
-                        and ("ägg" in name.lower() or "ägg" in product_entry["description"].lower())
-                    ):
-                        exclusions = ["nudlar", "pastej", "röra", "sallad", "smörgås", "skinka", "bacon", "paj", "glass", "våffla", "kakor", "bröd", "ost"]
-                        if not any(excl in name.lower() for excl in exclusions):
-                            is_egg_product = True
-
-                    egg_count = None
-                    if is_egg_product:
-                        for text in [display_volume, name, product_entry["description"]]:
-                            if not text:
-                                continue
-                            count_match = re.search(r"(\d+)\s*(?:p|st|pack|stycken|packe)\b", text.lower())
-                            if count_match:
-                                egg_count = int(count_match.group(1))
-                                break
-                        
-                        if egg_count and egg_count > 0:
-                            package_weight_g = egg_count * 55.0
-                            product_entry["package_weight_g"] = package_weight_g
-                            if price_sek and price_sek > 0:
-                                compare_price_per_kg = (price_sek / package_weight_g) * 1000
-                                product_entry["compare_price_per_kg"] = compare_price_per_kg
-                                product_entry["compare_price"] = f"{compare_price_per_kg:.2f} kr/kg (beräknat)"
-
-                    # Särskild hantering för torrsoppa / pulver / buljong / fond
-                    is_dry = False
-                    dry_keywords = ["soppa", "soppor", "buljong", "torrsoppa", "såsmix", "sasmix", "pulver", "dipp", "dressingmix", "potatismos", "fond", "fonder", "touch of taste", "buljongkoncentrat"]
-                    desc_text = product_entry.get("description") or ""
-                    full_text = " ".join([name, slug, desc_text]).lower()
-                    if any(kw in full_text for kw in dry_keywords):
-                        is_dry = True
-
-                    if is_dry and package_weight_g and price_sek:
-                        compare_price_per_kg = (price_sek / package_weight_g) * 1000
-                        product_entry["compare_price_per_kg"] = compare_price_per_kg
-                        product_entry["compare_price"] = f"{compare_price_per_kg:.2f} kr/kg (beräknat)"
-
-                    # Omräkna jämförpris om produkten har färdigvolym (t.ex. buljong, fond) där butiken anger jämförpris på färdig utspädd produkt,
-                    # eller om jämförpris saknas helt.
-                    elif (
-                        package_weight_g and price_sek
-                        and is_prepared_yield_volume(display_volume, f"{name} {product_entry['description']}")
-                    ):
-                        compare_price_per_kg = (price_sek / package_weight_g) * 1000
-                        product_entry["compare_price_per_kg"] = compare_price_per_kg
-                        product_entry["compare_price"] = f"{compare_price_per_kg:.2f} kr/kg (beräknat)"
-                    elif package_weight_g and price_sek and not raw.get("comparePrice"):
-                        compare_price_per_kg = (price_sek / package_weight_g) * 1000
-                        product_entry["compare_price_per_kg"] = compare_price_per_kg
-                        product_entry["compare_price"] = f"{compare_price_per_kg:.2f} kr/kg (beräknat)"
-
-                    nutrition = extract_nutrition_per_100g(
-                        detail,
-                        display_volume=display_volume,
-                        product_name=name,
-                    )
-                    protein = nutrition["protein"]
-                    
-                    product_entry["protein_per_100g"] = protein
-                    product_entry["calories_per_100g"] = nutrition["calories"]
-                    product_entry["fat_per_100g"] = nutrition["fat"]
-                    product_entry["carbohydrates_per_100g"] = nutrition["carbohydrates"]
-                    product_entry["salt_per_100g"] = nutrition["salt"]
-
-                    if protein is not None:
-                        ppk = calculate_protein_per_krona(
-                            protein_per_100g=protein,
-                            price_sek=price_sek or 0,
-                            compare_price_per_kg=compare_price_per_kg,
-                            package_weight_g=package_weight_g,
-                        )
-                        product_entry["protein_per_krona"] = ppk
-                        if compare_price_per_kg:
-                            product_entry["calculation_method"] = "A (jämförpris/kg)"
-                        elif package_weight_g and price_sek:
-                            product_entry["calculation_method"] = "B (totalvikt/pris)"
-
-                store_products.append(product_entry)
+                if product_entry:
+                    store_products.append(product_entry)
 
             _polite_sleep()
             page += 1
 
-            # Avbryt om vi nått max antal sidor eller sista sidan
             if max_pages > 0 and page >= max_pages:
                 log.info("Nådde max sidor (%d) för kategori '%s' på %s.", max_pages, slug, store_name)
                 break
@@ -1016,7 +1221,39 @@ def scrape_store(
         log.info("Klar med kategori '%s' på %s. Totalt %d unika produkter hittills.",
                  slug, store_name, len(store_products))
 
+    # 2. Skrapa kampanjer specifikt
+    log.info("── Startar skrapning av kampanjprodukter på %s ──", store_name)
+    store_id = fetch_active_store_id(session, base_url, store_key)
+    campaign_raws = fetch_campaign_products(session, base_url, store_id)
+    log.info("Hittade %d kampanjprodukter totalt på %s.", len(campaign_raws), store_name)
+
+    for raw in campaign_raws:
+        code = raw.get("code", "")
+        if not code:
+            continue
+        seen_key = f"{store_name}_{code}"
+        if seen_key in seen_keys:
+            continue
+        seen_keys.add(seen_key)
+
+        product_entry = process_raw_product(
+            raw=raw,
+            store_name=store_name,
+            base_url=base_url,
+            slug="veckans-erbjudanden",
+            session=session,
+            fetch_nutrition=fetch_nutrition
+        )
+        if product_entry:
+            # Mappa till rätt kategori baserat på brödsmulor om tillgängligt
+            mapped_cat = map_breadcrumbs_to_category(product_entry.get("underkategori", []))
+            if mapped_cat:
+                product_entry["category"] = mapped_cat
+
+            store_products.append(product_entry)
+
     return store_products
+
 
 
 def scrape_all_categories(
