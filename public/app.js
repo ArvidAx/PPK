@@ -34,7 +34,7 @@ const BASKETS = {
 // DOM Elements
 const tableBody = document.getElementById('tableBody');
 let selectedCategories = [];
-const storeSelect = document.getElementById('store');
+let selectedStores = [];
 const searchInput = document.getElementById('search');
 const maxPriceInput = document.getElementById('maxPrice');
 const maxPriceLabel = document.getElementById('maxPriceLabel');
@@ -94,11 +94,14 @@ function getSlug(item) {
 }
 
 function setFiltersEnabled(enabled) {
-    const inputs = [searchInput, storeSelect, maxPriceInput, minProteinInput];
+    const inputs = [searchInput, maxPriceInput, minProteinInput];
     inputs.forEach(input => {
         if (input) input.disabled = !enabled;
     });
-
+    const categorySelectBtn = document.getElementById('categorySelectBtn');
+    if (categorySelectBtn) categorySelectBtn.disabled = !enabled;
+    const storeSelectBtn = document.getElementById('storeSelectBtn');
+    if (storeSelectBtn) storeSelectBtn.disabled = !enabled;
     document.querySelectorAll('.basket-btn, .quick-search-btn').forEach(btn => {
         btn.disabled = !enabled;
         btn.style.opacity = enabled ? '1' : '0.6';
@@ -161,7 +164,7 @@ async function init() {
         if (tableBody) {
             tableBody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding: 4rem 2rem; color: var(--text-muted);">
                 <div class="loading-spinner"></div>
-                <div style="font-weight: 600; font-size: 1.05rem; margin-top: 0.5rem;">Laddar över 12 000 produkter...</div>
+                <div style="font-weight: 600; font-size: 1.05rem; margin-top: 0.5rem;">Laddar över 10 000 produkter...</div>
                 <div style="font-size: 0.85rem; margin-top: 0.25rem;">Hämtar färska proteindata från Hemköp och Willys</div>
             </td></tr>`;
         }
@@ -216,6 +219,7 @@ async function init() {
 
         // Populate filters, re-render shopping list (to resolve store comparisons), enable filters and show data
         populateCategories();
+        populateStores();
         renderShoppingList();
         setFiltersEnabled(true);
         
@@ -299,15 +303,56 @@ function populateCategories() {
             applyFilters(true);
         });
 
+        label.appendChild(document.createTextNode(slugToName[cat] || cat));
         label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(' ' + (slugToName[cat] || cat)));
+        dropdown.appendChild(label);
+    });
+}
+
+function updateStoreSelectBtnText() {
+    const btn = document.getElementById('storeSelectBtn');
+    if (!btn) return;
+    if (selectedStores.length === 0) {
+        btn.textContent = 'Alla Butiker';
+    } else if (selectedStores.length === 1) {
+        btn.textContent = selectedStores[0];
+    } else {
+        btn.textContent = `${selectedStores.length} valda`;
+    }
+}
+
+function populateStores() {
+    const dropdown = document.getElementById('storeSelectDropdown');
+    if (!dropdown) return;
+    dropdown.innerHTML = '';
+
+    const stores = ['Hemköp', 'Willys'];
+    stores.forEach(st => {
+        const label = document.createElement('label');
+        label.className = 'checkbox-label';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = st;
+        checkbox.className = 'store-checkbox';
+        checkbox.addEventListener('change', () => {
+            if (checkbox.checked) {
+                selectedStores.push(st);
+            } else {
+                selectedStores = selectedStores.filter(s => s !== st);
+            }
+            updateStoreSelectBtnText();
+            applyFilters(true);
+        });
+
+        label.appendChild(document.createTextNode(st));
+        label.appendChild(checkbox);
         dropdown.appendChild(label);
     });
 }
 
 function setupEventListeners() {
     searchInput.addEventListener('input', () => applyFilters(true));
-    storeSelect.addEventListener('change', () => applyFilters(true));
 
     const categorySelectBtn = document.getElementById('categorySelectBtn');
     const categorySelectDropdown = document.getElementById('categorySelectDropdown');
@@ -325,6 +370,26 @@ function setupEventListeners() {
             if (categoryMultiSelect && !categoryMultiSelect.contains(e.target)) {
                 categorySelectDropdown.style.display = 'none';
                 categorySelectBtn.classList.remove('active');
+            }
+        });
+    }
+
+    const storeSelectBtn = document.getElementById('storeSelectBtn');
+    const storeSelectDropdown = document.getElementById('storeSelectDropdown');
+    const storeMultiSelect = document.getElementById('storeMultiSelect');
+
+    if (storeSelectBtn && storeSelectDropdown) {
+        storeSelectBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = storeSelectDropdown.style.display === 'flex';
+            storeSelectDropdown.style.display = isOpen ? 'none' : 'flex';
+            storeSelectBtn.classList.toggle('active', !isOpen);
+        });
+
+        document.addEventListener('click', (e) => {
+            if (storeMultiSelect && !storeMultiSelect.contains(e.target)) {
+                storeSelectDropdown.style.display = 'none';
+                storeSelectBtn.classList.remove('active');
             }
         });
     }
@@ -701,11 +766,10 @@ function applyFilters(resetPage = false) {
 
     const rawSearch = searchInput ? (searchInput.value || '') : '';
     const search = rawSearch.toLowerCase().trim().replace(/[^a-zåäöA-ZÅÄÖ0-9\s\-\&]/g, ' ').replace(/\s+/g, ' ');
-    const store = storeSelect ? storeSelect.value : '';
     const maxPrice = parseFloat(maxPriceInput ? maxPriceInput.value : Infinity) || Infinity;
     const minProtein = parseFloat(minProteinInput ? minProteinInput.value : 0) || 0;
 
-    // STEG 1: STRIKT FILTRERING (Sök & Kategorier)
+    // STEG 1: STRIKT FILTRERING (Sök & Kategorier & Butiker)
     filteredData = allData.filter(item => {
         if (activeBasket && BASKETS[activeBasket]) {
             const criteria = BASKETS[activeBasket].filter_criteria;
@@ -718,7 +782,7 @@ function applyFilters(resetPage = false) {
         }
 
         if (selectedCategories.length > 0 && !selectedCategories.includes(item.category)) return false;
-        if (store && item.store !== store) return false;
+        if (selectedStores.length > 0 && !selectedStores.includes(item.store)) return false;
         if (item.price_sek > maxPrice) return false;
         if ((item.protein_per_100g || 0) < minProtein) return false;
 

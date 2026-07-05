@@ -5,21 +5,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="favicon.png">
-    <title>Billig Proteinrik Mat – Jämför Protein Per Krona på Hemköp & Willys | PPK</title>
+    <title>Protein Per Krona (PPK) Kalkylator – Billig Proteinrik Mat | PPK</title>
     <meta name="description"
-        content="Hitta de mest kostnadseffektiva proteinkällorna på Hemköp och Willys. Jämför gram protein per krona (PPK) för hundratals produkter – uppdateras automatiskt varje natt.">
+        content="Använd vår Protein Per Krona (PPK) kalkylator för att hitta billigaste proteinrik mat på Willys och Hemköp. Jämför g/kr för över 10 000 produkter dagligen.">
     <link rel="canonical" href="https://proteinpriser.se/">
 
     <!-- Open Graph / Social sharing -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://proteinpriser.se/">
-    <meta property="og:title" content="Billig Proteinrik Mat – Jämför Protein Per Krona | PPK">
+    <meta property="og:title" content="Protein Per Krona (PPK) Kalkylator – Billig Proteinrik Mat | PPK">
     <meta property="og:description"
-        content="Hitta de mest kostnadseffektiva proteinkällorna på Hemköp och Willys. Jämför gram protein per krona för hundratals produkter – uppdateras varje natt.">
+        content="Använd vår Protein Per Krona (PPK) kalkylator för att hitta billigaste proteinrik mat på Willys och Hemköp. Jämför g/kr för över 10 000 produkter dagligen.">
     <meta property="og:locale" content="sv_SE">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="PPK – Protein per Krona">
-    <meta name="twitter:description" content="Jämför gram protein per krona på Hemköp & Willys. Uppdateras varje natt.">
+    <meta name="twitter:title" content="Protein Per Krona (PPK) Kalkylator – Billig Proteinrik Mat">
+    <meta name="twitter:description" content="Använd vår PPK-kalkylator för att hitta billigaste proteinrik mat på Willys och Hemköp. Jämför över 10 000 produkter dagligen.">
 
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -38,6 +38,7 @@
     }
     </script>
 
+    <!-- Google AdSense - lägg till din kod här när kontot är godkänt -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
@@ -67,11 +68,10 @@
         <main class="main-content" id="main-content">
             <!-- 1. Centrerad och utökad Hero-sektion -->
             <header class="page-header hero-section">
-                <h1 class="app-title">Billig Proteinrik Mat &ndash; <span class="accent-red">Protein Per Krona
-                        (PPK)</span></h1>
+                <h1 class="app-title">Protein Per Krona (PPK) &ndash; <span class="accent-red">Kalkylator för Billig Mat</span></h1>
                 <p class="app-subtitle">
                     Välkommen till Sveriges mest kompletta verktyg för smartare och billigare matinköp. Vi skannar
-                    automatiskt över 12 000 produkter från Willys och Hemköp varje dag för att hjälpa dig maximera ditt
+                    automatiskt över 10 000 produkter från Willys och Hemköp varje dag för att hjälpa dig maximera ditt
                     Protein Per Krona (PPK). Oavsett om du bygger muskler på en stram budget eller bara vill handla
                     ekonomiskt, hittar du de bästa priserna och de renaste proteinkällorna här på proteinpriser.se.
                 </p>
@@ -100,7 +100,7 @@
                     <div class="search-input-wrapper">
                         <span class="search-icon">🔍</span>
                         <input type="text" id="search"
-                            placeholder="Sök bland över 12 000 produkter efter kyckling, kvarg, pasta..."
+                            placeholder="Sök bland över 10 000 produkter efter kyckling, kvarg, pasta..."
                             autocomplete="off" aria-label="Sök bland produkter">
                     </div>
                     <div class="quick-choices">
@@ -144,12 +144,13 @@
                     </div>
 
                     <div class="filter-item">
-                        <label for="store">🏪 Butik</label>
-                        <select id="store" aria-label="Filtrera efter butik">
-                            <option value="">Alla Butiker</option>
-                            <option value="Hemköp">Hemköp</option>
-                            <option value="Willys">Willys</option>
-                        </select>
+                        <label>🏪 Butik</label>
+                        <div class="multi-select-container" id="storeMultiSelect">
+                            <button type="button" class="multi-select-btn" id="storeSelectBtn">Alla Butiker</button>
+                            <div class="multi-select-dropdown" id="storeSelectDropdown" style="display: none;">
+                                <!-- Checkboxes dynamically populated by app.js -->
+                            </div>
+                        </div>
                     </div>
 
                     <div class="filter-item slider-item">
@@ -223,8 +224,7 @@
             <section class="table-section" aria-label="Produktlista">
                 <div class="table-header">
                     <h2>Resultat <span id="resultCount" class="result-count"></span></h2>
-                    <p class="table-hint">Klicka på en kolumnrubrik för att sortera. Klicka på en rad för
-                        produktdetaljer.</p>
+
                 </div>
                 <div id="basketBanner" class="basket-banner" style="display: none;">
                     <div class="basket-banner-content">
@@ -1225,8 +1225,11 @@
             </section>
             <footer class="app-footer"
                 style="text-align: center; padding: 2rem 0; border-top: 1px solid var(--border-color); margin-top: 4rem; font-size: 0.85rem; color: var(--text-muted);">
-                <p>&copy; 2026 proteinpriser.se. Alla rättigheter reserverade. | <a href="integritetspolicy.html"
-                        style="color: var(--accent-red); text-decoration: none; font-weight: 600;">Integritetspolicy</a>
+                <p>&copy; 2026 proteinpriser.se. Alla rättigheter reserverade.</p>
+                <p style="margin-top: 0.5rem;">
+                    <a href="integritetspolicy.html" style="color: var(--accent-red); text-decoration: none; font-weight: 600;">Integritetspolicy</a> |
+                    <a href="anvandarvillkor.html" style="color: var(--accent-red); text-decoration: none; font-weight: 600;">Användarvillkor</a> |
+                    <a href="om-oss.html" style="color: var(--accent-red); text-decoration: none; font-weight: 600;">Om oss</a>
                 </p>
             </footer>
         </main>
@@ -1243,19 +1246,8 @@
         </div>
     </div>
 
-    <div id="cookie-banner" class="cookie-banner hidden" role="dialog" aria-labelledby="cookie-title"
-        aria-describedby="cookie-desc">
-        <div class="cookie-content">
-            <h3 id="cookie-title">Vi använder cookies 🍪</h3>
-            <p id="cookie-desc">proteinpriser.se använder cookies för att spara din inköpslista samt för anonym
-                trafikanalys och anpassad annonsering via Google AdSense. Läs mer i vår <a
-                    href="integritetspolicy.html">integritetspolicy</a>.</p>
-            <div class="cookie-buttons">
-                <button id="cookie-decline" class="btn-cookie-secondary">Neka</button>
-                <button id="cookie-accept" class="btn-cookie-primary">Godkänn alla</button>
-            </div>
-        </div>
-    </div>
+    <!-- Cookie-bannern hanteras nu av Cookiebot (Google-certifierad CMP). -->
+    <!-- Se Cookiebot-scriptet i <head> ovan. Ingen manuell banner behövs längre. -->
 
 </body>
 
