@@ -513,6 +513,20 @@ function setupEventListeners() {
         });
     }
 
+    // FAQ Accordion Toggle
+    document.querySelectorAll('.faq-question').forEach(button => {
+        button.addEventListener('click', () => {
+            const faqAnswer = button.nextElementSibling;
+            const isOpen = button.getAttribute('aria-expanded') === 'true';
+            
+            button.setAttribute('aria-expanded', !isOpen);
+            if (faqAnswer) {
+                faqAnswer.classList.toggle('show');
+            }
+        });
+    });
+
+
     // View toggle event listener
     const viewToggleBtn = document.getElementById('view-toggle-btn');
     if (viewToggleBtn) {
