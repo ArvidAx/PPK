@@ -102,7 +102,7 @@ function setFiltersEnabled(enabled) {
     if (categorySelectBtn) categorySelectBtn.disabled = !enabled;
     const storeSelectBtn = document.getElementById('storeSelectBtn');
     if (storeSelectBtn) storeSelectBtn.disabled = !enabled;
-    document.querySelectorAll('.basket-btn, .quick-search-btn').forEach(btn => {
+    document.querySelectorAll('.basket-btn, .quick-search-btn, .surprise-btn').forEach(btn => {
         btn.disabled = !enabled;
         btn.style.opacity = enabled ? '1' : '0.6';
         btn.style.cursor = enabled ? 'pointer' : 'not-allowed';
@@ -480,6 +480,38 @@ function setupEventListeners() {
             }
         });
     });
+
+    // Surprise me button listener
+    const surpriseBtn = document.getElementById('surpriseBtn');
+    if (surpriseBtn) {
+        surpriseBtn.addEventListener('click', () => {
+            const surpriseTerms = [
+                // Fågel & Kött
+                "Kyckling", "Kalkon", "Nötfärs", "Fläskfilé", "Kycklingfilé", "Rostbiff", "Skinka", "Bacon", "Lövbiff", "Ryggbiff", "Kycklingben", "Kycklingklubbor", "Kycklingvingar",
+                // Fisk & Skaldjur
+                "Tonfisk", "Lax", "Torsk", "Sill", "Makrill", "Sej", "Räkor", "Musslor", "Sardiner",
+                // Mejeriprodukter & Ägg
+                "Kvarg", "Keso", "Ägg", "Kvarggurt", "Grekisk yoghurt", "Ost 17%", "Mjölk", "Lättmjölk", "Keso Mini", "Lättkvarg", "Mozzarella", "Fetaost", "Parmesan",
+                // Veganskt & Vegetariskt
+                "Tofu", "Sojafärs", "Vegofärs", "Tempeh", "Seitan", "Ärtprotein",
+                // Baljväxter & Frön & Nötter
+                "Linser", "Ärter", "Bönor", "Jordnötssmör", "Jordnötter", "Mandlar", "Pumpakärnor", "Chiafrön", "Kikärter", "Solroskärnor", "Hampafrön", "Valnötter", "Cashewnötter",
+                // Spannmål & Kolhydrater
+                "Havregryn", "Pasta", "Fullkornspasta", "Bönpasta", "Råris", "Bulgur", "Quinoa", "Bovete", "Knäckebröd",
+                // Konserver & Övrigt
+                "Ärtsoppa", "Linssoppa"
+            ];
+            
+            const currentTerm = searchInput ? searchInput.value.trim().toLowerCase() : "";
+            const filteredTerms = surpriseTerms.filter(t => t.toLowerCase() !== currentTerm);
+            const randomTerm = filteredTerms[Math.floor(Math.random() * filteredTerms.length)];
+            
+            if (searchInput) {
+                searchInput.value = randomTerm;
+                searchInput.dispatchEvent(new Event('input'));
+            }
+        });
+    }
 
     // View toggle event listener
     const viewToggleBtn = document.getElementById('view-toggle-btn');
