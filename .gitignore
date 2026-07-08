@@ -30,3 +30,10 @@ cron_log.txt
 #byggde en enkel kalkylator (proteinpriser.se) som visar protein per krona på willys och hemköp nattligen. helt gratis om nån vill använda
 
 #tipsar om proteinpriser.se om man vill få ut max protein ur matkassan utan att köpa dyra kosttillskott
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
+
