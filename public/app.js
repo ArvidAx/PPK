@@ -151,6 +151,8 @@ function initHamburgerMenu() {
 // Init
 async function init() {
     initHamburgerMenu();
+    initMobileFilters();
+    initScrollToTop();
     if (!document.getElementById('search')) {
         return;
     }
@@ -223,6 +225,7 @@ async function init() {
         populateStores();
         renderShoppingList();
         setFiltersEnabled(true);
+        initCampaignSection();
 
         // Check for url param to pre-select basket
         const urlParams = new URLSearchParams(window.location.search);
@@ -1674,6 +1677,175 @@ function updateBasketUI(currentBasketItems, fullDatabase) {
     } else {
         summaryElement.innerHTML = '';
     }
+}
+
+// === VECKANS KLIPP CAMPAIGN SECTION ===
+let activeCampaignStore = 'all';
+
+function initCampaignSection() {
+    const showAllBtn = document.getElementById('showAllCampaigns');
+    if (showAllBtn) {
+        showAllBtn.addEventListener('click', () => {
+            const onlyCampaignsInput = document.getElementById('onlyCampaigns');
+            if (onlyCampaignsInput) {
+                onlyCampaignsInput.checked = true;
+                onlyCampaignsInput.dispatchEvent(new Event('change'));
+            }
+            const tableSection = document.querySelector('.table-section');
+            if (tableSection) {
+                tableSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    }
+
+    const filterBtns = document.querySelectorAll('.campaign-filter-btn');
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            activeCampaignStore = btn.dataset.store;
+            renderCampaignCarousel(activeCampaignStore);
+        });
+    });
+
+    renderCampaignCarousel('all');
+}
+
+function renderCampaignCarousel(storeFilter = 'all') {
+    const carousel = document.getElementById('campaignCarousel');
+    const countEl = document.getElementById('campaignCount');
+    if (!carousel) return;
+
+    // Filter campaigns
+    let campaigns = allData.filter(item => item.is_campaign === true || item.is_campaign === "True");
+    
+    // Update count element with total available campaigns before store filtering
+    if (countEl) {
+        countEl.textContent = `(${campaigns.length} extrapriser just nu)`;
+    }
+
+    if (storeFilter !== 'all') {
+        campaigns = campaigns.filter(item => (item.store || '').toLowerCase() === storeFilter.toLowerCase());
+    }
+
+    // Sort by PPK descending
+    campaigns.sort((a, b) => (b.ppk || 0) - (a.ppk || 0));
+
+    // Limit to top 20
+    const topCampaigns = campaigns.slice(0, 20);
+
+    if (topCampaigns.length === 0) {
+        carousel.innerHTML = `<div style="padding: 2rem; color: var(--text-muted); text-align: center; width: 100%;">Inga kampanjer tillgängliga för denna butik.</div>`;
+        return;
+    }
+
+    carousel.innerHTML = '';
+    topCampaigns.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'campaign-card';
+
+        const fallbackUrl = (item.store || '').toLowerCase() === 'willys'
+            ? `https://www.willys.se/produkt/${item.code}`
+            : `https://www.hemkop.se/produkt/${item.code}`;
+        const validUrl = safeUrl(item.url, fallbackUrl);
+        const storeClass = (item.store || '').toLowerCase() === 'willys' ? 'willys' : 'hemkop';
+        const imgUrl = item.image_url || '';
+
+        const regPrice = parseFloat(item.regular_price) || 0;
+        const curPrice = parseFloat(item.price_sek) || 0;
+        
+        let discountBadge = '';
+        if (regPrice > curPrice && regPrice > 0) {
+            const pct = Math.round((1 - curPrice / regPrice) * 100);
+            discountBadge = `<div class="campaign-badge">-${pct}%</div>`;
+        } else {
+            discountBadge = `<div class="campaign-badge">REA</div>`;
+        }
+
+        let priceHtml = '';
+        if (regPrice > 0 && regPrice > curPrice) {
+            priceHtml = `
+                <div class="campaign-prices">
+                    <span class="campaign-price-current">${fmt(curPrice, 2)} kr</span>
+                    <span class="campaign-price-regular">${fmt(regPrice, 2)} kr</span>
+                </div>
+            `;
+        } else {
+            priceHtml = `
+                <div class="campaign-prices">
+                    <span class="campaign-price-current">${fmt(curPrice, 2)} kr</span>
+                </div>
+            `;
+        }
+
+        card.innerHTML = `
+            ${discountBadge}
+            <div class="campaign-image-box">
+                ${imgUrl ? `<img src="${esc(imgUrl)}" alt="${esc(item.name)}" loading="lazy">` : `<div style="font-size: 2rem;">💪</div>`}
+            </div>
+            <div class="campaign-brand">${esc(item.brand) || '–'}</div>
+            <h3 class="campaign-title">${esc(item.name)}</h3>
+            <div class="campaign-info-row">
+                <span>📦 ${esc(item.display_volume) || '–'}</span>
+                <span>💪 ${fmt(item.protein_per_100g, 1)}g</span>
+            </div>
+            <div class="campaign-meta">
+                ${priceHtml}
+                <div class="campaign-ppk-box">
+                    <span class="campaign-ppk-label">PPK</span>
+                    <span class="campaign-ppk-value">${fmt(item.ppk, 2)}</span>
+                </div>
+            </div>
+        `;
+
+        card.addEventListener('click', (e) => {
+            openModal(item);
+        });
+
+        carousel.appendChild(card);
+    });
+}
+
+function initMobileFilters() {
+    const filterPanel = document.querySelector('.filter-panel');
+    const filterOverlay = document.getElementById('filterOverlay');
+    const mobileFilterBtn = document.getElementById('mobileFilterBtn');
+    const closeMobileFilterBtn = document.getElementById('closeMobileFilterBtn');
+
+    if (!filterPanel || !mobileFilterBtn) return;
+
+    function openSheet() {
+        filterPanel.classList.add('open');
+        if (filterOverlay) filterOverlay.classList.add('open');
+        document.body.style.overflow = 'hidden'; // prevent background scrolling
+    }
+
+    function closeSheet() {
+        filterPanel.classList.remove('open');
+        if (filterOverlay) filterOverlay.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    mobileFilterBtn.addEventListener('click', openSheet);
+    if (closeMobileFilterBtn) closeMobileFilterBtn.addEventListener('click', closeSheet);
+    if (filterOverlay) filterOverlay.addEventListener('click', closeSheet);
+}
+
+function initScrollToTop() {
+    const btn = document.getElementById('scrollToTopBtn');
+    if (!btn) return;
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            btn.classList.add('visible');
+        } else {
+            btn.classList.remove('visible');
+        }
+    });
+
+    btn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 }
 
 init();

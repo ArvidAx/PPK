@@ -86,20 +86,21 @@
      crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script defer src="ascii-hero.js"></script>
     <script defer src="app.js"></script>
 </head>
 
 <body>
-    <nav class="navbar" aria-label="Huvudnavigation">
+    <header class="navbar">
         <a href="/" class="logo" aria-label="PPK proteinpriser.se startsida">
             <span class="logo-main">PPK</span>
             <span class="logo-domain">proteinpriser.se<span class="logo-dot">.</span></span>
         </a>
         <button class="hamburger-menu" aria-label="Öppna meny">☰</button>
-        <nav class="nav-links">
+        <nav class="nav-links" aria-label="Huvudnavigation">
             <ul role="list">
                 <li><a href="/" class="active" aria-current="page">Kalkylator</a></li>
                 <li><a href="recept.html">Recept</a></li>
@@ -107,12 +108,17 @@
                 <li><a href="pulver.html">Proteinpulver</a></li>
             </ul>
         </nav>
-    </nav>
+    </header>
 
     <div class="app-container single-column">
         <main class="main-content" id="main-content">
             <!-- 1. Centrerad och utökad Hero-sektion -->
             <header class="page-header hero-section">
+                <!-- ASCII Hero Animation Canvas -->
+                <div id="ascii-hero-wrapper" class="ascii-hero-wrapper">
+                    <canvas id="ascii-hero-canvas"></canvas>
+                </div>
+
                 <h1 class="app-title">Protein Per Krona (PPK) &ndash; <span class="accent-red">Kalkylator för Billig Mat</span></h1>
                 <p class="app-subtitle">
                     Välkommen till Sveriges mest kompletta verktyg för smartare och billigare matinköp. Vi skannar
@@ -175,8 +181,41 @@
                     aria-live="polite">Laddar uppdateringstid...</span>
             </header>
 
+            <!-- === VECKANS KLIPP — Kampanjkarusell === -->
+            <section id="campaign-section" class="campaign-section" aria-label="Veckans Klipp">
+                <div class="campaign-header">
+                    <div class="campaign-title-row">
+                        <h2>🔥 Veckans Klipp</h2>
+                        <span id="campaignCount" class="campaign-count"></span>
+                    </div>
+                    <div class="campaign-controls">
+                        <div class="campaign-store-filters">
+                            <button class="campaign-filter-btn active" data-store="all">Alla</button>
+                            <button class="campaign-filter-btn" data-store="Willys">Willys</button>
+                            <button class="campaign-filter-btn" data-store="Hemköp">Hemköp</button>
+                        </div>
+                        <button id="showAllCampaigns" class="campaign-show-all">Visa alla →</button>
+                    </div>
+                </div>
+                <div id="campaignCarousel" class="campaign-carousel">
+                    <!-- Dynamically populated by app.js -->
+                </div>
+            </section>
+
+            <!-- Dimming overlay for mobile filter sheet -->
+            <div id="filterOverlay" class="filter-overlay"></div>
+
+            <!-- Floating Mobile Filter Trigger Button -->
+            <button id="mobileFilterBtn" class="mobile-filter-trigger" aria-label="Öppna filter och sortering">
+                Filter & Sortering ⚙️
+            </button>
+
             <!-- 3. Reglage- och Filterpanel (Horisontell, kompakt rad under Hero-sektionen) -->
             <section class="filter-panel" aria-label="Filterinställningar">
+                <div class="mobile-sheet-header">
+                    <h3>Filter & Sortering</h3>
+                    <button id="closeMobileFilterBtn" class="close-sheet-btn" aria-label="Stäng filter">✕</button>
+                </div>
                 <div class="filter-row">
                     <div class="filter-item">
                         <label>📂 Kategori</label>
@@ -1319,15 +1358,14 @@
                         </div>
                     </div>
                 </div>
-            </section>
             <footer class="app-footer" style="text-align: center; padding: 2.5rem 0; border-top: 1px solid var(--border-color); margin-top: 4rem; font-size: 0.85rem; color: var(--text-muted);">
-        <p>&copy; 2026 proteinpriser.se. Alla rättigheter reserverade.</p>
-        <p style="margin-top: 0.5rem;">
-            <a href="integritetspolicy.html" style="color: var(--accent-red); text-decoration: none; font-weight: 600;">Integritetspolicy</a> |
-            <a href="anvandarvillkor.html" style="color: var(--accent-red); text-decoration: none; font-weight: 600;">Användarvillkor</a> |
-            <a href="om-oss.html" style="color: var(--accent-red); text-decoration: none; font-weight: 600;">Om oss</a>
-        </p>
-    </footer>
+                <p>&copy; 2026 proteinpriser.se. Alla rättigheter reserverade.</p>
+                <p style="margin-top: 0.5rem;">
+                    <a href="integritetspolicy.html" style="color: var(--accent-red); text-decoration: none; font-weight: 600;">Integritetspolicy</a> |
+                    <a href="anvandarvillkor.html" style="color: var(--accent-red); text-decoration: none; font-weight: 600;">Användarvillkor</a> |
+                    <a href="om-oss.html" style="color: var(--accent-red); text-decoration: none; font-weight: 600;">Om oss</a>
+                </p>
+            </footer>
         </main>
     </div>
 
@@ -1345,6 +1383,7 @@
     <!-- Cookie-bannern hanteras nu av Cookiebot (Google-certifierad CMP). -->
     <!-- Se Cookiebot-scriptet i <head> ovan. Ingen manuell banner behövs längre. -->
 
+    <button id="scrollToTopBtn" class="scroll-to-top-btn" aria-label="Gå till toppen av sidan">▲</button>
 </body>
 
 </html>
