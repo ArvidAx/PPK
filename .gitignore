@@ -37,3 +37,6 @@ cron_log.txt
 !.dev.vars.example
 !.env.example
 
+# Raw scraper output
+public/raw_data.json
+
