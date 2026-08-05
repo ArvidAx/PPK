@@ -173,7 +173,7 @@ async function init() {
         }
 
         // Fetch and display last updated time (non-blocking, async background check)
-        fetch('last_updated.json')
+        fetch(`last_updated.json?t=${Date.now()}`, { cache: 'no-cache' })
             .then(res => {
                 if (!res.ok) throw new Error();
                 return res.json();
@@ -201,7 +201,7 @@ async function init() {
             });
 
         // Fetch and load products database in the background without blocking main UI thread
-        const response = await fetch('/data.json');
+        const response = await fetch(`/data.json?t=${Date.now()}`, { cache: 'no-cache' });
         if (!response.ok) throw new Error('Kunde inte hämta data.json');
         const rawData = await response.json();
 

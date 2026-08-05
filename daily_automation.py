@@ -49,8 +49,8 @@ def main():
     logging.info("Genererar statiska SEO-sidor (generate_seo_pages.py)...")
     run_cmd(f"{sys.executable} -u generate_seo_pages.py")
 
-    # 4. Kontrollera om data.json eller produkter faktiskt har ändrats
-    status = subprocess.run("git status --porcelain public/data.json nutrition_cache.json public/produkter public/index.html", shell=True, capture_output=True, text=True)
+    # 4. Kontrollera om data.json, last_updated.json eller produkter faktiskt har ändrats
+    status = subprocess.run("git status --porcelain public/data.json public/last_updated.json nutrition_cache.json public/produkter public/index.html", shell=True, capture_output=True, text=True)
     if not status.stdout.strip():
         logging.info("Inga förändringar i data.json, cachen eller produktsidorna sedan igår. Inget att pusha.")
         return

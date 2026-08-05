@@ -43,6 +43,12 @@ def main():
         detail_url = f"produkter/{slug}.html"
         store_class = "willys" if store.lower() == "willys" else "hemkop"
         ppk_class = "ppk-high" if ppk >= 2 else ("ppk-mid" if ppk >= 1 else "")
+        is_campaign = item.get("is_campaign", False)
+        reg_price = item.get("regular_price") or price
+        if is_campaign and reg_price > price:
+            price_display = f'<span style="text-decoration: line-through; color: var(--text-muted); font-size: 0.75rem;">{reg_price:.2f} kr</span> <span style="color: var(--accent-red); font-weight: 800;">{price:.2f} kr</span>'
+        else:
+            price_display = f'{price:.2f} kr'
 
         row = f"""            <tr>
                 <td><button class="add-to-list-btn" aria-label="Lägg till {name} i shoppinglistan" title="Lägg till i shoppinglistan">+</button></td>
@@ -54,7 +60,7 @@ def main():
                 </td>
                 <td data-label="Märke">{brand}</td>
                 <td data-label="Butik"><span class="store-badge {store_class}">{store}</span></td>
-                <td data-label="Pris">{price:.2f} kr</td>
+                <td data-label="Pris">{price_display}</td>
                 <td data-label="Storlek">{volume}</td>
                 <td data-label="Protein/100g">{p_100:.1f} g</td>
                 <td data-label="Prot/100 kcal">{p_kcal:.1f} g</td>
